@@ -1,5 +1,39 @@
 {
   "translations": {
-    "Welcome to the Graasp App Starter Kit": "Bienvenue dans le kit de démarrage de l'application Graasp"
+    "Welcome to the Graasp App Starter Kit": "Bienvenue dans le kit de démarrage de l'application Graasp",
+    "ERROR_BOUNDARY": {
+      "FALLBACK": {
+        "MESSAGE_TITLE": "Désolé, quelque chose n'a pas fonctionné avec cette application",
+        "MESSAGE_FEEDBACK": "Notre équipe a été informée. Si vous souhaitez nous aider, veuillez nous expliquer ce qui s'est passé ci-dessous",
+        "ERROR_DETAILS": "Détails de l'erreur",
+        "NAME_LABEL": "Name",
+        "NAME_HELPER": "Fournissez votre nom (facultatif)",
+        "EMAIL_LABEL": "Email",
+        "EMAIL_HELPER": "Fournissez votre courriel (facultatif)",
+        "COMMENT_LABEL": "Commentaire",
+        "COMMENTAIRE_HELPER": "Racontez-nous ce qui s'est passé (facultatif)",
+        "THANKS_FOR_FEEDBACK": "Thank you for your feedback !",
+        "SEND": "Envoyez votre retour d'information"
+      }
+    },
+    "SETTINGS": {
+      "TITLE": "Paramètres de l'application",
+      "SAVE_BTN": "Enregistrer",
+      "CHAT": {
+        "DESCRIPTION": "Description du chat",
+        "INSTRUCTIONS": "Instructions pour le participant",
+        "END": "Texte de fin d'écran",
+        "ASSISTANT": "Assistant",
+        "USER": "Participant"
+      },
+      "EXCHANGES": {
+        "TITLE": "Échanges Paramètres",
+        "DESCRIPTION": "Description des échanges par défaut",
+        "INSTRUCTIONS": "Instructions du chatbot",
+        "CUE": "Initial Cue",
+        "FOLLOW_UP_QUESTIONS": "Nombre de questions de suivi",
+        "DISABLE_HARD_LIMIT": "Autoriser plus de questions de suivi"
+      }
+    }
   }
 }

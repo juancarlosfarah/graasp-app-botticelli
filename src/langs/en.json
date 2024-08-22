@@ -15,6 +15,25 @@
         "THANKS_FOR_FEEDBACK": "Thank you for your feedback!",
         "SEND": "Send your feedback"
       }
+    },
+    "SETTINGS": {
+      "TITLE": "App Settings",
+      "SAVE_BTN": "Save",
+      "CHAT": {
+        "DESCRIPTION": "Chat Description",
+        "INSTRUCTIONS": "Participant Instructions",
+        "END": "End Screen Text.",
+        "ASSISTANT": "Assistant",
+        "USER": "Participant"
+      },
+      "EXCHANGES": {
+        "TITLE": "Exchanges Settings",
+        "DESCRIPTION": "Default exchanges description.",
+        "INSTRUCTIONS": "Chatbot instructions",
+        "CUE": "Initial Cue",
+        "FOLLOW_UP_QUESTIONS": "Number of Follow Up Questions",
+        "DISABLE_HARD_LIMIT": "Allow More Follow Up Questions"
+      }
     }
   }
 }
