@@ -41,7 +41,8 @@
         "CUE": "Initial Cue",
         "ASSISTANT": "Assistant",
         "FOLLOW_UP_QUESTIONS": "Nombre de Questions de Suivi",
-        "DISABLE_HARD_LIMIT": "Autoriser pas plus de Questions de Suivi",
+        "DISABLE_hardLimit": "Rejet Automatique",
+        "hardLimit_INFO": "Si cette case est cochée, l'échange suivant commencera automatiquement une fois que le nombre de questions de suivi sera atteint",
         "CREATE": "Veuillez créer au moins un échange."
       }
     },

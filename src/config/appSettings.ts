@@ -8,17 +8,17 @@ export type AssistantsSettingsType = {
 
 export type ChatSettingsType = {
   description: string;
-  participant_instructions: string;
-  participant_end_txt: string;
+  participantInstructions: string;
+  participantEndText: string;
 };
 
 export type ExchangeSettings = {
   assistant: AssistantSettings;
   description: string;
-  chatbot_instructions: string;
-  participant_cue: string;
-  nb_follow_up_questions: number;
-  hard_limit: boolean;
+  chatbotInstructions: string;
+  participantCue: string;
+  nbFollowUpQuestions: number;
+  hardLimit: boolean;
 };
 
-export type ExchangesSettingsType = { exchanges_list: ExchangeSettings[] };
+export type ExchangesSettingsType = { exchangesList: ExchangeSettings[] };

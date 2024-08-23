@@ -6,15 +6,15 @@ type Interaction = {
   description: string;
   modelInstructions: string;
   // participantInstructions: string;
-  participant_instructions: string;
+  participantInstructions: string;
   // participantInstructionsOnComplete: string;
-  participant_end_txt: string;
+  participantEndText: string;
   name: string;
   currentExchange: number;
   completed: boolean;
   started: boolean;
   participant: Agent;
-  exchanges: { exchanges_list: Exchange[] };
+  exchanges: { exchangesList: Exchange[] };
   startedAt?: Date;
   completedAt?: Date;
   createdAt: Date;

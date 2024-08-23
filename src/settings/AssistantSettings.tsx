@@ -126,26 +126,44 @@ const AssistantsSettings: FC<PropTypesList> = ({ assistants, onChange }) => {
             {t('SETTINGS.ASSISTANTS.CREATE')}
           </Alert>
         ) : (
-          assistants.assistantsList.map((assistant, index) => (
-            <Stack
-              key={index}
-              justifyContent="space-around"
-              direction="row"
-              spacing={2}
-              alignItems="center"
-              divider={<Divider orientation="vertical" flexItem />}
-            >
-              <Typography sx={{ flex: '0 0 5%' }}>{index + 1}</Typography>
-              <Box sx={{ flex: '1' }}>
-                <AssistantSettingsPanel
-                  assistant={assistant}
-                  onChange={handleChange}
-                  index={index}
-                  handleRemoveAssistant={handleRemoveAssistant}
-                />
-              </Box>
-            </Stack>
-          ))
+          assistants.assistantsList.map((assistant, index) => {
+            const exchangeColors: string[] = ['#5050d2', '#d29650', '#50d250'];
+            return (
+              <Stack
+                key={index}
+                justifyContent="space-around"
+                direction="row"
+                spacing={2}
+                alignItems="center"
+                divider={
+                  <Divider
+                    orientation="vertical"
+                    flexItem
+                    color={exchangeColors[index % 3]}
+                  />
+                }
+              >
+                <Typography
+                  px={1}
+                  bgcolor={exchangeColors[index % 3]}
+                  flex="0 0 fit-content"
+                  color="white"
+                  borderRadius="50%"
+                  textAlign="center"
+                >
+                  {index + 1}
+                </Typography>
+                <Box sx={{ flex: '1' }}>
+                  <AssistantSettingsPanel
+                    assistant={assistant}
+                    onChange={handleChange}
+                    index={index}
+                    handleRemoveAssistant={handleRemoveAssistant}
+                  />
+                </Box>
+              </Stack>
+            );
+          })
         )}
         <Button variant="contained" onClick={handleAddAssistant}>
           {t('SETTINGS.ASSISTANTS.ADD')}

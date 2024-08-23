@@ -41,7 +41,8 @@
         "CUE": "Initial Cue",
         "ASSISTANT": "Assistant",
         "FOLLOW_UP_QUESTIONS": "Number of Follow Up Questions",
-        "DISABLE_HARD_LIMIT": "Do not Allow More Follow Up Questions",
+        "DISABLE_hardLimit": "Auto Dismiss",
+        "hardLimit_INFO": "If checked, the next exchange will start automatically after the number of follow up questions is reached.",
         "CREATE": "Please create at least one exchange."
       }
     },

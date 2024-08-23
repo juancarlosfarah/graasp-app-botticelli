@@ -16,8 +16,8 @@ const ChatSettings: FC<PropTypes> = ({ chat, onChange }) => {
   const { t } = useTranslation();
   const {
     description: chatDescription,
-    participant_instructions: chatInstructions,
-    participant_end_txt: chatEndText,
+    participantInstructions: chatInstructions,
+    participantEndText: chatEndText,
   } = chat;
   return (
     <Stack spacing={2}>
@@ -33,7 +33,7 @@ const ChatSettings: FC<PropTypes> = ({ chat, onChange }) => {
         label={t('SETTINGS.CHAT.INSTRUCTIONS')}
         multiline
         onChange={(e) =>
-          onChange({ ...chat, participant_instructions: e.target.value })
+          onChange({ ...chat, participantInstructions: e.target.value })
         }
       />
       <TextField
@@ -41,7 +41,7 @@ const ChatSettings: FC<PropTypes> = ({ chat, onChange }) => {
         label={t('SETTINGS.CHAT.END')}
         multiline
         onChange={(e) =>
-          onChange({ ...chat, participant_end_txt: e.target.value })
+          onChange({ ...chat, participantEndText: e.target.value })
         }
       />
     </Stack>

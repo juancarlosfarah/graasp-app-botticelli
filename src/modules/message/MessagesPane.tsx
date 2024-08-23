@@ -54,7 +54,7 @@ const MessagesPane = ({
     const finalPrompt = [
       {
         role: ChatbotRole.System,
-        content: `${currentExchange.chatbot_instructions}The current principal questions is:${currentExchange.participant_cue}`,
+        content: `${currentExchange.chatbotInstructions}The current principal questions is:${currentExchange.participantCue}`,
 
         /*
           'Vous êtes un chatbot qui conduit une interview avec une personne qui vient d’assister à un concert de musique électroacoustique. Vous allez poser trois questions principales. ' +
@@ -132,7 +132,7 @@ const MessagesPane = ({
     const defaultMessages: Message[] = [
       {
         id: `${currentExchange.id}`,
-        content: currentExchange.participant_cue,
+        content: currentExchange.participantCue,
         sender: {
           id: '1',
           name: 'Interviewer',
@@ -215,7 +215,7 @@ const MessagesPane = ({
 
     // will not take updated message count in consideration so we add two
     // https://react.dev/reference/react/useState#setstate-caveats
-    if (sentMessageCount + 1 > currentExchange.nb_follow_up_questions) {
+    if (sentMessageCount + 1 > currentExchange.nbFollowUpQuestions) {
       const newExchange = { ...currentExchange };
       newExchange.completed = true;
       newExchange.completedAt = new Date();

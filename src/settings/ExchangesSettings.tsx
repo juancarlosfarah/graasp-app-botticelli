@@ -2,6 +2,7 @@ import { FC, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DeleteIcon from '@mui/icons-material/Delete';
+import InfoBadge from '@mui/icons-material/Info';
 import {
   Alert,
   Box,
@@ -13,6 +14,7 @@ import {
   MenuItem,
   Select,
   Switch,
+  Tooltip,
 } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
@@ -23,10 +25,10 @@ import { useSettings } from '@/modules/context/SettingsContext';
 import Agent from '@/types/Agent';
 
 type PropTypesSingle = {
-  exchange: ExchangesSettingsType['exchanges_list'][number];
+  exchange: ExchangesSettingsType['exchangesList'][number];
   onChange: (
     index: number,
-    field: keyof ExchangesSettingsType['exchanges_list'][number],
+    field: keyof ExchangesSettingsType['exchangesList'][number],
     value: string | number | boolean | Omit<Agent, 'type'>,
   ) => void;
   handleRemoveExchange: (index: number) => void;
@@ -43,10 +45,10 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
   const {
     assistant: exchangeAssistant,
     description: exchangeDescription,
-    chatbot_instructions: exchangeInstructions,
-    participant_cue: exchangeCue,
-    nb_follow_up_questions: exchangeFollowUpQuestions,
-    hard_limit: exchangeLimit,
+    chatbotInstructions: exchangeInstructions,
+    participantCue: exchangeCue,
+    nbFollowUpQuestions: exchangeFollowUpQuestions,
+    hardLimit: exchangeLimit,
   } = exchange;
 
   const { assistants } = useSettings();
@@ -59,20 +61,17 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
         multiline
         onChange={(e) => onChange(index, 'description', e.target.value)}
       />
-
       <TextField
         value={exchangeInstructions}
         label={t('SETTINGS.EXCHANGES.INSTRUCTIONS')}
         multiline
-        onChange={(e) =>
-          onChange(index, 'chatbot_instructions', e.target.value)
-        }
+        onChange={(e) => onChange(index, 'chatbotInstructions', e.target.value)}
       />
       <TextField
         value={exchangeCue}
         label={t('SETTINGS.EXCHANGES.CUE')}
         multiline
-        onChange={(e) => onChange(index, 'participant_cue', e.target.value)}
+        onChange={(e) => onChange(index, 'participantCue', e.target.value)}
       />
       {/*
       <FormControl>
@@ -123,19 +122,19 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
         type="number"
         label={t('SETTINGS.EXCHANGES.FOLLOW_UP_QUESTIONS')}
         onChange={(e) =>
-          onChange(
-            index,
-            'nb_follow_up_questions',
-            parseInt(e.target.value, 10),
-          )
+          onChange(index, 'nbFollowUpQuestions', parseInt(e.target.value, 10))
         }
       />
       <Typography variant="h6">
-        {t('SETTINGS.EXCHANGES.DISABLE_HARD_LIMIT')}
+        {t('SETTINGS.EXCHANGES.DISABLE_hardLimit')}
+        {'   '}
+        <Tooltip title={t('SETTINGS.EXCHANGES.hardLimit_INFO')}>
+          <InfoBadge />
+        </Tooltip>
       </Typography>
       <Switch
         checked={exchangeLimit}
-        onChange={(e) => onChange(index, 'hard_limit', e.target.checked)}
+        onChange={(e) => onChange(index, 'hardLimit', e.target.checked)}
       />
       <IconButton
         color="secondary"
@@ -160,8 +159,8 @@ const ExchangeSettings: FC<PropTypesList> = ({ exchanges, onChange }) => {
 
   const handleAddExchange = (): void => {
     onChange((prev) => ({
-      exchanges_list: [
-        ...prev.exchanges_list,
+      exchangesList: [
+        ...prev.exchangesList,
         {
           assistant: {
             id: '1',
@@ -169,10 +168,10 @@ const ExchangeSettings: FC<PropTypesList> = ({ exchanges, onChange }) => {
             description: 'Assistant Description',
           },
           description: '',
-          chatbot_instructions: '',
-          participant_cue: '',
-          nb_follow_up_questions: NaN,
-          hard_limit: false,
+          chatbotInstructions: '',
+          participantCue: '',
+          nbFollowUpQuestions: NaN,
+          hardLimit: false,
         },
       ],
     }));
@@ -180,20 +179,20 @@ const ExchangeSettings: FC<PropTypesList> = ({ exchanges, onChange }) => {
 
   const handleRemoveExchange = (index: number): void => {
     onChange((prev) => ({
-      exchanges_list: prev.exchanges_list.filter((_, i) => i !== index),
+      exchangesList: prev.exchangesList.filter((_, i) => i !== index),
     }));
   };
 
   const handleChange = (
     index: number,
-    field: keyof ExchangesSettingsType['exchanges_list'][number],
+    field: keyof ExchangesSettingsType['exchangesList'][number],
     value: string | number | boolean | Omit<Agent, 'type'>,
   ): void => {
-    const updatedExchanges = exchanges.exchanges_list.map((exchange, i) =>
+    const updatedExchanges = exchanges.exchangesList.map((exchange, i) =>
       i === index ? { ...exchange, [field]: value } : exchange,
     );
 
-    onChange({ exchanges_list: updatedExchanges });
+    onChange({ exchangesList: updatedExchanges });
   };
 
   return (
@@ -206,7 +205,7 @@ const ExchangeSettings: FC<PropTypesList> = ({ exchanges, onChange }) => {
         border="1px solid #ccc"
         borderRadius="8px"
       >
-        {exchanges.exchanges_list.length === 0 ? (
+        {exchanges.exchangesList.length === 0 ? (
           <Alert
             severity="warning"
             sx={{
@@ -217,26 +216,44 @@ const ExchangeSettings: FC<PropTypesList> = ({ exchanges, onChange }) => {
             {t('SETTINGS.EXCHANGES.CREATE')}
           </Alert>
         ) : (
-          exchanges.exchanges_list.map((exchange, index) => (
-            <Stack
-              key={index}
-              justifyContent="space-around"
-              direction="row"
-              spacing={2}
-              alignItems="center"
-              divider={<Divider orientation="vertical" flexItem />}
-            >
-              <Typography sx={{ flex: '0 0 5%' }}>{index + 1}</Typography>
-              <Box sx={{ flex: '1' }}>
-                <ExchangeSettingsPanel
-                  exchange={exchange}
-                  onChange={handleChange}
-                  index={index}
-                  handleRemoveExchange={handleRemoveExchange}
-                />
-              </Box>
-            </Stack>
-          ))
+          exchanges.exchangesList.map((exchange, index) => {
+            const exchangeColors: string[] = ['#5050d2', '#d29650', '#50d250'];
+            return (
+              <Stack
+                key={index}
+                justifyContent="space-around"
+                direction="row"
+                spacing={2}
+                alignItems="center"
+                divider={
+                  <Divider
+                    orientation="vertical"
+                    flexItem
+                    color={exchangeColors[index % 3]}
+                  />
+                }
+              >
+                <Typography
+                  px={1}
+                  bgcolor={exchangeColors[index % 3]}
+                  flex="0 0 fit-content"
+                  color="white"
+                  borderRadius="50%"
+                  textAlign="center"
+                >
+                  {index + 1}
+                </Typography>
+                <Box sx={{ flex: '1' }}>
+                  <ExchangeSettingsPanel
+                    exchange={exchange}
+                    onChange={handleChange}
+                    index={index}
+                    handleRemoveExchange={handleRemoveExchange}
+                  />
+                </Box>
+              </Stack>
+            );
+          })
         )}
         <Button variant="contained" onClick={handleAddExchange}>
           +

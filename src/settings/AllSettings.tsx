@@ -130,7 +130,7 @@ const AllSettings: FC<Record<string, never>> = () => {
               disabled={useMemo(
                 () =>
                   isEqual(exchangesSavedState, exchanges) ||
-                  exchanges.exchanges_list.length === 0,
+                  exchanges.exchangesList.length === 0,
                 [exchanges, exchangesSavedState],
               )}
             >

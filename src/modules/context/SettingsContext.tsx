@@ -24,11 +24,11 @@ const defaultSettingsValues: AllSettingsType = {
   },
   chat: {
     description: '',
-    participant_instructions: '',
-    participant_end_txt: '',
+    participantInstructions: '',
+    participantEndText: '',
   },
   exchanges: {
-    exchanges_list: [
+    exchangesList: [
       {
         assistant: {
           id: '',
@@ -36,10 +36,10 @@ const defaultSettingsValues: AllSettingsType = {
           description: '',
         },
         description: '',
-        chatbot_instructions: '',
-        participant_cue: '',
-        nb_follow_up_questions: NaN,
-        hard_limit: false,
+        chatbotInstructions: '',
+        participantCue: '',
+        nbFollowUpQuestions: NaN,
+        hardLimit: false,
       },
     ],
   },

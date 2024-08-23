@@ -7,10 +7,10 @@ type Exchange = {
   name: string;
   description: string;
   // instructions: string;
-  chatbot_instructions: string;
+  chatbotInstructions: string;
   participantInstructionsOnComplete: string;
   // cue: string;
-  participant_cue: string;
+  participantCue: string;
   order: number;
   messages: Message[];
   // assistant: Agent;
@@ -20,9 +20,9 @@ type Exchange = {
   completed: boolean;
   dismissed: boolean;
   // softLimit: number;
-  nb_follow_up_questions: number;
+  nbFollowUpQuestions: number;
   // hardLimit: number;
-  hard_limit: boolean;
+  hardLimit: boolean;
   startedAt?: Date;
   completedAt?: Date;
   dismissedAt?: Date;

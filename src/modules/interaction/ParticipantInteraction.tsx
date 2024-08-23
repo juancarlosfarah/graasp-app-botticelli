@@ -30,8 +30,8 @@ const ParticipantInteraction = (): ReactElement => {
     id: 0,
     description: '',
     modelInstructions: '',
-    participant_instructions: '',
-    participant_end_txt: '',
+    participantInstructions: '',
+    participantEndText: '',
     name: '',
     currentExchange: 0,
     started: false,
@@ -42,7 +42,7 @@ const ParticipantInteraction = (): ReactElement => {
       description: 'User Description',
       name: 'User',
     },
-    exchanges: { exchanges_list: [] },
+    exchanges: { exchangesList: [] },
     createdAt: new Date(),
     updatedAt: new Date(),
   };
@@ -51,9 +51,9 @@ const ParticipantInteraction = (): ReactElement => {
     id: 0,
     name: 'Exchange 1',
     description: '',
-    chatbot_instructions: 'Instructions',
+    chatbotInstructions: 'Instructions',
     participantInstructionsOnComplete: '',
-    participant_cue: '',
+    participantCue: '',
     order: 0,
     messages: [],
     assistant: defaultAssistant,
@@ -61,8 +61,8 @@ const ParticipantInteraction = (): ReactElement => {
     started: false,
     completed: false,
     dismissed: false,
-    nb_follow_up_questions: 5,
-    hard_limit: true,
+    nbFollowUpQuestions: 5,
+    hardLimit: true,
     createdAt: new Date(),
     updatedAt: new Date(),
   };
@@ -175,7 +175,7 @@ const ParticipantInteraction = (): ReactElement => {
 
   function createTemplate(): Interaction {
     const interactionBase: Interaction = { ...defaultInteraction, ...chat };
-    interactionBase.exchanges.exchanges_list = exchanges.exchanges_list.map(
+    interactionBase.exchanges.exchangesList = exchanges.exchangesList.map(
       (exchange, index) => ({
         ...defaultExchange,
         ...exchange,
@@ -222,7 +222,7 @@ const ParticipantInteraction = (): ReactElement => {
     setInteraction((prevState) => ({
       ...prevState,
       exchanges: {
-        exchanges_list: prevState.exchanges.exchanges_list.map((exchange) =>
+        exchangesList: prevState.exchanges.exchangesList.map((exchange) =>
           exchange.id === updatedExchange.id ? updatedExchange : exchange,
         ),
       },
@@ -261,7 +261,7 @@ const ParticipantInteraction = (): ReactElement => {
 
   const goToNextExchange = (): void => {
     const updatedInteraction = { ...interaction };
-    const numExchanges = interaction.exchanges.exchanges_list.length;
+    const numExchanges = interaction.exchanges.exchangesList.length;
     const { currentExchange } = interaction;
     if (currentExchange === numExchanges - 1) {
       updatedInteraction.completed = true;
@@ -290,13 +290,13 @@ const ParticipantInteraction = (): ReactElement => {
           textAlign: 'center',
         }}
       >
-        {interaction.participant_instructions && (
+        {interaction.participantInstructions && (
           <>
             <Typography
               variant="body1"
               sx={{ p: 2, pt: 4, textAlign: 'justify' }}
             >
-              {interaction.participant_instructions}
+              {interaction.participantInstructions}
             </Typography>
             <Typography
               variant="body1"
@@ -328,7 +328,7 @@ const ParticipantInteraction = (): ReactElement => {
       }}
     >
       <Typography variant="body1" sx={{ p: 10, textAlign: 'center' }}>
-        {interaction.participant_end_txt}
+        {interaction.participantEndText}
         {/*
         <br />
         <br />
@@ -370,11 +370,11 @@ const ParticipantInteraction = (): ReactElement => {
     <MessagesPane
       goToNextExchange={goToNextExchange}
       autoDismiss={
-        interaction.exchanges.exchanges_list[interaction.currentExchange]
-          .hard_limit
+        interaction.exchanges.exchangesList[interaction.currentExchange]
+          .hardLimit
       }
       currentExchange={
-        interaction.exchanges.exchanges_list[interaction.currentExchange]
+        interaction.exchanges.exchangesList[interaction.currentExchange]
       }
       setExchange={updateExchange}
       participantId={participantId}
