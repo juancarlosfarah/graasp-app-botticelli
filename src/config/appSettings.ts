@@ -7,7 +7,7 @@ export type ChatSettingsType = {
   participant_end_txt: string;
 };
 
-type ExchangeSettings = {
+export type ExchangeSettings = {
   assistant: Agent & { type: AgentType.Assistant };
   description: string;
   chatbot_instructions: string;

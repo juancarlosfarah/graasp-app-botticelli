@@ -10,7 +10,7 @@ import { ChatBotMessage, ChatbotRole } from '@graasp/sdk';
 import _ from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 
-import { AppDataTypes } from '@/config/appData';
+// import { AppDataTypes } from '@/config/appData';
 import { mutations } from '@/config/queryClient';
 import AgentType from '@/types/AgentType';
 import Exchange from '@/types/Exchange';
@@ -23,59 +23,65 @@ import MessageInput from './MessageInput';
 import MessageLoader from './MessageLoader';
 
 type MessagesPaneProps = {
-  exchange: Exchange;
+  currentExchange: Exchange;
+  setExchange: (updatedExchange: Exchange) => void;
   participantId: string;
   readOnly?: boolean;
   autoDismiss?: boolean;
   goToNextExchange: () => void;
 };
 
-const buildPrompt = (
-  threadMessages: Message[],
-  userMessage: Message,
-): Array<ChatBotMessage> => {
-  // define the message to send to OpenAI with the initial prompt first if needed (role system).
-  // Each call to OpenAI must contain the whole history of the messages.
-  // const finalPrompt: Array<ChatBotMessage> = initialPrompt
-  //   ? [{ role: ChatbotRole.System, content: initialPrompt }]
-  //   : [];
-  const finalPrompt = [
-    {
-      role: ChatbotRole.System,
-      content:
-        'Vous êtes un chatbot qui conduit une interview avec une personne qui vient d’assister à un concert de musique électroacoustique. Vous allez poser trois questions principales. ' +
-        'Chaque question principale est suivie de quatre autres questions afin de préciser les réponses données. ' +
-        'Les trois questions principales sont: ' +
-        "(1) Quelles sont les images mentales les plus fortes ou les plus claires que vous avez perçues pendant l'écoute du concert? " +
-        "(2) Pourriez-vous décrire s'il s'agissait plus de formes réelles ou imaginaires? Réalistes ou abstraites? " +
-        "(3) Où se trouvait votre corps par rapport à ces images?  Vous les observiez depuis un point de vue extérieur, depuis le bas ou le haut ou latéralement, ou alors aviez-vous la sensation d'être immergé dans un espace qui vous entoure, d'être transporté dans un lieu?",
-    },
-  ];
-
-  threadMessages.forEach((msg) => {
-    const msgRole =
-      msg.sender.type === AgentType.Assistant
-        ? ChatbotRole.Assistant
-        : ChatbotRole.User;
-    finalPrompt.push({ role: msgRole, content: msg.content });
-  });
-
-  // add the last user's message in the prompt
-  finalPrompt.push({ role: ChatbotRole.User, content: userMessage.content });
-
-  return finalPrompt;
-};
-
 const MessagesPane = ({
-  exchange: defaultExchange,
+  currentExchange,
+  setExchange,
   participantId,
   autoDismiss,
   readOnly = false,
   goToNextExchange,
 }: MessagesPaneProps): ReactElement => {
-  const { mutateAsync: postAppDataAsync } = mutations.usePostAppData();
+  //  const { mutateAsync: postAppDataAsync } = mutations.usePostAppData();
   const { mutateAsync: postChatBot } = mutations.usePostChatBot();
 
+  const buildPrompt = (
+    threadMessages: Message[],
+    userMessage: Message,
+  ): Array<ChatBotMessage> => {
+    // define the message to send to OpenAI with the initial prompt first if needed (role system).
+    // Each call to OpenAI must contain the whole history of the messages.
+    // const finalPrompt: Array<ChatBotMessage> = initialPrompt
+    //   ? [{ role: ChatbotRole.System, content: initialPrompt }]
+    //   : [];
+    const finalPrompt = [
+      {
+        role: ChatbotRole.System,
+        content: `${currentExchange.chatbot_instructions}The current principal questions is:${currentExchange.participant_cue}`,
+
+        /*
+          'Vous êtes un chatbot qui conduit une interview avec une personne qui vient d’assister à un concert de musique électroacoustique. Vous allez poser trois questions principales. ' +
+          'Chaque question principale est suivie de quatre autres questions afin de préciser les réponses données. ' +
+          'Les trois questions principales sont: ' +
+          "(1) Quelles sont les images mentales les plus fortes ou les plus claires que vous avez perçues pendant l'écoute du concert? " +
+          "(2) Pourriez-vous décrire s'il s'agissait plus de formes réelles ou imaginaires? Réalistes ou abstraites? " +
+          "(3) Où se trouvait votre corps par rapport à ces images?  Vous les observiez depuis un point de vue extérieur, depuis le bas ou le haut ou latéralement, ou alors aviez-vous la sensation d'être immergé dans un espace qui vous entoure, d'être transporté dans un lieu?",
+      */
+      },
+    ];
+
+    threadMessages.forEach((msg) => {
+      const msgRole =
+        msg.sender.type === AgentType.Assistant
+          ? ChatbotRole.Assistant
+          : ChatbotRole.User;
+      finalPrompt.push({ role: msgRole, content: msg.content });
+    });
+
+    // add the last user's message in the prompt
+    finalPrompt.push({ role: ChatbotRole.User, content: userMessage.content });
+
+    return finalPrompt;
+  };
+
+  /*
   function loadMessages(): Message[] {
     const item = window.sessionStorage.getItem('messages');
     return item != null ? JSON.parse(item) : [];
@@ -90,15 +96,17 @@ const MessagesPane = ({
     const item = window.sessionStorage.getItem('sentMessageCount');
     return item != null ? parseInt(item, 10) : 0;
   }
+*/
 
   const [status, setStatus] = useState<Status>(Status.Idle);
-  const [exchange, setExchange] = useState<Exchange>(loadExchange());
-  const [messages, setMessages] = useState<Message[]>(loadMessages());
+  // const [exchange, setExchange] = useState<Exchange>(currentExchange);
+  const [msgs, setMessages] = useState<Message[]>([]);
   const [textAreaValue, setTextAreaValue] = useState('');
   const [sentMessageCount, setSentMessageCount] = useState<number>(
-    loadSentMessageCount(),
+    currentExchange.messages.length,
   );
 
+  /*
   useEffect(() => {
     window.sessionStorage.setItem('messages', JSON.stringify(messages));
   }, [messages]);
@@ -113,12 +121,18 @@ const MessagesPane = ({
       sentMessageCount.toString(),
     );
   }, [sentMessageCount]);
+*/
+
+  useEffect(() => {
+    setExchange({ ...currentExchange, messages: msgs });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentExchange]);
 
   useEffect(() => {
     const defaultMessages: Message[] = [
       {
-        id: `${defaultExchange.id}`,
-        content: defaultExchange.cue,
+        id: `${currentExchange.id}`,
+        content: currentExchange.participant_cue,
         sender: {
           id: '1',
           name: 'Interviewer',
@@ -127,8 +141,9 @@ const MessagesPane = ({
       },
     ];
     setMessages((m) => _.uniqBy([...m, ...defaultMessages], 'id'));
-    setExchange(defaultExchange);
-  }, [defaultExchange]);
+    setExchange({ ...currentExchange, messages: msgs });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentExchange]);
 
   const saveNewMessage = ({ content }: { content: string }): void => {
     setStatus(Status.Loading);
@@ -141,21 +156,21 @@ const MessagesPane = ({
         type: AgentType.User,
       },
     };
-
+    /*
     postAppDataAsync({
       data: {
         content,
       },
       type: AppDataTypes.ParticipantComment,
     });
-
+*/
     setMessages((m) => [...m, newMessage]);
     setSentMessageCount((c) => c + 1);
 
     // will not take updated message count in consideration so we add two
     // https://react.dev/reference/react/useState#setstate-caveats
-    if (exchange.softLimit && sentMessageCount + 2 > exchange.softLimit) {
-      const newExchange = { ...exchange };
+    if (sentMessageCount + 1 > currentExchange.nb_follow_up_questions) {
+      const newExchange = { ...currentExchange };
       newExchange.completed = true;
       newExchange.completedAt = new Date();
       if (autoDismiss) {
@@ -177,7 +192,7 @@ const MessagesPane = ({
         // we can not use it in this context as we are using a JSON prompt.
         // if we simplify the prompt in the future we will be able to remove the line above
         // and this function solely
-        ...buildPrompt(messages, newMessage),
+        ...buildPrompt(msgs, newMessage),
       ];
 
       postChatBot(prompt)
@@ -192,7 +207,7 @@ const MessagesPane = ({
               type: AgentType.Assistant,
             },
           };
-
+          /*
           // post comment from bot
           postAppDataAsync({
             data: {
@@ -200,7 +215,7 @@ const MessagesPane = ({
             },
             type: AppDataTypes.AssistantComment,
           });
-
+*/
           // const updatedMessagesWithResponse = [...updatedMessages, response];
           setMessages((m) => [...m, response]);
         })
@@ -220,23 +235,24 @@ const MessagesPane = ({
 
   useEffect((): void => {
     const startExchange = (): void => {
-      const updatedExchange = { ...exchange };
+      const updatedExchange = { ...currentExchange };
       updatedExchange.started = true;
       updatedExchange.startedAt = new Date();
       setExchange(updatedExchange);
     };
     // do not start if this is readonly
-    if (!readOnly && exchange && !exchange.started) {
+    if (!readOnly && currentExchange && !currentExchange.started) {
       startExchange();
     }
-  }, [exchange, readOnly]);
+  }, [currentExchange, readOnly, setExchange]);
 
-  if (!exchange) {
+  if (!currentExchange) {
     return <>Exchange Not Found</>;
   }
 
   const showParticipantInstructionsOnComplete =
-    exchange.completed && exchange.participantInstructionsOnComplete;
+    currentExchange.completed &&
+    currentExchange.participantInstructionsOnComplete;
 
   return (
     <Paper
@@ -259,7 +275,7 @@ const MessagesPane = ({
         }}
       >
         <Stack spacing={2} justifyContent="flex-end">
-          {messages.map((message: Message, index: number) => {
+          {msgs.map((message: Message, index: number) => {
             const isYou = message?.sender?.id === participantId;
 
             return (
@@ -296,19 +312,19 @@ const MessagesPane = ({
           )}
           {showParticipantInstructionsOnComplete && (
             <Alert variant="filled" color="success">
-              {exchange.participantInstructionsOnComplete}
+              {currentExchange.participantInstructionsOnComplete}
             </Alert>
           )}
         </Stack>
       </Box>
-      {!(readOnly || exchange.dismissed) && (
+      {!(readOnly || currentExchange.dismissed) && (
         <MessageInput
-          exchange={exchange}
+          exchange={currentExchange}
           goToNextExchange={goToNextExchange}
           textAreaValue={textAreaValue}
           setTextAreaValue={setTextAreaValue}
           setExchange={setExchange}
-          completed={exchange.completed}
+          completed={currentExchange.completed}
           onSubmit={(): void => {
             saveNewMessage({
               // keyPressEvents,

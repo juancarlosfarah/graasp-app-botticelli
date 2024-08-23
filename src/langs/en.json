@@ -20,10 +20,10 @@
       "TITLE": "App Settings",
       "SAVE_BTN": "Save",
       "CHAT": {
+        "TITLE": "Chat Settings",
         "DESCRIPTION": "Chat Description",
         "INSTRUCTIONS": "Participant Instructions",
-        "END": "End Screen Text.",
-        "ASSISTANT": "Assistant",
+        "END": "End Screen Text",
         "USER": "Participant"
       },
       "EXCHANGES": {
@@ -31,9 +31,18 @@
         "DESCRIPTION": "Default exchanges description.",
         "INSTRUCTIONS": "Chatbot instructions",
         "CUE": "Initial Cue",
+        "ASSISTANT": "Assistant",
         "FOLLOW_UP_QUESTIONS": "Number of Follow Up Questions",
-        "DISABLE_HARD_LIMIT": "Allow More Follow Up Questions"
+        "DISABLE_HARD_LIMIT": "Do not Allow More Follow Up Questions",
+        "DEFINE": "Please define at least one exchange."
       }
+    },
+    "START_INTERACTION": "The dialogue lasts about 5 minutes and you'll receive a small reward to thank you for taking part!",
+    "START": "Begin!",
+    "MESSAGE_BOX": {
+      "INSERT_HERE": "Your response here...",
+      "SEND": "Send",
+      "DONE": "Done"
     }
   }
 }

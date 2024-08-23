@@ -1,4 +1,5 @@
 import { ReactElement, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import CheckIcon from '@mui/icons-material/CheckRounded';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
@@ -36,6 +37,8 @@ const MessageInput = ({
 }: MessageInputProps): ReactElement => {
   const textAreaRef = useRef<HTMLDivElement>(null);
   const [keypressData, setKeypressData] = useState<KeyPressData[]>([]);
+
+  const { t } = useTranslation();
 
   function dismissExchange(): void {
     const updatedExchange = { ...exchange };
@@ -83,7 +86,7 @@ const MessageInput = ({
     <Box sx={{ px: 2, pb: 3 }}>
       <FormControl sx={{ width: '100%' }}>
         <Textarea
-          placeholder="Votre réponse ici…"
+          placeholder={t('MESSAGE_BOX.INSERT_HERE')}
           aria-label="Message"
           ref={textAreaRef}
           onChange={(e): void => {
@@ -113,7 +116,7 @@ const MessageInput = ({
                   sx={{ alignSelf: 'center', borderRadius: 'sm' }}
                   onClick={handleDismiss}
                 >
-                  Done
+                  {t('MESSAGE_BOX.DONE')}
                 </Button>
               )}
               <Button
@@ -123,7 +126,7 @@ const MessageInput = ({
                 endIcon={<SendRoundedIcon />}
                 onClick={handleClick}
               >
-                Envoyer
+                {t('MESSAGE_BOX.SEND')}
               </Button>
             </Stack>
           }

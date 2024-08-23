@@ -75,7 +75,9 @@ const BuilderView = (): JSX.Element => {
 
   const disableSave = useMemo(
     () =>
-      isEqual(chatSavedState, chat) && isEqual(exchangesSavedState, exchanges),
+      (isEqual(chatSavedState, chat) &&
+        isEqual(exchangesSavedState, exchanges)) ||
+      exchanges.exchanges_list.length === 0,
     [chat, chatSavedState, exchanges, exchangesSavedState],
   );
 
@@ -128,7 +130,7 @@ const BuilderView = (): JSX.Element => {
           </Button>
         </Stack>
         <Box p={2}>
-          <Stack spacing={2}>
+          <Stack spacing={5}>
             <Typography variant="h2">{t('SETTINGS.TITLE')}</Typography>
             <ChatSettingsComponent
               chat={chat}

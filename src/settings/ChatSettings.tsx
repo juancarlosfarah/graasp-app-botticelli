@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { Typography } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
 
 import { ChatSettingsType } from '@/config/appSettings';
 
@@ -20,22 +20,24 @@ const ChatSettings: FC<PropTypes> = ({ chat, onChange }) => {
     participant_end_txt: chatEndText,
   } = chat;
   return (
-    <Stack spacing={1}>
-      <Typography variant="h4">{t('SETTINGS.CHAT.DESCRIPTION')}</Typography>
+    <Stack spacing={2}>
+      <Typography variant="h5">{t('SETTINGS.CHAT.TITLE')}</Typography>
+
       <TextField
         value={chatDescription}
+        label={t('SETTINGS.CHAT.DESCRIPTION')}
         onChange={(e) => onChange({ ...chat, description: e.target.value })}
       />
-      <Typography variant="h4">{t('SETTINGS.CHAT.INSTRUCTIONS')}</Typography>
       <TextField
         value={chatInstructions}
+        label={t('SETTINGS.CHAT.INSTRUCTIONS')}
         onChange={(e) =>
           onChange({ ...chat, participant_instructions: e.target.value })
         }
       />
-      <Typography variant="h4">{t('SETTINGS.CHAT.END')}</Typography>
       <TextField
         value={chatEndText}
+        label={t('SETTINGS.CHAT.END')}
         onChange={(e) =>
           onChange({ ...chat, participant_end_txt: e.target.value })
         }

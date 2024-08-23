@@ -20,20 +20,29 @@
       "TITLE": "Paramètres de l'application",
       "SAVE_BTN": "Enregistrer",
       "CHAT": {
-        "DESCRIPTION": "Description du chat",
-        "INSTRUCTIONS": "Instructions pour le participant",
-        "END": "Texte de fin d'écran",
-        "ASSISTANT": "Assistant",
+        "TITLE": " Paramètres du Chat",
+        "DESCRIPTION": "Description du Chat",
+        "INSTRUCTIONS": "Instructions pour le Participant",
+        "END": "Texte de Fin d'Écran",
         "USER": "Participant"
       },
       "EXCHANGES": {
         "TITLE": "Échanges Paramètres",
-        "DESCRIPTION": "Description des échanges par défaut",
-        "INSTRUCTIONS": "Instructions du chatbot",
+        "DESCRIPTION": "Description des Échanges par Défaut",
+        "INSTRUCTIONS": "Instructions du Chatbot",
         "CUE": "Initial Cue",
-        "FOLLOW_UP_QUESTIONS": "Nombre de questions de suivi",
-        "DISABLE_HARD_LIMIT": "Autoriser plus de questions de suivi"
+        "ASSISTANT": "Assistant",
+        "FOLLOW_UP_QUESTIONS": "Nombre de Questions de Suivi",
+        "DISABLE_HARD_LIMIT": "Autoriser pas plus de Questions de Suivi",
+        "DEFINE": "Veuillez définir au moins un échange."
       }
+    },
+    "START_INTERACTION": "Le dialogue dure environ 5 minutes et vous recevrez une petite récompense pour vous remercier de votre participation!",
+    "START": "Commencer!",
+    "MESSAGE_BOX": {
+      "INSERT_HERE": "Votre réponse ici...",
+      "SEND": "Envoyer",
+      "DONE": "Fini"
     }
   }
 }

@@ -1,14 +1,20 @@
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
+// import { patchAppData } from '@graasp/apps-query-client/dist/src/api';
+import { hooks, mutations } from '@/config/queryClient';
 import { START_INTERACTION_BUTTON_CY } from '@/config/selectors';
 import MessagesPane from '@/modules/message/MessagesPane';
 import Agent from '@/types/Agent';
 import AgentType from '@/types/AgentType';
+import Exchange from '@/types/Exchange';
 import Interaction from '@/types/Interaction';
+
+import { useSettings } from '../context/SettingsContext';
 
 const ParticipantInteraction = (): ReactElement => {
   const participantId = '0';
@@ -20,6 +26,48 @@ const ParticipantInteraction = (): ReactElement => {
     type: AgentType.Assistant,
   };
 
+  const defaultInteraction: Interaction = {
+    id: 0,
+    description: '',
+    modelInstructions: '',
+    participant_instructions: '',
+    participant_end_txt: '',
+    name: '',
+    currentExchange: 0,
+    started: false,
+    completed: false,
+    participant: {
+      id: participantId,
+      type: AgentType.User,
+      description: 'User Description',
+      name: 'User',
+    },
+    exchanges: { exchanges_list: [] },
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+
+  const defaultExchange: Exchange = {
+    id: 0,
+    name: 'Exchange 1',
+    description: '',
+    chatbot_instructions: 'Instructions',
+    participantInstructionsOnComplete: '',
+    participant_cue: '',
+    order: 0,
+    messages: [],
+    assistant: artificialAssistant,
+    triggers: [],
+    started: false,
+    completed: false,
+    dismissed: false,
+    nb_follow_up_questions: 5,
+    hard_limit: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+
+  /*
   const defaultInteraction: Interaction = {
     id: 0,
     description: 'Default Description',
@@ -117,19 +165,64 @@ const ParticipantInteraction = (): ReactElement => {
     createdAt: new Date(),
     updatedAt: new Date(),
   };
+*/
+  const { data: appDatas } = hooks.useAppData();
+  const { mutate: postAppData } = mutations.usePostAppData();
+  const { mutate: patchAppData } = mutations.usePatchAppData();
+  const { chat, exchanges } = useSettings();
 
+  const { t } = useTranslation();
+
+  function createTemplate(): Interaction {
+    const interactionBase: Interaction = { ...defaultInteraction, ...chat };
+    interactionBase.exchanges.exchanges_list = exchanges.exchanges_list.map(
+      (exchange, index) => ({
+        ...defaultExchange,
+        ...exchange,
+        id: index,
+      }),
+    );
+    return interactionBase;
+  }
+
+  /*
   function load(key: string): Interaction {
     const item = window.sessionStorage.getItem(key);
     return item != null ? JSON.parse(item) : defaultInteraction;
   }
+*/
 
-  const [interaction, setInteraction] = useState<Interaction>(
-    load('interaction'),
-  );
+  const [interaction, setInteraction] = useState<Interaction>(createTemplate());
+
+  const hasPosted = useRef(false);
 
   useEffect(() => {
-    window.sessionStorage.setItem('interaction', JSON.stringify(interaction));
+    if (!hasPosted.current) {
+      postAppData({ data: interaction, type: 'Interaction' });
+      hasPosted.current = true;
+    }
+  });
+
+  useEffect(() => {
+    if (hasPosted.current) {
+      patchAppData({
+        id: appDatas?.at(-1)?.id || '',
+        data: interaction,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [interaction]);
+
+  const updateExchange = (updatedExchange: Exchange): void => {
+    setInteraction((prevState) => ({
+      ...prevState,
+      exchanges: {
+        exchanges_list: prevState.exchanges.exchanges_list.map((exchange) =>
+          exchange.id === updatedExchange.id ? updatedExchange : exchange,
+        ),
+      },
+    }));
+  };
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent): string => {
@@ -163,7 +256,7 @@ const ParticipantInteraction = (): ReactElement => {
 
   const goToNextExchange = (): void => {
     const updatedInteraction = { ...interaction };
-    const numExchanges = interaction.exchanges.length;
+    const numExchanges = interaction.exchanges.exchanges_list.length;
     const { currentExchange } = interaction;
     if (currentExchange === numExchanges - 1) {
       updatedInteraction.completed = true;
@@ -192,20 +285,19 @@ const ParticipantInteraction = (): ReactElement => {
           textAlign: 'center',
         }}
       >
-        {interaction.participantInstructions && (
+        {interaction.participant_instructions && (
           <>
             <Typography
               variant="body1"
               sx={{ p: 2, pt: 4, textAlign: 'justify' }}
             >
-              {interaction.participantInstructions}
+              {interaction.participant_instructions}
             </Typography>
             <Typography
               variant="body1"
               sx={{ p: 2, pt: 4, textAlign: 'center' }}
             >
-              Le dialogue dure environ 5 minutes et vous recevrez une petite
-              récompense pour vous remercier de votre participation!
+              {t('START_INTERACTION')}
             </Typography>
           </>
         )}
@@ -216,7 +308,7 @@ const ParticipantInteraction = (): ReactElement => {
           sx={{ mt: 3, mx: 'auto' }}
           onClick={handleStartInteraction}
         >
-          Commencer!
+          {t('START')}
         </Button>
       </Box>
     );
@@ -231,7 +323,8 @@ const ParticipantInteraction = (): ReactElement => {
       }}
     >
       <Typography variant="body1" sx={{ p: 10, textAlign: 'center' }}>
-        {interaction.participantInstructionsOnComplete}
+        {interaction.participant_end_txt}
+        {/*
         <br />
         <br />
         Cadeau! Écoutez ces concerts de Luca Forcucci en streaming!
@@ -265,13 +358,20 @@ const ParticipantInteraction = (): ReactElement => {
         <a href="https://lnco.epfl.ch" target="_blank" rel="noreferrer">
           Plus d’information sur les chercheurs.
         </a>
+        */}
       </Typography>
     </Box>
   ) : (
     <MessagesPane
       goToNextExchange={goToNextExchange}
-      autoDismiss
-      exchange={interaction.exchanges[interaction.currentExchange]}
+      autoDismiss={
+        interaction.exchanges.exchanges_list[interaction.currentExchange]
+          .hard_limit
+      }
+      currentExchange={
+        interaction.exchanges.exchanges_list[interaction.currentExchange]
+      }
+      setExchange={updateExchange}
       participantId={participantId}
       readOnly={false}
     />
