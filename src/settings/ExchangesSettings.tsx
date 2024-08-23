@@ -53,12 +53,14 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
       <TextField
         value={exchangeDescription}
         label={t('SETTINGS.EXCHANGES.DESCRIPTION')}
+        multiline
         onChange={(e) => onChange(index, 'description', e.target.value)}
       />
 
       <TextField
         value={exchangeInstructions}
         label={t('SETTINGS.EXCHANGES.INSTRUCTIONS')}
+        multiline
         onChange={(e) =>
           onChange(index, 'chatbot_instructions', e.target.value)
         }
@@ -66,6 +68,7 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
       <TextField
         value={exchangeCue}
         label={t('SETTINGS.EXCHANGES.CUE')}
+        multiline
         onChange={(e) => onChange(index, 'participant_cue', e.target.value)}
       />
       {/*
@@ -224,6 +227,60 @@ const ExchangeSettings: FC<PropTypesList> = ({ exchanges, setExchanges }) => {
       </Stack>
     </Stack>
   );
+
+  /*
+    return (
+    <Stack spacing={2}>
+      <Typography variant="h5">{t('SETTINGS.EXCHANGES.TITLE')}</Typography>
+      <Box
+        sx={{ maxHeight: '80vh', overflowY: 'auto' }}
+        py={2}
+        px={20}
+        border="1px solid #ccc"
+        borderRadius="8px"
+      >
+        <Stack spacing={1}>
+          {exchanges.exchanges_list.length === 0 ? (
+            <Alert
+              severity="warning"
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+            >
+              {t('SETTINGS.EXCHANGES.DEFINE')}
+            </Alert>
+          ) : (
+            exchanges.exchanges_list.map((exchange, index) => (
+              <Stack
+                key={index}
+                justifyContent="space-around"
+                direction="row"
+                spacing={2}
+                alignItems="center"
+                divider={<Divider orientation="vertical" flexItem />}
+              >
+                <Typography sx={{ flex: '0 0 5%' }}>{index + 1}</Typography>
+                <Box sx={{ flex: '1' }}>
+                  <ExchangeSettingsPanel
+                    exchange={exchange}
+                    onChange={handleChange}
+                    index={index}
+                    handleRemoveExchange={handleRemoveExchange}
+                  />
+                </Box>
+              </Stack>
+            ))
+          )}
+
+          <Button variant="contained" onClick={handleAddExchange}>
+            +
+          </Button>
+        </Stack>
+      </Box>
+    </Stack>
+  );
+  */
 };
 
 export default ExchangeSettings;

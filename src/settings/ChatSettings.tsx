@@ -22,15 +22,16 @@ const ChatSettings: FC<PropTypes> = ({ chat, onChange }) => {
   return (
     <Stack spacing={2}>
       <Typography variant="h5">{t('SETTINGS.CHAT.TITLE')}</Typography>
-
       <TextField
         value={chatDescription}
         label={t('SETTINGS.CHAT.DESCRIPTION')}
+        multiline
         onChange={(e) => onChange({ ...chat, description: e.target.value })}
       />
       <TextField
         value={chatInstructions}
         label={t('SETTINGS.CHAT.INSTRUCTIONS')}
+        multiline
         onChange={(e) =>
           onChange({ ...chat, participant_instructions: e.target.value })
         }
@@ -38,6 +39,7 @@ const ChatSettings: FC<PropTypes> = ({ chat, onChange }) => {
       <TextField
         value={chatEndText}
         label={t('SETTINGS.CHAT.END')}
+        multiline
         onChange={(e) =>
           onChange({ ...chat, participant_end_txt: e.target.value })
         }

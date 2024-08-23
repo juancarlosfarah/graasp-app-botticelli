@@ -145,6 +145,52 @@ const MessagesPane = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentExchange]);
 
+  function handlePostChatbot(newMessage: Message): void {
+    // respond
+    const prompt = [
+      // initial settings
+      // ...
+      // this function requests the prompt as the first argument in string format
+      // we can not use it in this context as we are using a JSON prompt.
+      // if we simplify the prompt in the future we will be able to remove the line above
+      // and this function solely
+      ...buildPrompt(msgs, newMessage),
+    ];
+
+    postChatBot(prompt)
+      .then((chatBotRes) => {
+        // actionData.content = chatBotRes.completion;
+        const response = {
+          id: uuidv4(),
+          content: chatBotRes.completion,
+          sender: {
+            id: '1',
+            name: 'Interviewer',
+            type: AgentType.Assistant,
+          },
+        };
+        /*
+            // post comment from bot
+            postAppDataAsync({
+              data: {
+                content: chatBotRes.completion,
+              },
+              type: AppDataTypes.AssistantComment,
+            });
+  */
+        // const updatedMessagesWithResponse = [...updatedMessages, response];
+        setMessages((m) => [...m, response]);
+      })
+      .finally(() => {
+        // set status back to idle
+        setStatus(Status.Idle);
+        // postAction({
+        //   data: actionData,
+        //   type: AppActionsType.Create,
+        // });
+      });
+  }
+
   const saveNewMessage = ({ content }: { content: string }): void => {
     setStatus(Status.Loading);
     const newMessage: Message = {
@@ -182,51 +228,10 @@ const MessagesPane = ({
         goToNextExchange();
       } else {
         setExchange(newExchange);
+        handlePostChatbot(newMessage);
       }
     } else {
-      // respond
-      const prompt = [
-        // initial settings
-        // ...
-        // this function requests the prompt as the first argument in string format
-        // we can not use it in this context as we are using a JSON prompt.
-        // if we simplify the prompt in the future we will be able to remove the line above
-        // and this function solely
-        ...buildPrompt(msgs, newMessage),
-      ];
-
-      postChatBot(prompt)
-        .then((chatBotRes) => {
-          // actionData.content = chatBotRes.completion;
-          const response = {
-            id: uuidv4(),
-            content: chatBotRes.completion,
-            sender: {
-              id: '1',
-              name: 'Interviewer',
-              type: AgentType.Assistant,
-            },
-          };
-          /*
-          // post comment from bot
-          postAppDataAsync({
-            data: {
-              content: chatBotRes.completion,
-            },
-            type: AppDataTypes.AssistantComment,
-          });
-*/
-          // const updatedMessagesWithResponse = [...updatedMessages, response];
-          setMessages((m) => [...m, response]);
-        })
-        .finally(() => {
-          // set status back to idle
-          setStatus(Status.Idle);
-          // postAction({
-          //   data: actionData,
-          //   type: AppActionsType.Create,
-          // });
-        });
+      handlePostChatbot(newMessage);
     }
 
     // evaluate
