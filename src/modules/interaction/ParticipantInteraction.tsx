@@ -19,7 +19,7 @@ import { useSettings } from '../context/SettingsContext';
 const ParticipantInteraction = (): ReactElement => {
   const participantId = '0';
 
-  const artificialAssistant: Agent = {
+  const defaultAssistant: Agent = {
     id: '1',
     name: 'Interviewer',
     description: 'Assistant Description',
@@ -56,7 +56,7 @@ const ParticipantInteraction = (): ReactElement => {
     participant_cue: '',
     order: 0,
     messages: [],
-    assistant: artificialAssistant,
+    assistant: defaultAssistant,
     triggers: [],
     started: false,
     completed: false,
@@ -180,6 +180,11 @@ const ParticipantInteraction = (): ReactElement => {
         ...defaultExchange,
         ...exchange,
         id: index,
+        assistant: {
+          ...defaultAssistant,
+          ...exchange.assistant,
+          type: AgentType.Assistant,
+        },
       }),
     );
     return interactionBase;

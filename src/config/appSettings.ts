@@ -1,5 +1,10 @@
 import Agent from '@/types/Agent';
-import AgentType from '@/types/AgentType';
+
+type AssistantSettings = Omit<Agent, 'type'>;
+
+export type AssistantsSettingsType = {
+  assistantsList: AssistantSettings[];
+};
 
 export type ChatSettingsType = {
   description: string;
@@ -8,7 +13,7 @@ export type ChatSettingsType = {
 };
 
 export type ExchangeSettings = {
-  assistant: Agent & { type: AgentType.Assistant };
+  assistant: AssistantSettings;
   description: string;
   chatbot_instructions: string;
   participant_cue: string;

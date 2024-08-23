@@ -19,15 +19,15 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 import { ExchangesSettingsType } from '@/config/appSettings';
+import { useSettings } from '@/modules/context/SettingsContext';
 import Agent from '@/types/Agent';
-import AgentType from '@/types/AgentType';
 
 type PropTypesSingle = {
   exchange: ExchangesSettingsType['exchanges_list'][number];
   onChange: (
     index: number,
     field: keyof ExchangesSettingsType['exchanges_list'][number],
-    value: string | number | boolean | (Agent & { type: AgentType.Assistant }),
+    value: string | number | boolean | Omit<Agent, 'type'>,
   ) => void;
   handleRemoveExchange: (index: number) => void;
   index: number;
@@ -48,6 +48,9 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
     nb_follow_up_questions: exchangeFollowUpQuestions,
     hard_limit: exchangeLimit,
   } = exchange;
+
+  const { assistants } = useSettings();
+
   return (
     <Stack spacing={1} p={2} border="1px solid #ccc" borderRadius="8px">
       <TextField
@@ -91,13 +94,28 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
       <FormControl>
         <InputLabel>{t('SETTINGS.EXCHANGES.ASSISTANT')}</InputLabel>
         <Select
-          value={exchangeAssistant}
+          value={exchangeAssistant.id}
+          renderValue={(selectedId) =>
+            assistants.assistantsList.find(
+              (assistant) => assistant.id === selectedId,
+            )?.name || selectedId
+          }
           label={t('SETTINGS.EXCHANGES.ASSISTANT')}
-          onChange={(e) => onChange(index, 'assistant', e.target.value)}
+          onChange={(e) =>
+            onChange(
+              index,
+              'assistant',
+              assistants.assistantsList.find(
+                (assistant) => assistant.id === e.target.value,
+              ) || exchangeAssistant,
+            )
+          }
         >
-          <MenuItem value={1}>1</MenuItem>
-          <MenuItem value={2}>2</MenuItem>
-          <MenuItem value={3}>3</MenuItem>
+          {assistants.assistantsList.map((assistant, nb) => (
+            <MenuItem key={nb} value={assistant.id}>
+              {assistant.name}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
       <TextField
@@ -134,14 +152,14 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
 
 type PropTypesList = {
   exchanges: ExchangesSettingsType;
-  setExchanges: (value: SetStateAction<ExchangesSettingsType>) => void;
+  onChange: (value: SetStateAction<ExchangesSettingsType>) => void;
 };
 
-const ExchangeSettings: FC<PropTypesList> = ({ exchanges, setExchanges }) => {
+const ExchangeSettings: FC<PropTypesList> = ({ exchanges, onChange }) => {
   const { t } = useTranslation();
 
   const handleAddExchange = (): void => {
-    setExchanges((prev) => ({
+    onChange((prev) => ({
       exchanges_list: [
         ...prev.exchanges_list,
         {
@@ -149,7 +167,6 @@ const ExchangeSettings: FC<PropTypesList> = ({ exchanges, setExchanges }) => {
             id: '1',
             name: 'Interviewer',
             description: 'Assistant Description',
-            type: AgentType.Assistant,
           },
           description: '',
           chatbot_instructions: '',
@@ -162,7 +179,7 @@ const ExchangeSettings: FC<PropTypesList> = ({ exchanges, setExchanges }) => {
   };
 
   const handleRemoveExchange = (index: number): void => {
-    setExchanges((prev) => ({
+    onChange((prev) => ({
       exchanges_list: prev.exchanges_list.filter((_, i) => i !== index),
     }));
   };
@@ -170,13 +187,13 @@ const ExchangeSettings: FC<PropTypesList> = ({ exchanges, setExchanges }) => {
   const handleChange = (
     index: number,
     field: keyof ExchangesSettingsType['exchanges_list'][number],
-    value: string | number | boolean | (Agent & { type: AgentType.Assistant }),
+    value: string | number | boolean | Omit<Agent, 'type'>,
   ): void => {
     const updatedExchanges = exchanges.exchanges_list.map((exchange, i) =>
       i === index ? { ...exchange, [field]: value } : exchange,
     );
 
-    setExchanges({ exchanges_list: updatedExchanges });
+    onChange({ exchanges_list: updatedExchanges });
   };
 
   return (
@@ -197,7 +214,7 @@ const ExchangeSettings: FC<PropTypesList> = ({ exchanges, setExchanges }) => {
               justifyContent: 'center',
             }}
           >
-            {t('SETTINGS.EXCHANGES.DEFINE')}
+            {t('SETTINGS.EXCHANGES.CREATE')}
           </Alert>
         ) : (
           exchanges.exchanges_list.map((exchange, index) => (
@@ -227,60 +244,6 @@ const ExchangeSettings: FC<PropTypesList> = ({ exchanges, setExchanges }) => {
       </Stack>
     </Stack>
   );
-
-  /*
-    return (
-    <Stack spacing={2}>
-      <Typography variant="h5">{t('SETTINGS.EXCHANGES.TITLE')}</Typography>
-      <Box
-        sx={{ maxHeight: '80vh', overflowY: 'auto' }}
-        py={2}
-        px={20}
-        border="1px solid #ccc"
-        borderRadius="8px"
-      >
-        <Stack spacing={1}>
-          {exchanges.exchanges_list.length === 0 ? (
-            <Alert
-              severity="warning"
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-              }}
-            >
-              {t('SETTINGS.EXCHANGES.DEFINE')}
-            </Alert>
-          ) : (
-            exchanges.exchanges_list.map((exchange, index) => (
-              <Stack
-                key={index}
-                justifyContent="space-around"
-                direction="row"
-                spacing={2}
-                alignItems="center"
-                divider={<Divider orientation="vertical" flexItem />}
-              >
-                <Typography sx={{ flex: '0 0 5%' }}>{index + 1}</Typography>
-                <Box sx={{ flex: '1' }}>
-                  <ExchangeSettingsPanel
-                    exchange={exchange}
-                    onChange={handleChange}
-                    index={index}
-                    handleRemoveExchange={handleRemoveExchange}
-                  />
-                </Box>
-              </Stack>
-            ))
-          )}
-
-          <Button variant="contained" onClick={handleAddExchange}>
-            +
-          </Button>
-        </Stack>
-      </Box>
-    </Stack>
-  );
-  */
 };
 
 export default ExchangeSettings;

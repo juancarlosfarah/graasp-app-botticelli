@@ -19,6 +19,14 @@
     "SETTINGS": {
       "TITLE": "App Settings",
       "SAVE_BTN": "Save",
+      "ASSISTANTS": {
+        "TITLE": "Assitants Settings",
+        "ID": "Assistant Id",
+        "NAME": "Assistant Name",
+        "DESCRIPTION": "Assistant Description",
+        "ADD": "Create new Assistant",
+        "CREATE": "Please create at least one assistant."
+      },
       "CHAT": {
         "TITLE": "Chat Settings",
         "DESCRIPTION": "Chat Description",
@@ -34,7 +42,7 @@
         "ASSISTANT": "Assistant",
         "FOLLOW_UP_QUESTIONS": "Number of Follow Up Questions",
         "DISABLE_HARD_LIMIT": "Do not Allow More Follow Up Questions",
-        "DEFINE": "Please define at least one exchange."
+        "CREATE": "Please create at least one exchange."
       }
     },
     "START_INTERACTION": "The dialogue lasts about 5 minutes and you'll receive a small reward to thank you for taking part!",

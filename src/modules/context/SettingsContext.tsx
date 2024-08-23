@@ -1,7 +1,10 @@
 import { FC, ReactElement, createContext, useContext } from 'react';
 
-import { ChatSettingsType, ExchangesSettingsType } from '@/config/appSettings';
-import AgentType from '@/types/AgentType';
+import {
+  AssistantsSettingsType,
+  ChatSettingsType,
+  ExchangesSettingsType,
+} from '@/config/appSettings';
 
 import { hooks, mutations } from '../../config/queryClient';
 import Loader from '../common/Loader';
@@ -9,12 +12,16 @@ import Loader from '../common/Loader';
 // mapping between Setting names and their data type
 // eslint-disable-next-line @typescript-eslint/ban-types
 type AllSettingsType = {
+  assistants: AssistantsSettingsType;
   chat: ChatSettingsType;
   exchanges: ExchangesSettingsType;
 };
 
 // default values for the data property of settings by name
 const defaultSettingsValues: AllSettingsType = {
+  assistants: {
+    assistantsList: [{ id: '', name: '', description: '' }],
+  },
   chat: {
     description: '',
     participant_instructions: '',
@@ -24,10 +31,9 @@ const defaultSettingsValues: AllSettingsType = {
     exchanges_list: [
       {
         assistant: {
-          id: '1',
-          name: 'Interviewer',
-          description: 'Assistant Description',
-          type: AgentType.Assistant,
+          id: '',
+          name: '',
+          description: '',
         },
         description: '',
         chatbot_instructions: '',
@@ -42,13 +48,14 @@ const defaultSettingsValues: AllSettingsType = {
 // list of the settings names
 const ALL_SETTING_NAMES = [
   // name of your settings
+  'assistants',
   'chat',
   'exchanges',
 ] as const;
 
 // automatically generated types
 type AllSettingsNameType = (typeof ALL_SETTING_NAMES)[number];
-type AllSettingsDataType = AllSettingsType[keyof AllSettingsType];
+export type AllSettingsDataType = AllSettingsType[keyof AllSettingsType];
 
 export type SettingsContextType = AllSettingsType & {
   saveSettings: (

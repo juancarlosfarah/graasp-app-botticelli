@@ -1,20 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-
-import SaveIcon from '@mui/icons-material/Save';
 import { Box, Button, Stack, Typography } from '@mui/material';
 
 import { useLocalContext } from '@graasp/apps-query-client';
 
-import isEqual from 'lodash/isequal';
-
-import { ChatSettingsType, ExchangesSettingsType } from '@/config/appSettings';
 import { hooks, mutations } from '@/config/queryClient';
 import { BUILDER_VIEW_CY } from '@/config/selectors';
 
-import ChatSettingsComponent from '../../settings/ChatSettings';
-import ExchangesSettingsComponent from '../../settings/ExchangesSettings';
-import { useSettings } from '../context/SettingsContext';
+import AllSettingsComponent from '../../settings/AllSettings';
 
 const AppSettingsDisplay = (): JSX.Element => {
   const { data: appSettings } = hooks.useAppSettings();
@@ -52,34 +43,6 @@ const BuilderView = (): JSX.Element => {
   const { mutate: patchAppData } = mutations.usePatchAppData();
   const { mutate: deleteAppData } = mutations.useDeleteAppData();
   const { mutate: postAppSetting } = mutations.usePostAppSetting();
-
-  const { t } = useTranslation();
-
-  const {
-    chat: chatSavedState,
-    exchanges: exchangesSavedState,
-    saveSettings,
-  } = useSettings();
-
-  const [chat, setChat] = useState<ChatSettingsType>(chatSavedState);
-  const [exchanges, setExchanges] =
-    useState<ExchangesSettingsType>(exchangesSavedState);
-
-  const saveAllSettings = (): void => {
-    saveSettings('chat', chat);
-    saveSettings('exchanges', exchanges);
-  };
-
-  useEffect(() => setChat(chatSavedState), [chatSavedState]);
-  useEffect(() => setExchanges(exchangesSavedState), [exchangesSavedState]);
-
-  const disableSave = useMemo(
-    () =>
-      (isEqual(chatSavedState, chat) &&
-        isEqual(exchangesSavedState, exchanges)) ||
-      exchanges.exchanges_list.length === 0,
-    [chat, chatSavedState, exchanges, exchangesSavedState],
-  );
 
   return (
     <div data-cy={BUILDER_VIEW_CY}>
@@ -130,29 +93,7 @@ const BuilderView = (): JSX.Element => {
           </Button>
         </Stack>
         <Box p={2}>
-          <Stack spacing={5}>
-            <Typography variant="h2">{t('SETTINGS.TITLE')}</Typography>
-            <ChatSettingsComponent
-              chat={chat}
-              onChange={(newSetting: ChatSettingsType) => {
-                setChat(newSetting);
-              }}
-            />
-            <ExchangesSettingsComponent
-              exchanges={exchanges}
-              setExchanges={setExchanges}
-            />
-            <Box>
-              <Button
-                startIcon={<SaveIcon />}
-                variant="contained"
-                onClick={saveAllSettings}
-                disabled={disableSave}
-              >
-                {t('SETTINGS.SAVE_BTN')}
-              </Button>
-            </Box>
-          </Stack>
+          <AllSettingsComponent />
         </Box>
         <Box p={2}>
           <Typography>App Data</Typography>

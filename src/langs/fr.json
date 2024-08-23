@@ -19,6 +19,14 @@
     "SETTINGS": {
       "TITLE": "Paramètres de l'application",
       "SAVE_BTN": "Enregistrer",
+      "ASSISTANTS": {
+        "TITLE": "Paramètres de l'Assistant",
+        "ID": "Assistant Id",
+        "NAME": "Nom de l'Assistant",
+        "DESCRIPTION": "Description de l'Assistant",
+        "ADD": "Créer un Nouvel Assistant",
+        "CREATE": "Veuillez créer au moins un assistant."
+      },
       "CHAT": {
         "TITLE": " Paramètres du Chat",
         "DESCRIPTION": "Description du Chat",
@@ -34,7 +42,7 @@
         "ASSISTANT": "Assistant",
         "FOLLOW_UP_QUESTIONS": "Nombre de Questions de Suivi",
         "DISABLE_HARD_LIMIT": "Autoriser pas plus de Questions de Suivi",
-        "DEFINE": "Veuillez définir au moins un échange."
+        "CREATE": "Veuillez créer au moins un échange."
       }
     },
     "START_INTERACTION": "Le dialogue dure environ 5 minutes et vous recevrez une petite récompense pour vous remercier de votre participation!",
