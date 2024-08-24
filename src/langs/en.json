@@ -40,6 +40,7 @@
         "INSTRUCTIONS": "Chatbot instructions",
         "CUE": "Initial Cue",
         "ASSISTANT": "Assistant",
+        "CREATE_ASSISTANT": "Please create at least one assistant.",
         "FOLLOW_UP_QUESTIONS": "Number of Follow Up Questions",
         "DISABLE_hardLimit": "Auto Dismiss",
         "hardLimit_INFO": "If checked, the next exchange will start automatically after the number of follow up questions is reached.",

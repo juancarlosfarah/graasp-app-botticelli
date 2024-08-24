@@ -40,6 +40,7 @@
         "INSTRUCTIONS": "Instructions du Chatbot",
         "CUE": "Initial Cue",
         "ASSISTANT": "Assistant",
+        "CREATE_ASSISTANT": "Veuillez créer au moins un assistant.",
         "FOLLOW_UP_QUESTIONS": "Nombre de Questions de Suivi",
         "DISABLE_hardLimit": "Rejet Automatique",
         "hardLimit_INFO": "Si cette case est cochée, l'échange suivant commencera automatiquement une fois que le nombre de questions de suivi sera atteint",

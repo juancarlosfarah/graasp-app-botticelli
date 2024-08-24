@@ -112,7 +112,17 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
         >
           {assistants.assistantsList.map((assistant, nb) => (
             <MenuItem key={nb} value={assistant.id}>
-              {assistant.name}
+              {assistant.name || (
+                <Alert
+                  severity="warning"
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                  }}
+                >
+                  {t('SETTINGS.EXCHANGES.CREATE_ASSISTANT')}
+                </Alert>
+              )}
             </MenuItem>
           ))}
         </Select>
