@@ -1,6 +1,8 @@
 import { FC, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Alert, Box, Button, Divider, IconButton } from '@mui/material';
 import Stack from '@mui/material/Stack';
@@ -19,7 +21,10 @@ type PropTypesSingle = {
     value: string,
   ) => void;
   handleRemoveAssistant: (index: number) => void;
+  handleMoveUp: (index: number) => void; // New handler for moving up
+  handleMoveDown: (index: number) => void; // New handler for moving down
   index: number;
+  assistantsListLength: number; // Add the length of assistantsList as a prop
 };
 
 const AssistantSettingsPanel: FC<PropTypesSingle> = ({
@@ -27,6 +32,9 @@ const AssistantSettingsPanel: FC<PropTypesSingle> = ({
   onChange,
   index,
   handleRemoveAssistant,
+  handleMoveUp,
+  handleMoveDown,
+  assistantsListLength, // Use the length prop
 }) => {
   const { t } = useTranslation();
   const {
@@ -34,6 +42,7 @@ const AssistantSettingsPanel: FC<PropTypesSingle> = ({
     name: assistantName,
     description: assistantDescription,
   } = assistant;
+
   return (
     <Stack spacing={1} p={2} border="1px solid #ccc" borderRadius="8px">
       <TextField
@@ -54,15 +63,29 @@ const AssistantSettingsPanel: FC<PropTypesSingle> = ({
         multiline
         onChange={(e) => onChange(index, 'description', e.target.value)}
       />
-      <IconButton
-        color="secondary"
-        onClick={() => {
-          handleRemoveAssistant(index);
-        }}
-        sx={{ alignSelf: 'center', width: 'auto' }}
-      >
-        <DeleteIcon />
-      </IconButton>
+      <Stack direction="row" spacing={1} justifyContent="center">
+        <IconButton
+          color="primary"
+          onClick={() => handleMoveUp(index)}
+          disabled={index === 0}
+        >
+          <ArrowUpwardIcon />
+        </IconButton>
+        <IconButton
+          color="primary"
+          onClick={() => handleMoveDown(index)}
+          disabled={index === assistantsListLength - 1} // Use assistantsListLength
+        >
+          <ArrowDownwardIcon />
+        </IconButton>
+        <IconButton
+          color="secondary"
+          onClick={() => handleRemoveAssistant(index)}
+          sx={{ width: 'auto' }}
+        >
+          <DeleteIcon />
+        </IconButton>
+      </Stack>
     </Stack>
   );
 };
@@ -74,6 +97,7 @@ type PropTypesList = {
 
 const AssistantsSettings: FC<PropTypesList> = ({ assistants, onChange }) => {
   const { t } = useTranslation();
+
   const handleAddAssistant = (): void => {
     onChange((prev) => ({
       assistantsList: [
@@ -91,6 +115,26 @@ const AssistantsSettings: FC<PropTypesList> = ({ assistants, onChange }) => {
     onChange((prev) => ({
       assistantsList: prev.assistantsList.filter((_, i) => i !== index),
     }));
+  };
+
+  const handleMoveUp = (index: number): void => {
+    if (index === 0) return;
+    onChange((prev) => {
+      const updatedAssistants = [...prev.assistantsList];
+      const [movedAssistant] = updatedAssistants.splice(index, 1);
+      updatedAssistants.splice(index - 1, 0, movedAssistant);
+      return { assistantsList: updatedAssistants };
+    });
+  };
+
+  const handleMoveDown = (index: number): void => {
+    if (index === assistants.assistantsList.length - 1) return;
+    onChange((prev) => {
+      const updatedAssistants = [...prev.assistantsList];
+      const [movedAssistant] = updatedAssistants.splice(index, 1);
+      updatedAssistants.splice(index + 1, 0, movedAssistant);
+      return { assistantsList: updatedAssistants };
+    });
   };
 
   const handleChange = (
@@ -127,7 +171,7 @@ const AssistantsSettings: FC<PropTypesList> = ({ assistants, onChange }) => {
           </Alert>
         ) : (
           assistants.assistantsList.map((assistant, index) => {
-            const exchangeColors: string[] = ['#5050d2', '#d29650', '#50d250'];
+            const assistantColors: string[] = ['#5050d2', '#d29650', '#50d250'];
             return (
               <Stack
                 key={index}
@@ -139,13 +183,13 @@ const AssistantsSettings: FC<PropTypesList> = ({ assistants, onChange }) => {
                   <Divider
                     orientation="vertical"
                     flexItem
-                    color={exchangeColors[index % 3]}
+                    color={assistantColors[index % 3]}
                   />
                 }
               >
                 <Typography
                   px={1}
-                  bgcolor={exchangeColors[index % 3]}
+                  bgcolor={assistantColors[index % 3]}
                   flex="0 0 fit-content"
                   color="white"
                   borderRadius="50%"
@@ -159,6 +203,9 @@ const AssistantsSettings: FC<PropTypesList> = ({ assistants, onChange }) => {
                     onChange={handleChange}
                     index={index}
                     handleRemoveAssistant={handleRemoveAssistant}
+                    handleMoveUp={handleMoveUp}
+                    handleMoveDown={handleMoveDown}
+                    assistantsListLength={assistants.assistantsList.length}
                   />
                 </Box>
               </Stack>
@@ -171,60 +218,6 @@ const AssistantsSettings: FC<PropTypesList> = ({ assistants, onChange }) => {
       </Stack>
     </Stack>
   );
-
-  /*
-  return (
-    <Stack spacing={2}>
-      <Typography variant="h5">{t('SETTINGS.EXCHANGES.TITLE')}</Typography>
-      <Box
-        sx={{ maxHeight: '80vh', overflowY: 'auto' }}
-        py={2}
-        px={20}
-        border="1px solid #ccc"
-        borderRadius="8px"
-      >
-        <Stack spacing={1}>
-          {assistants.assistantsList.length === 0 ? (
-            <Alert
-              severity="warning"
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-              }}
-            >
-              {t('SETTINGS.EXCHANGES.CREATE')}
-            </Alert>
-          ) : (
-            assistants.assistantsList.map((assistant, index) => (
-              <Stack
-                key={index}
-                justifyContent="space-around"
-                direction="row"
-                spacing={2}
-                alignItems="center"
-                divider={<Divider orientation="vertical" flexItem />}
-              >
-                <Typography sx={{ flex: '0 0 5%' }}>{index + 1}</Typography>
-                <Box sx={{ flex: '1' }}>
-                  <AssistantSettingsPanel
-                    assistant={assistant}
-                    onChange={handleChange}
-                    index={index}
-                    handleRemoveAssistant={handleRemoveAssistant}
-                  />
-                </Box>
-              </Stack>
-            ))
-          )}
-
-          <Button variant="contained" onClick={handleAddAssistant}>
-            +
-          </Button>
-        </Stack>
-      </Box>
-    </Stack>
-  );
-  */
 };
 
 export default AssistantsSettings;

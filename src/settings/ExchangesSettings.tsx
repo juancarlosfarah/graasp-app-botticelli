@@ -1,6 +1,8 @@
 import { FC, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import DeleteIcon from '@mui/icons-material/Delete';
 import InfoBadge from '@mui/icons-material/Info';
 import {
@@ -32,7 +34,10 @@ type PropTypesSingle = {
     value: string | number | boolean | Omit<Agent, 'type'>,
   ) => void;
   handleRemoveExchange: (index: number) => void;
+  handleMoveUp: (index: number) => void; // New handler for moving up
+  handleMoveDown: (index: number) => void; // New handler for moving down
   index: number;
+  exchangesListLength: number; // Add the length of exchangesList as a prop
 };
 
 const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
@@ -40,6 +45,9 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
   onChange,
   index,
   handleRemoveExchange,
+  handleMoveUp,
+  handleMoveDown,
+  exchangesListLength, // Use the length prop
 }) => {
   const { t } = useTranslation();
   const {
@@ -73,23 +81,6 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
         multiline
         onChange={(e) => onChange(index, 'participantCue', e.target.value)}
       />
-      {/*
-      <FormControl>
-        <InputLabel id="assistant-select-label" sx={{ bgcolor: 'white' }}>
-          {t('SETTINGS.EXCHANGES.ASSISTANT')}
-        </InputLabel>
-        <Select
-          labelId="assistant-select-label"
-          value="string"
-          label={t('SETTINGS.EXCHANGES.ASSISTANT')}
-          onChange={(e) => onChange(index, 'assistant', e.target.value)}
-        >
-          <MenuItem value="opt1">opt1</MenuItem>
-          <MenuItem value="opt2">opt2</MenuItem>
-          <MenuItem value="opt3">opt3</MenuItem>
-        </Select>
-      </FormControl>
-      */}
       <FormControl>
         <InputLabel>{t('SETTINGS.EXCHANGES.ASSISTANT')}</InputLabel>
         <Select
@@ -146,15 +137,31 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
         checked={exchangeLimit}
         onChange={(e) => onChange(index, 'hardLimit', e.target.checked)}
       />
-      <IconButton
-        color="secondary"
-        onClick={() => {
-          handleRemoveExchange(index);
-        }}
-        sx={{ alignSelf: 'center', width: 'auto' }}
-      >
-        <DeleteIcon />
-      </IconButton>
+      <Stack direction="row" spacing={1} justifyContent="center">
+        <IconButton
+          color="primary"
+          onClick={() => handleMoveUp(index)}
+          disabled={index === 0}
+        >
+          <ArrowUpwardIcon />
+        </IconButton>
+        <IconButton
+          color="primary"
+          onClick={() => handleMoveDown(index)}
+          disabled={index === exchangesListLength - 1}
+        >
+          <ArrowDownwardIcon />
+        </IconButton>
+        <IconButton
+          color="secondary"
+          onClick={() => {
+            handleRemoveExchange(index);
+          }}
+          sx={{ alignSelf: 'center', width: 'auto' }}
+        >
+          <DeleteIcon />
+        </IconButton>
+      </Stack>
     </Stack>
   );
 };
@@ -191,6 +198,26 @@ const ExchangeSettings: FC<PropTypesList> = ({ exchanges, onChange }) => {
     onChange((prev) => ({
       exchangesList: prev.exchangesList.filter((_, i) => i !== index),
     }));
+  };
+
+  const handleMoveUp = (index: number): void => {
+    if (index === 0) return;
+    onChange((prev) => {
+      const updatedExchanges = [...prev.exchangesList];
+      const [movedExchange] = updatedExchanges.splice(index, 1);
+      updatedExchanges.splice(index - 1, 0, movedExchange);
+      return { exchangesList: updatedExchanges };
+    });
+  };
+
+  const handleMoveDown = (index: number): void => {
+    if (index === exchanges.exchangesList.length - 1) return;
+    onChange((prev) => {
+      const updatedExchanges = [...prev.exchangesList];
+      const [movedExchange] = updatedExchanges.splice(index, 1);
+      updatedExchanges.splice(index + 1, 0, movedExchange);
+      return { exchangesList: updatedExchanges };
+    });
   };
 
   const handleChange = (
@@ -259,6 +286,9 @@ const ExchangeSettings: FC<PropTypesList> = ({ exchanges, onChange }) => {
                     onChange={handleChange}
                     index={index}
                     handleRemoveExchange={handleRemoveExchange}
+                    handleMoveUp={handleMoveUp}
+                    handleMoveDown={handleMoveDown}
+                    exchangesListLength={exchanges.exchangesList.length} // Pass the length
                   />
                 </Box>
               </Stack>
