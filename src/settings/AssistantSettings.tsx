@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Alert, Box, Button, Divider, IconButton } from '@mui/material';
+import { Alert, Avatar, Box, Button, Divider, IconButton } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -21,10 +21,10 @@ type PropTypesSingle = {
     value: string,
   ) => void;
   handleRemoveAssistant: (index: number) => void;
-  handleMoveUp: (index: number) => void; // New handler for moving up
-  handleMoveDown: (index: number) => void; // New handler for moving down
+  handleMoveUp: (index: number) => void;
+  handleMoveDown: (index: number) => void;
   index: number;
-  assistantsListLength: number; // Add the length of assistantsList as a prop
+  assistantsListLength: number;
 };
 
 const AssistantSettingsPanel: FC<PropTypesSingle> = ({
@@ -34,17 +34,48 @@ const AssistantSettingsPanel: FC<PropTypesSingle> = ({
   handleRemoveAssistant,
   handleMoveUp,
   handleMoveDown,
-  assistantsListLength, // Use the length prop
+  assistantsListLength,
 }) => {
   const { t } = useTranslation();
   const {
     id: assistantId,
     name: assistantName,
     description: assistantDescription,
+    imageUrl: assistantImageUrl, // New field for the image URL
   } = assistant;
 
   return (
     <Stack spacing={1} p={2} border="1px solid #ccc" borderRadius="8px">
+      <Stack direction="row" spacing={2} alignItems="center">
+        <Avatar
+          alt={assistantName}
+          src={assistantImageUrl}
+          sx={{ border: '1px solid #bdbdbd' }}
+        >
+          {assistantName.slice(0, 2)}
+        </Avatar>
+        <TextField
+          value={assistantImageUrl || ''}
+          label={t('SETTINGS.ASSISTANTS.IMAGE')}
+          onChange={(e) => onChange(index, 'imageUrl', e.target.value)}
+          placeholder={t('SETTINGS.ASSISTANTS.URL')}
+          fullWidth
+        />
+        <IconButton
+          color="primary"
+          onClick={() => handleMoveUp(index)}
+          disabled={index === 0}
+        >
+          <ArrowUpwardIcon />
+        </IconButton>
+        <IconButton
+          color="primary"
+          onClick={() => handleMoveDown(index)}
+          disabled={index === assistantsListLength - 1}
+        >
+          <ArrowDownwardIcon />
+        </IconButton>
+      </Stack>
       <TextField
         value={assistantId}
         label={t('SETTINGS.ASSISTANTS.ID')}
@@ -64,20 +95,6 @@ const AssistantSettingsPanel: FC<PropTypesSingle> = ({
         onChange={(e) => onChange(index, 'description', e.target.value)}
       />
       <Stack direction="row" spacing={1} justifyContent="center">
-        <IconButton
-          color="primary"
-          onClick={() => handleMoveUp(index)}
-          disabled={index === 0}
-        >
-          <ArrowUpwardIcon />
-        </IconButton>
-        <IconButton
-          color="primary"
-          onClick={() => handleMoveDown(index)}
-          disabled={index === assistantsListLength - 1} // Use assistantsListLength
-        >
-          <ArrowDownwardIcon />
-        </IconButton>
         <IconButton
           color="secondary"
           onClick={() => handleRemoveAssistant(index)}
@@ -106,6 +123,7 @@ const AssistantsSettings: FC<PropTypesList> = ({ assistants, onChange }) => {
           id: '',
           name: '',
           description: '',
+          imageUrl: '', // Initialize with an empty string
         },
       ],
     }));

@@ -24,6 +24,8 @@
         "ID": "Assistant Id",
         "NAME": "Assistant Name",
         "DESCRIPTION": "Assistant Description",
+        "IMAGE": "Assistant Image",
+        "URL": "Please enter a working link to your desired image.",
         "ADD": "Create new Assistant",
         "CREATE": "Please create at least one assistant."
       },
@@ -36,14 +38,14 @@
       },
       "EXCHANGES": {
         "TITLE": "Exchanges Settings",
-        "DESCRIPTION": "Default exchanges description.",
+        "DESCRIPTION": "Default Exchanges Description",
         "INSTRUCTIONS": "Chatbot instructions",
         "CUE": "Initial Cue",
         "ASSISTANT": "Assistant",
         "CREATE_ASSISTANT": "Please create at least one assistant.",
         "FOLLOW_UP_QUESTIONS": "Number of Follow Up Questions",
         "DISABLE_hardLimit": "Auto Dismiss",
-        "hardLimit_INFO": "If checked, the next exchange will start automatically after the number of follow up questions is reached.",
+        "HARD_LIMIT_INFO": "If checked, the next exchange will start automatically after the number of follow up questions is reached.",
         "CREATE": "Please create at least one exchange."
       }
     },

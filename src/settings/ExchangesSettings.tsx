@@ -7,6 +7,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import InfoBadge from '@mui/icons-material/Info';
 import {
   Alert,
+  Avatar,
   Box,
   Button,
   Divider,
@@ -81,43 +82,53 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
         multiline
         onChange={(e) => onChange(index, 'participantCue', e.target.value)}
       />
-      <FormControl>
-        <InputLabel>{t('SETTINGS.EXCHANGES.ASSISTANT')}</InputLabel>
-        <Select
-          value={exchangeAssistant.id}
-          renderValue={(selectedId) =>
-            assistants.assistantsList.find(
-              (assistant) => assistant.id === selectedId,
-            )?.name || selectedId
-          }
-          label={t('SETTINGS.EXCHANGES.ASSISTANT')}
-          onChange={(e) =>
-            onChange(
-              index,
-              'assistant',
+      <Stack direction="row" spacing={2} alignItems="center">
+        <Avatar src={exchangeAssistant.imageUrl}>
+          {exchangeAssistant.name.slice(0, 2)}
+        </Avatar>
+        <FormControl fullWidth>
+          <InputLabel>{t('SETTINGS.EXCHANGES.ASSISTANT')}</InputLabel>
+          <Select
+            value={exchangeAssistant.id}
+            renderValue={(selectedId) =>
               assistants.assistantsList.find(
-                (assistant) => assistant.id === e.target.value,
-              ) || exchangeAssistant,
-            )
-          }
-        >
-          {assistants.assistantsList.map((assistant, nb) => (
-            <MenuItem key={nb} value={assistant.id}>
-              {assistant.name || (
-                <Alert
-                  severity="warning"
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {t('SETTINGS.EXCHANGES.CREATE_ASSISTANT')}
-                </Alert>
-              )}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+                (assistant) => assistant.id === selectedId,
+              )?.name || selectedId
+            }
+            label={t('SETTINGS.EXCHANGES.ASSISTANT')}
+            onChange={(e) =>
+              onChange(
+                index,
+                'assistant',
+                assistants.assistantsList.find(
+                  (assistant) => assistant.id === e.target.value,
+                ) || exchangeAssistant,
+              )
+            }
+          >
+            {assistants.assistantsList.map((assistant, nb) => (
+              <MenuItem key={nb} value={assistant.id}>
+                <Avatar src={assistant.imageUrl} sx={{ mx: '1%' }}>
+                  {assistant.name.slice(0, 2)}
+                </Avatar>
+                {assistant ? (
+                  assistant.name || assistant.id
+                ) : (
+                  <Alert
+                    severity="warning"
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    {t('SETTINGS.EXCHANGES.CREATE_ASSISTANT')}
+                  </Alert>
+                )}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Stack>
       <TextField
         value={exchangeFollowUpQuestions}
         type="number"
@@ -129,7 +140,7 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
       <Typography variant="h6">
         {t('SETTINGS.EXCHANGES.DISABLE_hardLimit')}
         {'   '}
-        <Tooltip title={t('SETTINGS.EXCHANGES.hardLimit_INFO')}>
+        <Tooltip title={t('SETTINGS.EXCHANGES.HARD_LIMIT_INFO')}>
           <InfoBadge />
         </Tooltip>
       </Typography>

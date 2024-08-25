@@ -291,8 +291,11 @@ const MessagesPane = ({
                 flexDirection={isYou ? 'row-reverse' : 'row'}
               >
                 {!isYou && (
-                  <AvatarWithStatus src="" sx={{ bgcolor: '#5050d2' }}>
-                    😀
+                  <AvatarWithStatus
+                    src={currentExchange.assistant.imageUrl}
+                    sx={{ bgcolor: '#5050d2' }}
+                  >
+                    {currentExchange.assistant.name.slice(0, 2) || '🤖'}
                   </AvatarWithStatus>
                 )}
                 <ChatBubble
