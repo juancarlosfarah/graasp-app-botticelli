@@ -38,7 +38,7 @@
       },
       "EXCHANGES": {
         "TITLE": "Exchanges Settings",
-        "DESCRIPTION": "Default Exchanges Description",
+        "DESCRIPTION": "Exchanges Description",
         "INSTRUCTIONS": "Chatbot instructions",
         "CUE": "Initial Cue",
         "ASSISTANT": "Assistant",

@@ -73,6 +73,7 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
           value={exchangeDescription}
           label={t('SETTINGS.EXCHANGES.DESCRIPTION')}
           multiline
+          inputProps={{ maxLength: 400 }}
           fullWidth
           onChange={(e) => onChange(index, 'description', e.target.value)}
         />
@@ -95,12 +96,14 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
         value={exchangeInstructions}
         label={t('SETTINGS.EXCHANGES.INSTRUCTIONS')}
         multiline
+        inputProps={{ maxLength: 400 }}
         onChange={(e) => onChange(index, 'chatbotInstructions', e.target.value)}
       />
       <TextField
         value={exchangeCue}
         label={t('SETTINGS.EXCHANGES.CUE')}
         multiline
+        inputProps={{ maxLength: 400 }}
         onChange={(e) => onChange(index, 'participantCue', e.target.value)}
       />
       <Stack direction="row" spacing={2} alignItems="center">
@@ -153,6 +156,7 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
       <TextField
         value={exchangeFollowUpQuestions}
         type="number"
+        inputProps={{ min: 0, max: 400 }}
         label={t('SETTINGS.EXCHANGES.FOLLOW_UP_QUESTIONS')}
         onChange={(e) =>
           onChange(index, 'nbFollowUpQuestions', parseInt(e.target.value, 10))

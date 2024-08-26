@@ -26,12 +26,14 @@ const ChatSettings: FC<PropTypes> = ({ chat, onChange }) => {
         value={chatDescription}
         label={t('SETTINGS.CHAT.DESCRIPTION')}
         multiline
+        inputProps={{ maxLength: 400 }}
         onChange={(e) => onChange({ ...chat, description: e.target.value })}
       />
       <TextField
         value={chatInstructions}
         label={t('SETTINGS.CHAT.INSTRUCTIONS')}
         multiline
+        inputProps={{ maxLength: 400 }}
         onChange={(e) =>
           onChange({ ...chat, participantInstructions: e.target.value })
         }
@@ -40,6 +42,7 @@ const ChatSettings: FC<PropTypes> = ({ chat, onChange }) => {
         value={chatEndText}
         label={t('SETTINGS.CHAT.END')}
         multiline
+        inputProps={{ maxLength: 400 }}
         onChange={(e) =>
           onChange({ ...chat, participantEndText: e.target.value })
         }

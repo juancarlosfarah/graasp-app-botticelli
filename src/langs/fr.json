@@ -38,7 +38,7 @@
       },
       "EXCHANGES": {
         "TITLE": "Échanges Paramètres",
-        "DESCRIPTION": "Description des Échanges par Défaut",
+        "DESCRIPTION": "Description des Échanges",
         "INSTRUCTIONS": "Instructions du Chatbot",
         "CUE": "Initial Cue",
         "ASSISTANT": "Assistant",

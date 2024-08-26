@@ -50,11 +50,7 @@ const AssistantSettingsPanel: FC<PropTypesSingle> = ({
   return (
     <Stack spacing={1} p={2} border="1px solid #ccc" borderRadius="8px">
       <Stack direction="row" spacing={2} alignItems="center">
-        <Avatar
-          alt={assistantName}
-          src={assistantImageUrl}
-          sx={{ border: '1px solid #bdbdbd' }}
-        >
+        <Avatar src={assistantImageUrl} sx={{ border: '1px solid #bdbdbd' }}>
           {assistantName.slice(0, 2)}
         </Avatar>
         <TextField
@@ -83,12 +79,14 @@ const AssistantSettingsPanel: FC<PropTypesSingle> = ({
         value={assistantName}
         label={t('SETTINGS.ASSISTANTS.NAME')}
         multiline
+        inputProps={{ maxLength: 400 }}
         onChange={(e) => onChange(index, 'name', e.target.value)}
       />
       <TextField
         value={assistantDescription}
         label={t('SETTINGS.ASSISTANTS.DESCRIPTION')}
         multiline
+        inputProps={{ maxLength: 400 }}
         onChange={(e) => onChange(index, 'description', e.target.value)}
       />
       <Stack direction="row" justifyContent="center">
