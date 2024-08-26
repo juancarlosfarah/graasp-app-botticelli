@@ -1,8 +1,10 @@
+import { UUID } from '@graasp/sdk';
+
 import Agent from './Agent';
 import Exchange from './Exchange';
 
 type Interaction = {
-  id: string;
+  id: UUID;
   description: string;
   modelInstructions: string;
   // participantInstructions: string;

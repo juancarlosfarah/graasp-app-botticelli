@@ -1,3 +1,5 @@
+import { UUID } from '@graasp/sdk';
+
 import Agent from '@/types/Agent';
 
 type AssistantSettings = Omit<Agent, 'type'>;
@@ -13,7 +15,7 @@ export type ChatSettingsType = {
 };
 
 export type ExchangeSettings = {
-  id: string;
+  id: UUID;
   assistant: AssistantSettings;
   description: string;
   chatbotInstructions: string;

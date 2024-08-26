@@ -5,6 +5,8 @@ import { Button } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
+import { useLocalContext } from '@graasp/apps-query-client';
+
 import { v4 as uuidv4 } from 'uuid';
 
 // import { patchAppData } from '@graasp/apps-query-client/dist/src/api';
@@ -19,12 +21,26 @@ import Interaction from '@/types/Interaction';
 import { useSettings } from '../context/SettingsContext';
 
 const ParticipantInteraction = (): ReactElement => {
-  const participantId = uuidv4();
+  const { memberId: participantId } = useLocalContext();
+
+  const defaultUser: Agent = {
+    id: uuidv4(),
+    name: 'Default User',
+    description: 'Default user description',
+    type: AgentType.User,
+  };
+
+  const currentMember = {
+    ...defaultUser,
+    ...hooks
+      .useAppContext()
+      .data?.members.find((member) => member.id === participantId),
+  };
 
   const defaultAssistant: Agent = {
     id: uuidv4(),
-    name: 'Interviewer',
-    description: 'Assistant Description',
+    name: 'Default Assistant',
+    description: 'Default assistant description',
     type: AgentType.Assistant,
   };
 
@@ -38,12 +54,7 @@ const ParticipantInteraction = (): ReactElement => {
     currentExchange: 0,
     started: false,
     completed: false,
-    participant: {
-      id: participantId,
-      name: 'User',
-      description: 'User Description',
-      type: AgentType.User,
-    },
+    participant: currentMember,
     exchanges: { exchangesList: [] },
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -168,7 +179,7 @@ const ParticipantInteraction = (): ReactElement => {
     updatedAt: new Date(),
   };
 */
-  const { data: appDatas } = hooks.useAppData();
+  const { data: appDatas } = hooks.useAppData({ type: 'Interaction' });
   const { mutate: postAppData } = mutations.usePostAppData();
   const { mutate: patchAppData } = mutations.usePatchAppData();
   const { chat, exchanges } = useSettings();
@@ -198,9 +209,33 @@ const ParticipantInteraction = (): ReactElement => {
   }
 */
 
-  const [interaction, setInteraction] = useState<Interaction>(createTemplate());
+  const saveData = (
+    name: AllSettingsNameType,
+    newValue: AllSettingsDataType,
+  ): void => {
+    if (appSettingsList) {
+      const previousSetting = appSettingsList.find((s) => s.name === name);
+      // setting does not exist
+      if (!previousSetting) {
+        postAppSetting({
+          data: newValue,
+          name,
+        });
+      } else {
+        patchAppSetting({
+          id: previousSetting.id,
+          data: newValue,
+        });
+      }
+    }
+  };
 
-  const hasPosted = useRef(false);
+  const hasPosted = useRef(!!appDatas);
+
+  const [interaction, setInteraction] = useState<Interaction>(
+    (appDatas?.find((appData) => appData.member.id === participantId)
+      ?.data as Interaction) || createTemplate(),
+  );
 
   useEffect(() => {
     if (!hasPosted.current) {
@@ -216,8 +251,7 @@ const ParticipantInteraction = (): ReactElement => {
         data: interaction,
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [interaction]);
+  }, [appDatas, interaction, patchAppData]);
 
   const updateExchange = (updatedExchange: Exchange): void => {
     setInteraction((prevState) => ({
@@ -378,7 +412,7 @@ const ParticipantInteraction = (): ReactElement => {
         interaction.exchanges.exchangesList[interaction.currentExchange]
       }
       setExchange={updateExchange}
-      participantId={participantId}
+      participant={currentMember}
       readOnly={false}
     />
   );

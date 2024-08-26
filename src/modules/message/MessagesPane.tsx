@@ -12,6 +12,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 // import { AppDataTypes } from '@/config/appData';
 import { mutations } from '@/config/queryClient';
+import Agent from '@/types/Agent';
 import AgentType from '@/types/AgentType';
 import Exchange from '@/types/Exchange';
 import { Message } from '@/types/Message';
@@ -25,7 +26,7 @@ import MessageLoader from './MessageLoader';
 type MessagesPaneProps = {
   currentExchange: Exchange;
   setExchange: (updatedExchange: Exchange) => void;
-  participantId: string;
+  participant: Agent;
   readOnly?: boolean;
   autoDismiss?: boolean;
   goToNextExchange: () => void;
@@ -34,7 +35,7 @@ type MessagesPaneProps = {
 const MessagesPane = ({
   currentExchange,
   setExchange,
-  participantId,
+  participant,
   autoDismiss,
   readOnly = false,
   goToNextExchange,
@@ -133,11 +134,7 @@ const MessagesPane = ({
       {
         id: `${currentExchange.id}`,
         content: currentExchange.participantCue,
-        sender: {
-          id: '1',
-          name: 'Interviewer',
-          type: AgentType.Assistant,
-        },
+        sender: currentExchange.assistant,
       },
     ];
     setMessages((m) => _.uniqBy([...m, ...defaultMessages], 'id'));
@@ -163,11 +160,7 @@ const MessagesPane = ({
         const response = {
           id: uuidv4(),
           content: chatBotRes.completion,
-          sender: {
-            id: '1',
-            name: 'Interviewer',
-            type: AgentType.Assistant,
-          },
+          sender: currentExchange.assistant,
         };
         /*
             // post comment from bot
@@ -196,11 +189,7 @@ const MessagesPane = ({
     const newMessage: Message = {
       id: uuidv4(),
       content,
-      sender: {
-        id: participantId,
-        name: 'User',
-        type: AgentType.User,
-      },
+      sender: participant,
     };
     /*
     postAppDataAsync({
@@ -281,7 +270,7 @@ const MessagesPane = ({
       >
         <Stack spacing={2} justifyContent="flex-end">
           {msgs.map((message: Message, index: number) => {
-            const isYou = message?.sender?.id === participantId;
+            const isYou = message?.sender?.id === participant.id;
 
             return (
               <Stack
@@ -336,7 +325,7 @@ const MessagesPane = ({
           onSubmit={(): void => {
             saveNewMessage({
               // keyPressEvents,
-              // sender: participantId,
+              // sender: participant,
               content: textAreaValue,
             });
           }}
