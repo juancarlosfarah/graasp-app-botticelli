@@ -19,6 +19,8 @@
     "SETTINGS": {
       "TITLE": "Paramètres de l'application",
       "SAVE_BTN": "Enregistrer",
+      "UP": "Déplacer vers le haut",
+      "DOWN": "Déplacer vers le bas",
       "ASSISTANTS": {
         "TITLE": "Paramètres de l'Assistant",
         "ID": "Assistant Id",

@@ -82,14 +82,18 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
           onClick={() => handleMoveUp(index)}
           disabled={index === 0}
         >
-          <ArrowUpwardIcon />
+          <Tooltip title={t('SETTINGS.UP')}>
+            <ArrowUpwardIcon />
+          </Tooltip>
         </IconButton>
         <IconButton
           sx={{ color: panelColor }}
           onClick={() => handleMoveDown(index)}
           disabled={index === exchangesListLength - 1}
         >
-          <ArrowDownwardIcon />
+          <Tooltip title={t('SETTINGS.DOWN')}>
+            <ArrowDownwardIcon />
+          </Tooltip>
         </IconButton>
       </Stack>
       <TextField
@@ -159,7 +163,11 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
         inputProps={{ min: 0, max: 400 }}
         label={t('SETTINGS.EXCHANGES.FOLLOW_UP_QUESTIONS')}
         onChange={(e) =>
-          onChange(index, 'nbFollowUpQuestions', parseInt(e.target.value, 10))
+          onChange(
+            index,
+            'nbFollowUpQuestions',
+            parseInt(e.target.value, 10) || 0,
+          )
         }
       />
       <Typography variant="h6">

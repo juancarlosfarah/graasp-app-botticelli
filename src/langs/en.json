@@ -19,6 +19,8 @@
     "SETTINGS": {
       "TITLE": "App Settings",
       "SAVE_BTN": "Save",
+      "UP": "Move up",
+      "DOWN": "Move down",
       "ASSISTANTS": {
         "TITLE": "Assitants Settings",
         "ID": "Assistant Id",

@@ -4,7 +4,15 @@ import { useTranslation } from 'react-i18next';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Alert, Avatar, Box, Button, Divider, IconButton } from '@mui/material';
+import {
+  Alert,
+  Avatar,
+  Box,
+  Button,
+  Divider,
+  IconButton,
+  Tooltip,
+} from '@mui/material';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -65,14 +73,18 @@ const AssistantSettingsPanel: FC<PropTypesSingle> = ({
           onClick={() => handleMoveUp(index)}
           disabled={index === 0}
         >
-          <ArrowUpwardIcon />
+          <Tooltip title={t('SETTINGS.UP')}>
+            <ArrowUpwardIcon />
+          </Tooltip>
         </IconButton>
         <IconButton
           sx={{ color: panelColor }}
           onClick={() => handleMoveDown(index)}
           disabled={index === assistantsListLength - 1}
         >
-          <ArrowDownwardIcon />
+          <Tooltip title={t('SETTINGS.DOWN')}>
+            <ArrowDownwardIcon />
+          </Tooltip>
         </IconButton>
       </Stack>
       <TextField
