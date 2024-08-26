@@ -1,5 +1,7 @@
 import { FC, ReactElement, createContext, useContext } from 'react';
 
+import { v4 as uuidv4 } from 'uuid';
+
 import {
   AssistantsSettingsType,
   ChatSettingsType,
@@ -20,7 +22,7 @@ type AllSettingsType = {
 // default values for the data property of settings by name
 const defaultSettingsValues: AllSettingsType = {
   assistants: {
-    assistantsList: [{ id: '', name: '', description: '' }],
+    assistantsList: [{ id: uuidv4(), name: '', description: '' }],
   },
   chat: {
     description: '',
@@ -30,6 +32,7 @@ const defaultSettingsValues: AllSettingsType = {
   exchanges: {
     exchangesList: [
       {
+        id: uuidv4(),
         assistant: {
           id: '',
           name: '',
@@ -38,7 +41,7 @@ const defaultSettingsValues: AllSettingsType = {
         description: '',
         chatbotInstructions: '',
         participantCue: '',
-        nbFollowUpQuestions: NaN,
+        nbFollowUpQuestions: 0,
         hardLimit: false,
       },
     ],

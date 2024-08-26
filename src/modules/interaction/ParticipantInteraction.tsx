@@ -5,6 +5,8 @@ import { Button } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
+import { v4 as uuidv4 } from 'uuid';
+
 // import { patchAppData } from '@graasp/apps-query-client/dist/src/api';
 import { hooks, mutations } from '@/config/queryClient';
 import { START_INTERACTION_BUTTON_CY } from '@/config/selectors';
@@ -17,17 +19,17 @@ import Interaction from '@/types/Interaction';
 import { useSettings } from '../context/SettingsContext';
 
 const ParticipantInteraction = (): ReactElement => {
-  const participantId = '0';
+  const participantId = uuidv4();
 
   const defaultAssistant: Agent = {
-    id: '1',
+    id: uuidv4(),
     name: 'Interviewer',
     description: 'Assistant Description',
     type: AgentType.Assistant,
   };
 
   const defaultInteraction: Interaction = {
-    id: 0,
+    id: uuidv4(),
     description: '',
     modelInstructions: '',
     participantInstructions: '',
@@ -38,9 +40,9 @@ const ParticipantInteraction = (): ReactElement => {
     completed: false,
     participant: {
       id: participantId,
-      type: AgentType.User,
-      description: 'User Description',
       name: 'User',
+      description: 'User Description',
+      type: AgentType.User,
     },
     exchanges: { exchangesList: [] },
     createdAt: new Date(),
@@ -48,7 +50,7 @@ const ParticipantInteraction = (): ReactElement => {
   };
 
   const defaultExchange: Exchange = {
-    id: 0,
+    id: '0',
     name: 'Exchange 1',
     description: '',
     chatbotInstructions: 'Instructions',
@@ -176,10 +178,9 @@ const ParticipantInteraction = (): ReactElement => {
   function createTemplate(): Interaction {
     const interactionBase: Interaction = { ...defaultInteraction, ...chat };
     interactionBase.exchanges.exchangesList = exchanges.exchangesList.map(
-      (exchange, index) => ({
+      (exchange) => ({
         ...defaultExchange,
         ...exchange,
-        id: index,
         assistant: {
           ...defaultAssistant,
           ...exchange.assistant,

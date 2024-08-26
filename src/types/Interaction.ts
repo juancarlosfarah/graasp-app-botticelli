@@ -2,7 +2,7 @@ import Agent from './Agent';
 import Exchange from './Exchange';
 
 type Interaction = {
-  id: number;
+  id: string;
   description: string;
   modelInstructions: string;
   // participantInstructions: string;

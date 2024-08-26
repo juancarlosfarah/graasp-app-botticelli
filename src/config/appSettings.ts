@@ -13,6 +13,7 @@ export type ChatSettingsType = {
 };
 
 export type ExchangeSettings = {
+  id: string;
   assistant: AssistantSettings;
   description: string;
   chatbotInstructions: string;

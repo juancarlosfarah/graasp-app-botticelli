@@ -23,6 +23,8 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
+import { v4 as uuidv4 } from 'uuid';
+
 import { ExchangesSettingsType } from '@/config/appSettings';
 import { useSettings } from '@/modules/context/SettingsContext';
 import Agent from '@/types/Agent';
@@ -190,15 +192,16 @@ const ExchangeSettings: FC<PropTypesList> = ({ exchanges, onChange }) => {
       exchangesList: [
         ...prev.exchangesList,
         {
+          id: uuidv4(),
           assistant: {
-            id: '1',
-            name: 'Interviewer',
-            description: 'Assistant Description',
+            id: '',
+            name: '',
+            description: '',
           },
           description: '',
           chatbotInstructions: '',
           participantCue: '',
-          nbFollowUpQuestions: NaN,
+          nbFollowUpQuestions: 0,
           hardLimit: false,
         },
       ],
@@ -264,47 +267,44 @@ const ExchangeSettings: FC<PropTypesList> = ({ exchanges, onChange }) => {
             {t('SETTINGS.EXCHANGES.CREATE')}
           </Alert>
         ) : (
-          exchanges.exchangesList.map((exchange, index) => {
-            const exchangeColors: string[] = ['#5050d2', '#d29650', '#50d250'];
-            return (
-              <Stack
-                key={index}
-                justifyContent="space-around"
-                direction="row"
-                spacing={2}
-                alignItems="center"
-                divider={
-                  <Divider
-                    orientation="vertical"
-                    flexItem
-                    color={exchangeColors[index % 3]}
-                  />
-                }
+          exchanges.exchangesList.map((exchange, index) => (
+            <Stack
+              key={index}
+              justifyContent="space-around"
+              direction="row"
+              spacing={2}
+              alignItems="center"
+              divider={
+                <Divider
+                  orientation="vertical"
+                  flexItem
+                  color={`#0${exchange.id.slice(0, 5)}`}
+                />
+              }
+            >
+              <Typography
+                px={1}
+                bgcolor={`#0${exchange.id.slice(0, 5)}`}
+                flex="0 0 fit-content"
+                color="white"
+                borderRadius="50%"
+                textAlign="center"
               >
-                <Typography
-                  px={1}
-                  bgcolor={exchangeColors[index % 3]}
-                  flex="0 0 fit-content"
-                  color="white"
-                  borderRadius="50%"
-                  textAlign="center"
-                >
-                  {index + 1}
-                </Typography>
-                <Box sx={{ flex: '1' }}>
-                  <ExchangeSettingsPanel
-                    exchange={exchange}
-                    onChange={handleChange}
-                    index={index}
-                    handleRemoveExchange={handleRemoveExchange}
-                    handleMoveUp={handleMoveUp}
-                    handleMoveDown={handleMoveDown}
-                    exchangesListLength={exchanges.exchangesList.length} // Pass the length
-                  />
-                </Box>
-              </Stack>
-            );
-          })
+                {index + 1}
+              </Typography>
+              <Box sx={{ flex: '1' }}>
+                <ExchangeSettingsPanel
+                  exchange={exchange}
+                  onChange={handleChange}
+                  index={index}
+                  handleRemoveExchange={handleRemoveExchange}
+                  handleMoveUp={handleMoveUp}
+                  handleMoveDown={handleMoveDown}
+                  exchangesListLength={exchanges.exchangesList.length} // Pass the length
+                />
+              </Box>
+            </Stack>
+          ))
         )}
         <Button variant="contained" onClick={handleAddExchange}>
           +

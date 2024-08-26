@@ -9,6 +9,8 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
+import { v4 as uuidv4 } from 'uuid';
+
 import { AssistantsSettingsType } from '@/config/appSettings';
 import Agent from '@/types/Agent';
 import AgentType from '@/types/AgentType';
@@ -38,7 +40,6 @@ const AssistantSettingsPanel: FC<PropTypesSingle> = ({
 }) => {
   const { t } = useTranslation();
   const {
-    id: assistantId,
     name: assistantName,
     description: assistantDescription,
     imageUrl: assistantImageUrl, // New field for the image URL
@@ -77,12 +78,6 @@ const AssistantSettingsPanel: FC<PropTypesSingle> = ({
         </IconButton>
       </Stack>
       <TextField
-        value={assistantId}
-        label={t('SETTINGS.ASSISTANTS.ID')}
-        multiline
-        onChange={(e) => onChange(index, 'id', e.target.value)}
-      />
-      <TextField
         value={assistantName}
         label={t('SETTINGS.ASSISTANTS.NAME')}
         multiline
@@ -120,10 +115,10 @@ const AssistantsSettings: FC<PropTypesList> = ({ assistants, onChange }) => {
       assistantsList: [
         ...prev.assistantsList,
         {
-          id: '',
+          id: uuidv4(),
           name: '',
           description: '',
-          imageUrl: '', // Initialize with an empty string
+          imageUrl: '',
         },
       ],
     }));
@@ -188,47 +183,44 @@ const AssistantsSettings: FC<PropTypesList> = ({ assistants, onChange }) => {
             {t('SETTINGS.ASSISTANTS.CREATE')}
           </Alert>
         ) : (
-          assistants.assistantsList.map((assistant, index) => {
-            const assistantColors: string[] = ['#5050d2', '#d29650', '#50d250'];
-            return (
-              <Stack
-                key={index}
-                justifyContent="space-around"
-                direction="row"
-                spacing={2}
-                alignItems="center"
-                divider={
-                  <Divider
-                    orientation="vertical"
-                    flexItem
-                    color={assistantColors[index % 3]}
-                  />
-                }
+          assistants.assistantsList.map((assistant, index) => (
+            <Stack
+              key={index}
+              justifyContent="space-around"
+              direction="row"
+              spacing={2}
+              alignItems="center"
+              divider={
+                <Divider
+                  orientation="vertical"
+                  flexItem
+                  color={`#0${assistant.id.slice(0, 5)}`} // {assistantColors[index % 3]}
+                />
+              }
+            >
+              <Typography
+                px={1}
+                bgcolor={`#0${assistant.id.slice(0, 5)}`} // {assistantColors[index % 3]}
+                flex="0 0 fit-content"
+                color="white"
+                borderRadius="50%"
+                textAlign="center"
               >
-                <Typography
-                  px={1}
-                  bgcolor={assistantColors[index % 3]}
-                  flex="0 0 fit-content"
-                  color="white"
-                  borderRadius="50%"
-                  textAlign="center"
-                >
-                  {index + 1}
-                </Typography>
-                <Box sx={{ flex: '1' }}>
-                  <AssistantSettingsPanel
-                    assistant={assistant}
-                    onChange={handleChange}
-                    index={index}
-                    handleRemoveAssistant={handleRemoveAssistant}
-                    handleMoveUp={handleMoveUp}
-                    handleMoveDown={handleMoveDown}
-                    assistantsListLength={assistants.assistantsList.length}
-                  />
-                </Box>
-              </Stack>
-            );
-          })
+                {index + 1}
+              </Typography>
+              <Box sx={{ flex: '1' }}>
+                <AssistantSettingsPanel
+                  assistant={assistant}
+                  onChange={handleChange}
+                  index={index}
+                  handleRemoveAssistant={handleRemoveAssistant}
+                  handleMoveUp={handleMoveUp}
+                  handleMoveDown={handleMoveDown}
+                  assistantsListLength={assistants.assistantsList.length}
+                />
+              </Box>
+            </Stack>
+          ))
         )}
         <Button variant="contained" onClick={handleAddAssistant}>
           {t('SETTINGS.ASSISTANTS.ADD')}

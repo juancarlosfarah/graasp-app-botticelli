@@ -3,7 +3,7 @@ import { Message } from './Message';
 import Trigger from './Trigger';
 
 type Exchange = {
-  id: number;
+  id: string;
   name: string;
   description: string;
   // instructions: string;
