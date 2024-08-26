@@ -209,27 +209,6 @@ const ParticipantInteraction = (): ReactElement => {
   }
 */
 
-  const saveData = (
-    name: AllSettingsNameType,
-    newValue: AllSettingsDataType,
-  ): void => {
-    if (appSettingsList) {
-      const previousSetting = appSettingsList.find((s) => s.name === name);
-      // setting does not exist
-      if (!previousSetting) {
-        postAppSetting({
-          data: newValue,
-          name,
-        });
-      } else {
-        patchAppSetting({
-          id: previousSetting.id,
-          data: newValue,
-        });
-      }
-    }
-  };
-
   const hasPosted = useRef(!!appDatas);
 
   const [interaction, setInteraction] = useState<Interaction>(
