@@ -45,6 +45,8 @@ const AssistantSettingsPanel: FC<PropTypesSingle> = ({
     imageUrl: assistantImageUrl, // New field for the image URL
   } = assistant;
 
+  const panelColor: string = `#0${assistant.id.slice(0, 5)}`;
+
   return (
     <Stack spacing={1} p={2} border="1px solid #ccc" borderRadius="8px">
       <Stack direction="row" spacing={2} alignItems="center">
@@ -63,14 +65,14 @@ const AssistantSettingsPanel: FC<PropTypesSingle> = ({
           fullWidth
         />
         <IconButton
-          color="primary"
+          sx={{ color: panelColor }}
           onClick={() => handleMoveUp(index)}
           disabled={index === 0}
         >
           <ArrowUpwardIcon />
         </IconButton>
         <IconButton
-          color="primary"
+          sx={{ color: panelColor }}
           onClick={() => handleMoveDown(index)}
           disabled={index === assistantsListLength - 1}
         >
@@ -89,7 +91,7 @@ const AssistantSettingsPanel: FC<PropTypesSingle> = ({
         multiline
         onChange={(e) => onChange(index, 'description', e.target.value)}
       />
-      <Stack direction="row" spacing={1} justifyContent="center">
+      <Stack direction="row" justifyContent="center">
         <IconButton
           color="secondary"
           onClick={() => handleRemoveAssistant(index)}

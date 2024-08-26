@@ -62,16 +62,35 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
     hardLimit: exchangeLimit,
   } = exchange;
 
+  const panelColor: string = `#0${exchange.id.slice(0, 5)}`;
+
   const { assistants } = useSettings();
 
   return (
     <Stack spacing={1} p={2} border="1px solid #ccc" borderRadius="8px">
-      <TextField
-        value={exchangeDescription}
-        label={t('SETTINGS.EXCHANGES.DESCRIPTION')}
-        multiline
-        onChange={(e) => onChange(index, 'description', e.target.value)}
-      />
+      <Stack direction="row" spacing={2} alignItems="center">
+        <TextField
+          value={exchangeDescription}
+          label={t('SETTINGS.EXCHANGES.DESCRIPTION')}
+          multiline
+          fullWidth
+          onChange={(e) => onChange(index, 'description', e.target.value)}
+        />
+        <IconButton
+          sx={{ color: panelColor }}
+          onClick={() => handleMoveUp(index)}
+          disabled={index === 0}
+        >
+          <ArrowUpwardIcon />
+        </IconButton>
+        <IconButton
+          sx={{ color: panelColor }}
+          onClick={() => handleMoveDown(index)}
+          disabled={index === exchangesListLength - 1}
+        >
+          <ArrowDownwardIcon />
+        </IconButton>
+      </Stack>
       <TextField
         value={exchangeInstructions}
         label={t('SETTINGS.EXCHANGES.INSTRUCTIONS')}
@@ -150,21 +169,7 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
         checked={exchangeLimit}
         onChange={(e) => onChange(index, 'hardLimit', e.target.checked)}
       />
-      <Stack direction="row" spacing={1} justifyContent="center">
-        <IconButton
-          color="primary"
-          onClick={() => handleMoveUp(index)}
-          disabled={index === 0}
-        >
-          <ArrowUpwardIcon />
-        </IconButton>
-        <IconButton
-          color="primary"
-          onClick={() => handleMoveDown(index)}
-          disabled={index === exchangesListLength - 1}
-        >
-          <ArrowDownwardIcon />
-        </IconButton>
+      <Stack direction="row" justifyContent="center">
         <IconButton
           color="secondary"
           onClick={() => {
