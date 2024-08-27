@@ -1,6 +1,5 @@
 import Agent from './Agent';
 import { Message } from './Message';
-import Trigger from './Trigger';
 
 type Exchange = {
   id: string;
@@ -11,11 +10,9 @@ type Exchange = {
   participantInstructionsOnComplete: string;
   // cue: string;
   participantCue: string;
-  order: number;
   messages: Message[];
   // assistant: Agent;
   assistant: Agent;
-  triggers: Trigger[];
   started: boolean;
   completed: boolean;
   dismissed: boolean;

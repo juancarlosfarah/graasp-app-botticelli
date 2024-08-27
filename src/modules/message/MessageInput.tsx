@@ -10,6 +10,7 @@ import Textarea from '@mui/material/OutlinedInput';
 import Stack from '@mui/material/Stack';
 
 import Exchange from '@/types/Exchange';
+import { Message } from '@/types/Message';
 
 export type MessageInputProps = {
   exchange: Exchange;
@@ -19,6 +20,7 @@ export type MessageInputProps = {
   completed: boolean;
   setExchange: (exchange: Exchange) => void;
   goToNextExchange: () => void;
+  setMessages: (msgs: Message[]) => void;
 };
 
 type KeyPressData = {
@@ -34,6 +36,7 @@ const MessageInput = ({
   completed,
   setExchange,
   goToNextExchange,
+  setMessages,
 }: MessageInputProps): ReactElement => {
   const textAreaRef = useRef<HTMLDivElement>(null);
   const [keypressData, setKeypressData] = useState<KeyPressData[]>([]);
@@ -41,6 +44,7 @@ const MessageInput = ({
   const { t } = useTranslation();
 
   function dismissExchange(): void {
+    setMessages([]);
     const updatedExchange = { ...exchange };
     updatedExchange.dismissed = true;
     updatedExchange.dismissedAt = new Date();
@@ -89,6 +93,7 @@ const MessageInput = ({
           placeholder={t('MESSAGE_BOX.INSERT_HERE')}
           aria-label="Message"
           ref={textAreaRef}
+          autoFocus
           onChange={(e): void => {
             setTextAreaValue(e.target.value);
           }}

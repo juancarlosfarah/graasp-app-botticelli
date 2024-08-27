@@ -26,6 +26,7 @@ import MessageLoader from './MessageLoader';
 type MessagesPaneProps = {
   currentExchange: Exchange;
   setExchange: (updatedExchange: Exchange) => void;
+  pastMessages: Message[];
   participant: Agent;
   readOnly?: boolean;
   autoDismiss?: boolean;
@@ -35,6 +36,7 @@ type MessagesPaneProps = {
 const MessagesPane = ({
   currentExchange,
   setExchange,
+  pastMessages,
   participant,
   autoDismiss,
   readOnly = false,
@@ -101,7 +103,7 @@ const MessagesPane = ({
 
   const [status, setStatus] = useState<Status>(Status.Idle);
   // const [exchange, setExchange] = useState<Exchange>(currentExchange);
-  const [msgs, setMessages] = useState<Message[]>([]);
+  const [msgs, setMessages] = useState<Message[]>(currentExchange.messages);
   const [textAreaValue, setTextAreaValue] = useState('');
   const [sentMessageCount, setSentMessageCount] = useState<number>(
     currentExchange.messages.length,
@@ -123,12 +125,12 @@ const MessagesPane = ({
     );
   }, [sentMessageCount]);
 */
-
+  /*
   useEffect(() => {
     setExchange({ ...currentExchange, messages: msgs });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentExchange]);
-
+*/
   useEffect(() => {
     const defaultMessages: Message[] = [
       {
@@ -139,8 +141,7 @@ const MessagesPane = ({
     ];
     setMessages((m) => _.uniqBy([...m, ...defaultMessages], 'id'));
     setExchange({ ...currentExchange, messages: msgs });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentExchange]);
+  }, [currentExchange, msgs, setExchange]);
 
   function handlePostChatbot(newMessage: Message): void {
     // respond
@@ -199,7 +200,10 @@ const MessagesPane = ({
       type: AppDataTypes.ParticipantComment,
     });
 */
-    setMessages((m) => [...m, newMessage]);
+    const updatedMessages = [...msgs, newMessage];
+    // eslint-disable-next-line no-console
+    console.log(updatedMessages);
+    setMessages(updatedMessages);
     setSentMessageCount((c) => c + 1);
 
     // will not take updated message count in consideration so we add two
@@ -207,16 +211,17 @@ const MessagesPane = ({
     if (sentMessageCount + 1 > currentExchange.nbFollowUpQuestions) {
       const newExchange = { ...currentExchange };
       newExchange.completed = true;
-      newExchange.completedAt = new Date();
+      newExchange.completedAt = newExchange.completedAt || new Date();
       if (autoDismiss) {
         newExchange.dismissed = true;
         newExchange.dismissedAt = new Date();
-        setExchange(newExchange);
+        setExchange({ ...newExchange, messages: updatedMessages });
         setStatus(Status.Idle);
         setSentMessageCount(0);
+        setMessages([]);
         goToNextExchange();
       } else {
-        setExchange(newExchange);
+        setExchange({ ...newExchange, messages: updatedMessages });
         handlePostChatbot(newMessage);
       }
     } else {
@@ -269,7 +274,7 @@ const MessagesPane = ({
         }}
       >
         <Stack spacing={2} justifyContent="flex-end">
-          {msgs.map((message: Message, index: number) => {
+          {[...pastMessages, ...msgs].map((message: Message, index: number) => {
             const isYou = message?.sender?.id === participant.id;
 
             return (
@@ -329,6 +334,7 @@ const MessagesPane = ({
               content: textAreaValue,
             });
           }}
+          setMessages={setMessages}
         />
       )}
     </Paper>
