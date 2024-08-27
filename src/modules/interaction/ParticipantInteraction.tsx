@@ -121,8 +121,6 @@ const ParticipantInteraction = (): ReactElement => {
   useEffect(() => {
     if (!hasPosted.current) {
       postAppData({ data: interaction, type: 'Interaction' });
-      // eslint-disable-next-line no-console
-      console.log('POSTED');
       hasPosted.current = true;
     }
   }, [interaction, postAppData]);
@@ -133,7 +131,6 @@ const ParticipantInteraction = (): ReactElement => {
         id: currentAppData.id,
         data: interaction,
       });
-      // eslint-disable-next-line no-console
     }
   }, [interaction, patchAppData, currentAppData?.id]);
 
@@ -172,8 +169,6 @@ const ParticipantInteraction = (): ReactElement => {
   }, [interaction.completed]);
 
   const startInteraction = (): void => {
-    // eslint-disable-next-line no-console
-    console.log('START');
     setInteraction((prev) => ({
       ...prev,
       started: true,
@@ -182,8 +177,6 @@ const ParticipantInteraction = (): ReactElement => {
   };
 
   const goToNextExchange = (): void => {
-    // eslint-disable-next-line no-console
-    console.log('NEXT');
     setInteraction((prev) => {
       const numExchanges = prev.exchanges.exchangesList.length;
       if (prev.currentExchange === numExchanges - 1) {

@@ -11,7 +11,7 @@
         "EMAIL_LABEL": "Email",
         "EMAIL_HELPER": "Fournissez votre courriel (facultatif)",
         "COMMENT_LABEL": "Commentaire",
-        "COMMENTAIRE_HELPER": "Racontez-nous ce qui s'est passé (facultatif)",
+        "COMMENT_HELPER": "Racontez-nous ce qui s'est passé (facultatif)",
         "THANKS_FOR_FEEDBACK": "Thank you for your feedback !",
         "SEND": "Envoyez votre retour d'information"
       }

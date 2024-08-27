@@ -57,7 +57,7 @@ const MessagesPane = ({
     const finalPrompt = [
       {
         role: ChatbotRole.System,
-        content: `${currentExchange.chatbotInstructions}The current principal questions is:${currentExchange.participantCue}`,
+        content: `${currentExchange.chatbotInstructions} The current principal questions is: ${currentExchange.participantCue}`,
 
         /*
           'Vous êtes un chatbot qui conduit une interview avec une personne qui vient d’assister à un concert de musique électroacoustique. Vous allez poser trois questions principales. ' +
@@ -201,8 +201,6 @@ const MessagesPane = ({
     });
 */
     const updatedMessages = [...msgs, newMessage];
-    // eslint-disable-next-line no-console
-    console.log(updatedMessages);
     setMessages(updatedMessages);
     setSentMessageCount((c) => c + 1);
 
