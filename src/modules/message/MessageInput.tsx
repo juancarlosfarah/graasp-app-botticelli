@@ -52,12 +52,12 @@ const MessageInput = ({
     goToNextExchange();
   }
 
-  // const focusOnTextArea = (): void => {
-  //   const textareaElement = textAreaRef?.current?.querySelector('textarea');
-  //   if (textareaElement) {
-  //     textareaElement.focus();
-  //   }
-  // };
+  const focusOnTextArea = (): void => {
+    const textareaElement = textAreaRef?.current?.querySelector('textarea');
+    if (textareaElement) {
+      textareaElement.focus();
+    }
+  };
 
   const blurTextArea = (): void => {
     const textareaElement = textAreaRef?.current?.querySelector('textarea');
@@ -67,7 +67,7 @@ const MessageInput = ({
   };
 
   useEffect(() => {
-    // focusOnTextArea();
+    focusOnTextArea();
   });
 
   const handleClick = (): void => {
@@ -76,8 +76,8 @@ const MessageInput = ({
       setTextAreaValue('');
 
       // focus on the text area
-      // focusOnTextArea();
-      // blue text area
+      focusOnTextArea();
+      // blur text area
       blurTextArea();
     }
   };
@@ -93,7 +93,6 @@ const MessageInput = ({
           placeholder={t('MESSAGE_BOX.INSERT_HERE')}
           aria-label="Message"
           ref={textAreaRef}
-          autoFocus
           onChange={(e): void => {
             setTextAreaValue(e.target.value);
           }}
