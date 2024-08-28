@@ -22,6 +22,7 @@ import ChatBubble from './ChatBubble';
 import MessageInput from './MessageInput';
 import MessageLoader from './MessageLoader';
 
+// Props type definition for MessagesPane component
 type MessagesPaneProps = {
   currentExchange: Exchange;
   setExchange: (updatedExchange: Exchange) => void;
@@ -31,6 +32,7 @@ type MessagesPaneProps = {
   goToNextExchange: () => void;
 };
 
+// Main component function: MessagesPane
 const MessagesPane = ({
   currentExchange,
   setExchange,
@@ -39,9 +41,10 @@ const MessagesPane = ({
   autoDismiss,
   goToNextExchange,
 }: MessagesPaneProps): ReactElement => {
-  //  const { mutateAsync: postAppDataAsync } = mutations.usePostAppData();
+  // Hook to post chat messages asynchronously using mutation
   const { mutateAsync: postChatBot } = mutations.usePostChatBot();
 
+  // Function to build the prompt for the chatbot based on past messages and user input
   const buildPrompt = (
     threadMessages: Message[],
     userMessage: Message,
@@ -49,10 +52,11 @@ const MessagesPane = ({
     const finalPrompt = [
       {
         role: ChatbotRole.System,
-        content: `${currentExchange.chatbotInstructions} The current principal questions is: ${currentExchange.participantCue}`,
+        content: `${currentExchange.chatbotInstructions} The current principal question is: ${currentExchange.participantCue}`,
       },
     ];
 
+    // Loop through threadMessages to add them to the prompt
     threadMessages.forEach((msg) => {
       const msgRole =
         msg.sender.type === AgentType.Assistant
@@ -61,18 +65,24 @@ const MessagesPane = ({
       finalPrompt.push({ role: msgRole, content: msg.content });
     });
 
-    // add the last user's message in the prompt
+    // Add the last user message to the prompt
     finalPrompt.push({ role: ChatbotRole.User, content: userMessage.content });
 
     return finalPrompt;
   };
 
+  // State to manage the current status of the component (idle or loading)
   const [status, setStatus] = useState<Status>(Status.Idle);
+
+  // State to manage the list of messages within the current exchange
   const [msgs, setMessages] = useState<Message[]>(currentExchange.messages);
+
+  // State to keep track of the number of messages sent in the current exchange
   const [sentMessageCount, setSentMessageCount] = useState<number>(
     currentExchange.messages.length,
   );
 
+  // Effect to initialize the message list when the component mounts or currentExchange changes
   useEffect(() => {
     const defaultMessages: Message[] = [
       {
@@ -81,72 +91,81 @@ const MessagesPane = ({
         sender: currentExchange.assistant,
       },
     ];
+    // Add unique messages to the list
     setMessages((m) => _.uniqBy([...m, ...defaultMessages], 'id'));
+
+    // Update the exchange with the new messages list
     setExchange({ ...currentExchange, messages: msgs });
   }, [currentExchange, msgs, setExchange]);
 
+  // Function to handle posting a new message to the chatbot and receiving a response
   function handlePostChatbot(newMessage: Message): void {
-    // respond
-    const prompt = [
-      // initial settings
-      // ...
-      // this function requests the prompt as the first argument in string format
-      // we can not use it in this context as we are using a JSON prompt.
-      // if we simplify the prompt in the future we will be able to remove the line above
-      // and this function solely
-      ...buildPrompt(msgs, newMessage),
-    ];
+    // Build the prompt for the chatbot using the existing messages and the new message
+    const prompt = [...buildPrompt(msgs, newMessage)];
 
+    // Send the prompt to the chatbot API and handle the response
     postChatBot(prompt)
       .then((chatBotRes) => {
-        // actionData.content = chatBotRes.completion;
         const response = {
           id: uuidv4(),
           content: chatBotRes.completion,
           sender: currentExchange.assistant,
         };
 
+        // Add the chatbot's response to the list of messages
         setMessages((m) => [...m, response]);
       })
       .finally(() => {
-        // set status back to idle
+        // Reset the status back to idle after the chatbot responds
         setStatus(Status.Idle);
       });
   }
 
+  // Function to save a new user message and handle chatbot response logic
   const saveNewMessage = ({ content }: { content: string }): void => {
     setStatus(Status.Loading);
+
+    // Create a new message object with the user's input
     const newMessage: Message = {
       id: uuidv4(),
       content,
       sender: participant,
     };
 
+    // Update the messages state with the new message
     const updatedMessages = [...msgs, newMessage];
     setMessages(updatedMessages);
+
+    // Increment the count of sent messages
     setSentMessageCount((c) => c + 1);
 
+    // Check if the exchange should be completed based on the number of follow-up questions
     if (sentMessageCount + 1 > currentExchange.nbFollowUpQuestions) {
       const newExchange = { ...currentExchange };
       newExchange.completed = true;
       newExchange.completedAt = newExchange.completedAt || new Date();
+
       if (autoDismiss) {
+        // Auto-dismiss the exchange if autoDismiss is true
         newExchange.dismissed = true;
         newExchange.dismissedAt = new Date();
         setExchange({ ...newExchange, messages: updatedMessages });
         setStatus(Status.Idle);
         setSentMessageCount(0);
         setMessages([]);
-        goToNextExchange();
+        goToNextExchange(); // Move to the next exchange
       } else {
+        // Otherwise, just update the exchange and handle chatbot response
         setExchange({ ...newExchange, messages: updatedMessages });
         handlePostChatbot(newMessage);
       }
     } else {
+      // If not completed, continue with the chatbot response
       handlePostChatbot(newMessage);
     }
   };
 
+  // Effect to start the exchange when the component mounts or currentExchange changes
   useEffect((): void => {
     const startExchange = (): void => {
       const updatedExchange = { ...currentExchange };
@@ -154,16 +173,19 @@ const MessagesPane = ({
       updatedExchange.startedAt = new Date();
       setExchange(updatedExchange);
     };
-    // do not start if this is readonly
+
+    // Start the exchange only if it hasn't been started and is not read-only
     if (currentExchange && !currentExchange.started) {
       startExchange();
     }
   }, [currentExchange, setExchange]);
 
+  // Render a fallback if no current exchange is available
   if (!currentExchange) {
     return <>Exchange Not Found</>;
   }
 
+  // Determine whether to show participant instructions after completing the exchange
   const showParticipantInstructionsOnComplete =
     currentExchange.completed &&
     currentExchange.participantInstructionsOnComplete;
@@ -215,6 +237,7 @@ const MessagesPane = ({
               </Stack>
             );
           })}
+
           {status === Status.Loading && (
             <Box sx={{ maxWidth: '60%', minWidth: 'auto' }}>
               <Stack
@@ -227,6 +250,7 @@ const MessagesPane = ({
               </Stack>
             </Box>
           )}
+
           {showParticipantInstructionsOnComplete && (
             <Alert variant="filled" color="success">
               {currentExchange.participantInstructionsOnComplete}
