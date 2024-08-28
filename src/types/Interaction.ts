@@ -7,9 +7,7 @@ type Interaction = {
   id: UUID;
   description: string;
   modelInstructions: string;
-  // participantInstructions: string;
   participantInstructions: string;
-  // participantInstructionsOnComplete: string;
   participantEndText: string;
   name: string;
   currentExchange: number;

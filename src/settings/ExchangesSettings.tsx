@@ -37,10 +37,10 @@ type PropTypesSingle = {
     value: string | number | boolean | Omit<Agent, 'type'>,
   ) => void;
   handleRemoveExchange: (index: number) => void;
-  handleMoveUp: (index: number) => void; // New handler for moving up
-  handleMoveDown: (index: number) => void; // New handler for moving down
+  handleMoveUp: (index: number) => void;
+  handleMoveDown: (index: number) => void;
   index: number;
-  exchangesListLength: number; // Add the length of exchangesList as a prop
+  exchangesListLength: number;
 };
 
 const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
@@ -50,7 +50,7 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
   handleRemoveExchange,
   handleMoveUp,
   handleMoveDown,
-  exchangesListLength, // Use the length prop
+  exchangesListLength,
 }) => {
   const { t } = useTranslation();
   const {

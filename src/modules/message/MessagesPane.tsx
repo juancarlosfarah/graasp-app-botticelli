@@ -49,24 +49,10 @@ const MessagesPane = ({
     threadMessages: Message[],
     userMessage: Message,
   ): Array<ChatBotMessage> => {
-    // define the message to send to OpenAI with the initial prompt first if needed (role system).
-    // Each call to OpenAI must contain the whole history of the messages.
-    // const finalPrompt: Array<ChatBotMessage> = initialPrompt
-    //   ? [{ role: ChatbotRole.System, content: initialPrompt }]
-    //   : [];
     const finalPrompt = [
       {
         role: ChatbotRole.System,
         content: `${currentExchange.chatbotInstructions} The current principal questions is: ${currentExchange.participantCue}`,
-
-        /*
-          'Vous êtes un chatbot qui conduit une interview avec une personne qui vient d’assister à un concert de musique électroacoustique. Vous allez poser trois questions principales. ' +
-          'Chaque question principale est suivie de quatre autres questions afin de préciser les réponses données. ' +
-          'Les trois questions principales sont: ' +
-          "(1) Quelles sont les images mentales les plus fortes ou les plus claires que vous avez perçues pendant l'écoute du concert? " +
-          "(2) Pourriez-vous décrire s'il s'agissait plus de formes réelles ou imaginaires? Réalistes ou abstraites? " +
-          "(3) Où se trouvait votre corps par rapport à ces images?  Vous les observiez depuis un point de vue extérieur, depuis le bas ou le haut ou latéralement, ou alors aviez-vous la sensation d'être immergé dans un espace qui vous entoure, d'être transporté dans un lieu?",
-      */
       },
     ];
 
@@ -84,23 +70,6 @@ const MessagesPane = ({
     return finalPrompt;
   };
 
-  /*
-  function loadMessages(): Message[] {
-    const item = window.sessionStorage.getItem('messages');
-    return item != null ? JSON.parse(item) : [];
-  }
-
-  function loadExchange(): Exchange {
-    const item = window.sessionStorage.getItem('exchange');
-    return item != null ? JSON.parse(item) : defaultExchange;
-  }
-
-  function loadSentMessageCount(): number {
-    const item = window.sessionStorage.getItem('sentMessageCount');
-    return item != null ? parseInt(item, 10) : 0;
-  }
-*/
-
   const [status, setStatus] = useState<Status>(Status.Idle);
   // const [exchange, setExchange] = useState<Exchange>(currentExchange);
   const [msgs, setMessages] = useState<Message[]>(currentExchange.messages);
@@ -109,28 +78,6 @@ const MessagesPane = ({
     currentExchange.messages.length,
   );
 
-  /*
-  useEffect(() => {
-    window.sessionStorage.setItem('messages', JSON.stringify(messages));
-  }, [messages]);
-
-  useEffect(() => {
-    window.sessionStorage.setItem('exchange', JSON.stringify(exchange));
-  }, [exchange]);
-
-  useEffect(() => {
-    window.sessionStorage.setItem(
-      'sentMessageCount',
-      sentMessageCount.toString(),
-    );
-  }, [sentMessageCount]);
-*/
-  /*
-  useEffect(() => {
-    setExchange({ ...currentExchange, messages: msgs });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentExchange]);
-*/
   useEffect(() => {
     const defaultMessages: Message[] = [
       {
@@ -163,25 +110,12 @@ const MessagesPane = ({
           content: chatBotRes.completion,
           sender: currentExchange.assistant,
         };
-        /*
-            // post comment from bot
-            postAppDataAsync({
-              data: {
-                content: chatBotRes.completion,
-              },
-              type: AppDataTypes.AssistantComment,
-            });
-  */
-        // const updatedMessagesWithResponse = [...updatedMessages, response];
+
         setMessages((m) => [...m, response]);
       })
       .finally(() => {
         // set status back to idle
         setStatus(Status.Idle);
-        // postAction({
-        //   data: actionData,
-        //   type: AppActionsType.Create,
-        // });
       });
   }
 
@@ -192,20 +126,11 @@ const MessagesPane = ({
       content,
       sender: participant,
     };
-    /*
-    postAppDataAsync({
-      data: {
-        content,
-      },
-      type: AppDataTypes.ParticipantComment,
-    });
-*/
+
     const updatedMessages = [...msgs, newMessage];
     setMessages(updatedMessages);
     setSentMessageCount((c) => c + 1);
 
-    // will not take updated message count in consideration so we add two
-    // https://react.dev/reference/react/useState#setstate-caveats
     if (sentMessageCount + 1 > currentExchange.nbFollowUpQuestions) {
       const newExchange = { ...currentExchange };
       newExchange.completed = true;
@@ -225,9 +150,6 @@ const MessagesPane = ({
     } else {
       handlePostChatbot(newMessage);
     }
-
-    // evaluate
-    // ...
   };
 
   useEffect((): void => {
@@ -327,8 +249,6 @@ const MessagesPane = ({
           completed={currentExchange.completed}
           onSubmit={(): void => {
             saveNewMessage({
-              // keyPressEvents,
-              // sender: participant,
               content: textAreaValue,
             });
           }}

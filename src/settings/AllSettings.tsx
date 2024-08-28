@@ -141,33 +141,6 @@ const AllSettings: FC<Record<string, never>> = () => {
       </TabPanel>
     </TabContext>
   );
-  /*
-  return (
-    <Stack spacing={2}>
-      <Typography variant="h3">{t('SETTINGS.TITLE')}</Typography>
-      <ChatSettingsComponent
-        chat={chat}
-        onChange={(newSetting: ChatSettingsType) => {
-          setChat(newSetting);
-        }}
-      />
-      <ExchangesSettingsComponent
-        exchanges={exchanges}
-        onChange={setExchanges}
-      />
-      <Box>
-        <Button
-          startIcon={<SaveIcon />}
-          variant="contained"
-          onClick={saveAllSettings}
-          disabled={disableSave}
-        >
-          {t('SETTINGS.SAVE_BTN')}
-        </Button>
-      </Box>
-    </Stack>
-  );
-  */
 };
 
 export default AllSettings;

@@ -50,7 +50,7 @@ const AssistantSettingsPanel: FC<PropTypesSingle> = ({
   const {
     name: assistantName,
     description: assistantDescription,
-    imageUrl: assistantImageUrl, // New field for the image URL
+    imageUrl: assistantImageUrl,
   } = assistant;
 
   const panelColor: string = `#0${assistant.id.slice(0, 5)}`;
@@ -206,13 +206,13 @@ const AssistantsSettings: FC<PropTypesList> = ({ assistants, onChange }) => {
                 <Divider
                   orientation="vertical"
                   flexItem
-                  color={`#0${assistant.id.slice(0, 5)}`} // {assistantColors[index % 3]}
+                  color={`#0${assistant.id.slice(0, 5)}`}
                 />
               }
             >
               <Typography
                 px={1}
-                bgcolor={`#0${assistant.id.slice(0, 5)}`} // {assistantColors[index % 3]}
+                bgcolor={`#0${assistant.id.slice(0, 5)}`}
                 flex="0 0 fit-content"
                 color="white"
                 borderRadius="50%"

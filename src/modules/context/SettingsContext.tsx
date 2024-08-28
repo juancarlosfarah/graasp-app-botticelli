@@ -12,7 +12,6 @@ import { hooks, mutations } from '../../config/queryClient';
 import Loader from '../common/Loader';
 
 // mapping between Setting names and their data type
-// eslint-disable-next-line @typescript-eslint/ban-types
 type AllSettingsType = {
   assistants: AssistantsSettingsType;
   chat: ChatSettingsType;
@@ -116,8 +115,6 @@ export const SettingsProvider: FC<Prop> = ({ children }) => {
     if (isSuccess) {
       const allSettings: AllSettingsType = ALL_SETTING_NAMES.reduce(
         <T extends AllSettingsNameType>(acc: AllSettingsType, key: T) => {
-          // todo: types are not inferred correctly here
-          // @ts-ignore
           const setting = appSettingsList.find((s) => s.name === key);
           if (setting) {
             const settingData =
