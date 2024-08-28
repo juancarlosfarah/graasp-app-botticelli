@@ -10,7 +10,6 @@ import { ChatBotMessage, ChatbotRole } from '@graasp/sdk';
 import _ from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 
-// import { AppDataTypes } from '@/config/appData';
 import { mutations } from '@/config/queryClient';
 import Agent from '@/types/Agent';
 import AgentType from '@/types/AgentType';
@@ -28,8 +27,7 @@ type MessagesPaneProps = {
   setExchange: (updatedExchange: Exchange) => void;
   pastMessages: Message[];
   participant: Agent;
-  readOnly?: boolean;
-  autoDismiss?: boolean;
+  autoDismiss: boolean;
   goToNextExchange: () => void;
 };
 
@@ -39,7 +37,6 @@ const MessagesPane = ({
   pastMessages,
   participant,
   autoDismiss,
-  readOnly = false,
   goToNextExchange,
 }: MessagesPaneProps): ReactElement => {
   //  const { mutateAsync: postAppDataAsync } = mutations.usePostAppData();
@@ -71,9 +68,7 @@ const MessagesPane = ({
   };
 
   const [status, setStatus] = useState<Status>(Status.Idle);
-  // const [exchange, setExchange] = useState<Exchange>(currentExchange);
   const [msgs, setMessages] = useState<Message[]>(currentExchange.messages);
-  const [textAreaValue, setTextAreaValue] = useState('');
   const [sentMessageCount, setSentMessageCount] = useState<number>(
     currentExchange.messages.length,
   );
@@ -160,10 +155,10 @@ const MessagesPane = ({
       setExchange(updatedExchange);
     };
     // do not start if this is readonly
-    if (!readOnly && currentExchange && !currentExchange.started) {
+    if (currentExchange && !currentExchange.started) {
       startExchange();
     }
-  }, [currentExchange, readOnly, setExchange]);
+  }, [currentExchange, setExchange]);
 
   if (!currentExchange) {
     return <>Exchange Not Found</>;
@@ -239,19 +234,12 @@ const MessagesPane = ({
           )}
         </Stack>
       </Box>
-      {!(readOnly || currentExchange.dismissed) && (
+      {!currentExchange.dismissed && (
         <MessageInput
           exchange={currentExchange}
           goToNextExchange={goToNextExchange}
-          textAreaValue={textAreaValue}
-          setTextAreaValue={setTextAreaValue}
           setExchange={setExchange}
-          completed={currentExchange.completed}
-          onSubmit={(): void => {
-            saveNewMessage({
-              content: textAreaValue,
-            });
-          }}
+          onSubmit={saveNewMessage}
           setMessages={setMessages}
         />
       )}

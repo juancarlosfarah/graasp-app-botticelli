@@ -14,32 +14,22 @@ import { Message } from '@/types/Message';
 
 export type MessageInputProps = {
   exchange: Exchange;
-  textAreaValue: string;
-  setTextAreaValue: (value: string) => void;
-  onSubmit: (keyPressData: KeyPressData[]) => void;
-  completed: boolean;
+  onSubmit: ({ content }: { content: string }) => void;
   setExchange: (exchange: Exchange) => void;
   goToNextExchange: () => void;
   setMessages: (msgs: Message[]) => void;
 };
 
-type KeyPressData = {
-  timestamp: number;
-  key: string;
-};
-
 const MessageInput = ({
   exchange,
-  textAreaValue,
-  setTextAreaValue,
   onSubmit,
-  completed,
   setExchange,
   goToNextExchange,
   setMessages,
 }: MessageInputProps): ReactElement => {
+  const [textAreaValue, setTextAreaValue] = useState('');
+
   const textAreaRef = useRef<HTMLDivElement>(null);
-  const [keypressData, setKeypressData] = useState<KeyPressData[]>([]);
 
   const { t } = useTranslation();
 
@@ -72,7 +62,7 @@ const MessageInput = ({
 
   const handleClick = (): void => {
     if (textAreaValue.trim() !== '') {
-      onSubmit(keypressData);
+      onSubmit({ content: textAreaValue });
       setTextAreaValue('');
 
       // focus on the text area
@@ -112,7 +102,7 @@ const MessageInput = ({
                 px: 1,
               }}
             >
-              {completed && (
+              {exchange.completed && (
                 <Button
                   size="small"
                   color="success"
@@ -135,17 +125,8 @@ const MessageInput = ({
             </Stack>
           }
           onKeyDown={(event): void => {
-            setKeypressData([
-              ...keypressData,
-              {
-                timestamp: event.timeStamp,
-                key: event.key,
-              },
-            ]);
             if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
               handleClick();
-              // reset keypress data
-              setKeypressData([]);
             }
           }}
           sx={{

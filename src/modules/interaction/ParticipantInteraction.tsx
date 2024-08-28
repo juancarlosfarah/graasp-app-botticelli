@@ -258,7 +258,6 @@ const ParticipantInteraction = (): ReactElement => {
         return [];
       })}
       participant={currentMember}
-      readOnly={false}
     />
   );
 };
