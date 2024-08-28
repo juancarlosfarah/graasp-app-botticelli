@@ -24,7 +24,7 @@ import AgentType from '@/types/AgentType';
 import Exchange from '@/types/Exchange';
 import Interaction from '@/types/Interaction';
 
-import { useSettings } from '../context/SettingsContext';
+import { defaultSettingsValues, useSettings } from '../context/SettingsContext';
 
 const ParticipantInteraction = (): ReactElement => {
   const { memberId: participantId } = useLocalContext();
@@ -58,12 +58,8 @@ const ParticipantInteraction = (): ReactElement => {
   };
 
   const defaultInteraction: Interaction = {
+    ...defaultSettingsValues.chat,
     id: uuidv4(),
-    description: '',
-    modelInstructions: '',
-    participantInstructions: '',
-    participantEndText: '',
-    name: '',
     currentExchange: 0,
     started: false,
     completed: false,
@@ -74,19 +70,12 @@ const ParticipantInteraction = (): ReactElement => {
   };
 
   const defaultExchange: Exchange = {
-    id: '',
-    name: '',
-    description: '',
-    chatbotInstructions: '',
-    participantInstructionsOnComplete: '',
-    participantCue: '',
+    ...defaultSettingsValues.exchanges.exchangesList[0],
     messages: [],
     assistant: defaultAssistant,
     started: false,
     completed: false,
     dismissed: false,
-    nbFollowUpQuestions: 5,
-    hardLimit: true,
     createdAt: new Date(),
     updatedAt: new Date(),
   };

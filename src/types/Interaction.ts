@@ -1,15 +1,12 @@
 import { UUID } from '@graasp/sdk';
 
+import { ChatSettingsType } from '@/config/appSettings';
+
 import Agent from './Agent';
 import Exchange from './Exchange';
 
-type Interaction = {
+type Interaction = ChatSettingsType & {
   id: UUID;
-  description: string;
-  modelInstructions: string;
-  participantInstructions: string;
-  participantEndText: string;
-  name: string;
   currentExchange: number;
   completed: boolean;
   started: boolean;

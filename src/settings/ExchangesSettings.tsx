@@ -218,6 +218,7 @@ const ExchangeSettings: FC<PropTypesList> = ({ exchanges, onChange }) => {
           description: '',
           chatbotInstructions: '',
           participantCue: '',
+          participantInstructionsOnComplete: '',
           nbFollowUpQuestions: 0,
           hardLimit: false,
         },

@@ -19,7 +19,7 @@ type AllSettingsType = {
 };
 
 // default values for the data property of settings by name
-const defaultSettingsValues: AllSettingsType = {
+export const defaultSettingsValues: AllSettingsType = {
   assistants: {
     assistantsList: [{ id: uuidv4(), name: '', description: '' }],
   },
@@ -40,6 +40,7 @@ const defaultSettingsValues: AllSettingsType = {
         description: '',
         chatbotInstructions: '',
         participantCue: '',
+        participantInstructionsOnComplete: '',
         nbFollowUpQuestions: 0,
         hardLimit: false,
       },
