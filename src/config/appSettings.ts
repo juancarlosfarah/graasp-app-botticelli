@@ -21,7 +21,7 @@ export type ExchangeSettings = {
   chatbotInstructions: string;
   participantCue: string;
   nbFollowUpQuestions: number;
-  participantInstructionsOnComplete: string;
+  participantInstructionsOnComplete?: string;
   hardLimit: boolean;
 };
 

@@ -58,6 +58,7 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
     description: exchangeDescription,
     chatbotInstructions: exchangeInstructions,
     participantCue: exchangeCue,
+    participantInstructionsOnComplete: exchangeOnComplete,
     nbFollowUpQuestions: exchangeFollowUpQuestions,
     hardLimit: exchangeLimit,
   } = exchange;
@@ -171,7 +172,7 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
         }
       />
       <Typography variant="h6">
-        {t('SETTINGS.EXCHANGES.DISABLE_hardLimit')}
+        {t('SETTINGS.EXCHANGES.DISABLE_HARD_LIMIT')}
         {'   '}
         <Tooltip title={t('SETTINGS.EXCHANGES.HARD_LIMIT_INFO')}>
           <InfoBadge />
@@ -181,6 +182,17 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
         checked={exchangeLimit}
         onChange={(e) => onChange(index, 'hardLimit', e.target.checked)}
       />
+      {exchangeLimit && (
+        <TextField
+          value={exchangeOnComplete}
+          label={t('SETTINGS.EXCHANGES.ON_COMPLETE')}
+          placeholder={t('SETTINGS.EXCHANGES.ON_COMPLETE_HELPER')}
+          inputProps={{ maxLength: 400 }}
+          onChange={(e) =>
+            onChange(index, 'participantInstructionsOnComplete', e.target.value)
+          }
+        />
+      )}
       <Stack direction="row" justifyContent="center">
         <IconButton
           color="secondary"

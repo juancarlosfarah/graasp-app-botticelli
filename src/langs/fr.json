@@ -45,7 +45,9 @@
         "ASSISTANT": "Assistant",
         "CREATE_ASSISTANT": "Veuillez créer au moins un assistant.",
         "FOLLOW_UP_QUESTIONS": "Nombre de Questions de Suivi",
-        "DISABLE_hardLimit": "Rejet Automatique",
+        "ON_COMPLETE": "Instruction sur l'achèvement de l'échange",
+        "ON_COMPLETE_HELPER": "Ce texte s'affichera une fois que le nombre donné de questions de suivi aura été répondu. Laisser en blanc si aucun message n'est affiché.",
+        "DISABLE_HARD_LIMIT": "Rejet Automatique",
         "HARD_LIMIT_INFO": "Si cette case est cochée, l'échange suivant commencera automatiquement une fois que le nombre de questions de suivi sera atteint",
         "CREATE": "Veuillez créer au moins un échange."
       }

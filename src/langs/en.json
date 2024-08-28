@@ -45,7 +45,9 @@
         "ASSISTANT": "Assistant",
         "CREATE_ASSISTANT": "Please create at least one assistant.",
         "FOLLOW_UP_QUESTIONS": "Number of Follow Up Questions",
-        "DISABLE_hardLimit": "Auto Dismiss",
+        "ON_COMPLETE": "Instruction on Exchange Completion",
+        "ON_COMPLETE_HELPER": "This text will be shown once the given number of follow up questions have been answered. Leave blank for no message.",
+        "DISABLE_HARD_LIMIT": "Auto Dismiss",
         "HARD_LIMIT_INFO": "If checked, the next exchange will start automatically after the number of follow up questions is reached.",
         "CREATE": "Please create at least one exchange."
       }
