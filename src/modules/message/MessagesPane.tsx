@@ -104,7 +104,6 @@ const MessagesPane = ({
    * @function dismissExchange
    * @description Resets the messages state, marks the current exchange as dismissed, and updates the dismissed timestamp.
    * It also resets the count of sent messages and proceeds to the next exchange in the sequence.
-   * - Calls `goToNextExchange` to transition to the next exchange.
    */
   function dismissExchange(): void {
     setMessages([]);
