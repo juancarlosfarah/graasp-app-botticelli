@@ -64,7 +64,7 @@ const AssistantSettingsPanel: FC<PropTypesSingle> = ({
     <Stack spacing={1} p={2} border="1px solid #ccc" borderRadius="8px">
       <Stack direction="row" spacing={2} alignItems="center">
         <Avatar src={assistantImageUrl} sx={{ border: '1px solid #bdbdbd' }}>
-          {assistantName.slice(0, 2)}{' '}
+          {assistantName.slice(0, 2)}
         </Avatar>
         <TextField
           value={assistantImageUrl || ''}
