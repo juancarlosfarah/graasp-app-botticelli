@@ -77,6 +77,18 @@ const MessagesPane = ({
   // State to manage the list of messages within the current exchange
   const [msgs, setMessages] = useState<Message[]>(currentExchange.messages);
 
+  useEffect(() => {
+    if (msgs.length === 0) {
+      setMessages([
+        {
+          id: uuidv4(),
+          content: currentExchange.participantCue,
+          sender: currentExchange.assistant,
+        },
+      ]);
+    }
+  }, [currentExchange.assistant, currentExchange.participantCue, msgs.length]);
+
   // State to keep track of the number of messages sent in the current exchange
   const [sentMessageCount, setSentMessageCount] = useState<number>(
     currentExchange.messages.length,
@@ -96,24 +108,6 @@ const MessagesPane = ({
 
     goToNextExchange();
   }
-
-  // Effect to initialize the message list when the component mounts or currentExchange changes
-  useEffect(() => {
-    const defaultMessages: Message[] = [
-      {
-        id: `${currentExchange.id}`,
-        content: currentExchange.participantCue,
-        sender: currentExchange.assistant,
-      },
-    ];
-    // Add unique messages to the list
-    setMessages((m) => _.uniqBy([...m, ...defaultMessages], 'id'));
-
-    // Update the exchange with the new messages list
-    setExchange({ ...currentExchange, messages: msgs });
-    // eslint-disable-next-line no-console
-    console.log('SET');
-  }, [currentExchange, msgs, setExchange]);
 
   // Function to handle posting a new message to the chatbot and receiving a response
   function handlePostChatbot(newMessage: Message): void {
