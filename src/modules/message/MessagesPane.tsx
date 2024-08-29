@@ -100,7 +100,12 @@ const MessagesPane = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [msgs, setExchange]);
 
-  // Function to dismiss the current exchange
+  /**
+   * @function dismissExchange
+   * @description Resets the messages state, marks the current exchange as dismissed, and updates the dismissed timestamp.
+   * It also resets the count of sent messages and proceeds to the next exchange in the sequence.
+   * - Calls `goToNextExchange` to transition to the next exchange.
+   */
   function dismissExchange(): void {
     setMessages([]);
 
@@ -115,7 +120,11 @@ const MessagesPane = ({
     goToNextExchange();
   }
 
-  // Function to handle posting a new message to the chatbot and receiving a response
+  /**
+   * @function handlePostChatbot
+   * @description Posts a new message to the chatbot and handles the chatbot's response.
+   * @param {Message} newMessage - The new message to send to the chatbot.
+   */
   function handlePostChatbot(newMessage: Message): void {
     // Build the prompt for the chatbot using the existing messages and the new message
     const prompt = [...buildPrompt(msgs, newMessage)];

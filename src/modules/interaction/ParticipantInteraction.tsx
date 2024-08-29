@@ -88,7 +88,11 @@ const ParticipantInteraction = (): ReactElement => {
     updatedAt: new Date(),
   };
 
-  // Function to create a template interaction object
+  /**
+   * @function createTemplate
+   * @description Creates and returns a new `Interaction` object by merging default settings with chat and exchange settings.
+   * @returns {Interaction} A fully constructed `Interaction` object with merged settings.
+   */
   function createTemplate(): Interaction {
     // Merge chat settings with default interaction
     const interactionBase: Interaction = { ...defaultInteraction, ...chat };
