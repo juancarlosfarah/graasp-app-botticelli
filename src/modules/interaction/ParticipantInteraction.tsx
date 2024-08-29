@@ -284,6 +284,7 @@ const ParticipantInteraction = (): ReactElement => {
         interaction.exchanges.exchangesList[interaction.currentExchange]
       }
       setExchange={updateExchange}
+      interactionDescription={interaction.description}
       pastMessages={interaction.exchanges.exchangesList.flatMap((exchange) => {
         if (exchange.dismissed) {
           return exchange.messages;

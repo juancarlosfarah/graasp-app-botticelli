@@ -26,6 +26,7 @@ import MessageLoader from './MessageLoader';
 type MessagesPaneProps = {
   currentExchange: Exchange;
   setExchange: (updatedExchange: Exchange) => void;
+  interactionDescription: string;
   pastMessages: Message[];
   participant: Agent;
   autoDismiss: boolean;
@@ -36,6 +37,7 @@ type MessagesPaneProps = {
 const MessagesPane = ({
   currentExchange,
   setExchange,
+  interactionDescription,
   pastMessages,
   participant,
   autoDismiss,
@@ -49,12 +51,11 @@ const MessagesPane = ({
     threadMessages: Message[],
     userMessage: Message,
   ): Array<ChatBotMessage> => {
-    const finalPrompt = [
-      {
-        role: ChatbotRole.System,
-        content: `${currentExchange.chatbotInstructions} The current principal question is: ${currentExchange.participantCue}`,
-      },
-    ];
+    const prompt = [
+      currentExchange.assistant.description,
+      interactionDescription,
+      currentExchange.chatbotInstructions,
+    ].map((txt: string = '') => ({ role: ChatbotRole.System, content: txt }));
 
     // Loop through threadMessages to add them to the prompt
     threadMessages.forEach((msg) => {
@@ -62,13 +63,13 @@ const MessagesPane = ({
         msg.sender.type === AgentType.Assistant
           ? ChatbotRole.Assistant
           : ChatbotRole.User;
-      finalPrompt.push({ role: msgRole, content: msg.content });
+      prompt.push({ role: msgRole, content: msg.content });
     });
 
     // Add the last user message to the prompt
-    finalPrompt.push({ role: ChatbotRole.User, content: userMessage.content });
+    prompt.push({ role: ChatbotRole.User, content: userMessage.content });
 
-    return finalPrompt;
+    return prompt;
   };
 
   // State to manage the current status of the component (idle or loading)
@@ -93,6 +94,11 @@ const MessagesPane = ({
   const [sentMessageCount, setSentMessageCount] = useState<number>(
     currentExchange.messages.length,
   );
+
+  useEffect(() => {
+    setExchange({ ...currentExchange, messages: msgs });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [msgs, setExchange]);
 
   // Function to dismiss the current exchange
   function dismissExchange(): void {
@@ -160,16 +166,15 @@ const MessagesPane = ({
         // Auto-dismiss the exchange if autoDismiss is true
         newExchange.dismissed = true;
         newExchange.dismissedAt = new Date();
-        setExchange({ ...newExchange, messages: updatedMessages });
         setStatus(Status.Idle);
         setSentMessageCount(0);
         setMessages([]);
         goToNextExchange();
       } else {
         // Otherwise, just update the exchange and handle chatbot response
-        setExchange({ ...newExchange, messages: updatedMessages });
         handlePostChatbot(newMessage);
       }
+      setExchange({ ...newExchange, messages: updatedMessages });
     } else {
       // If not completed, continue with the chatbot response
       handlePostChatbot(newMessage);
