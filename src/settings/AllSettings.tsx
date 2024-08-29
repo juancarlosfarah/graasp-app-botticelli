@@ -65,39 +65,40 @@ const AllSettings: FC<Record<string, never>> = () => {
       >
         <Tab
           value={Tabs.ASSISTANT_VIEW}
-          label={t('SETTINGS.EXCHANGES.ASSISTANT')} // Label for the tab
-          icon={<AssistantViewIcon />} // Icon for the tab
-          iconPosition="start" // Position of the icon relative to the label
+          label={t('SETTINGS.EXCHANGES.ASSISTANT')}
+          icon={<AssistantViewIcon />}
+          iconPosition="start"
         />
         <Tab
           value={Tabs.CHAT_VIEW}
-          label={t('SETTINGS.CHAT.TITLE')} // Label for the tab
-          icon={<ChatViewIcon />} // Icon for the tab
-          iconPosition="start" // Position of the icon relative to the label
+          label={t('SETTINGS.CHAT.TITLE')}
+          icon={<ChatViewIcon />}
+          iconPosition="start"
         />
         <Tab
           value={Tabs.EXCHANGES_VIEW}
-          label={t('SETTINGS.EXCHANGES.TITLE')} // Label for the tab
-          icon={<ExchangesViewIcon />} // Icon for the tab
-          iconPosition="start" // Position of the icon relative to the label
+          label={t('SETTINGS.EXCHANGES.TITLE')}
+          icon={<ExchangesViewIcon />}
+          iconPosition="start"
         />
       </TabList>
       <TabPanel value={Tabs.ASSISTANT_VIEW}>
         <Stack spacing={2}>
           <AssistantsSettingsComponent
             assistants={assistants} // Passing current assistant settings
-            onChange={setAssistants} // Function to update the assistant settings
+            onChange={setAssistants}
           />
           <Box>
             <Button
-              startIcon={<SaveIcon />} // Icon for the button
-              variant="contained" // Button style
-              onClick={() => saveSettings('assistants', assistants)} // Function to save the settings
+              startIcon={<SaveIcon />}
+              variant="contained"
+              onClick={() => saveSettings('assistants', assistants)}
               disabled={useMemo(
                 () =>
-                  isEqual(assistantsSavedState, assistants) || // Disable if settings have not changed or list is empty
+                  // Disable if settings have not changed or list is empty
+                  isEqual(assistantsSavedState, assistants) ||
                   assistants.assistantsList.length === 0,
-                [assistants, assistantsSavedState], // Dependencies for useMemo
+                [assistants, assistantsSavedState],
               )}
             >
               {t('SETTINGS.SAVE_BTN')}{' '}
@@ -110,12 +111,13 @@ const AllSettings: FC<Record<string, never>> = () => {
           <ChatSettingsComponent chat={chat} onChange={setChat} />
           <Box>
             <Button
-              startIcon={<SaveIcon />} // Icon for the button
-              variant="contained" // Button style
-              onClick={() => saveSettings('chat', chat)} // Function to save the settings
+              startIcon={<SaveIcon />}
+              variant="contained"
+              onClick={() => saveSettings('chat', chat)}
               disabled={useMemo(
-                () => isEqual(chatSavedState, chat), // Disable if settings have not changed
-                [chat, chatSavedState], // Dependencies for useMemo
+                // Disable if settings have not changed
+                () => isEqual(chatSavedState, chat),
+                [chat, chatSavedState],
               )}
             >
               {t('SETTINGS.SAVE_BTN')}{' '}
@@ -128,18 +130,19 @@ const AllSettings: FC<Record<string, never>> = () => {
         <Stack spacing={2}>
           <ExchangesSettingsComponent
             exchanges={exchanges} // Passing current exchanges settings
-            onChange={setExchanges} // Function to update the exchanges settings
+            onChange={setExchanges}
           />
           <Box>
             <Button
-              startIcon={<SaveIcon />} // Icon for the button
-              variant="contained" // Button style
-              onClick={() => saveSettings('exchanges', exchanges)} // Function to save the settings
+              startIcon={<SaveIcon />}
+              variant="contained"
+              onClick={() => saveSettings('exchanges', exchanges)}
               disabled={useMemo(
                 () =>
-                  isEqual(exchangesSavedState, exchanges) || // Disable if settings have not changed or list is empty
+                  // Disable if settings have not changed or list is empty
+                  isEqual(exchangesSavedState, exchanges) ||
                   exchanges.exchangesList.length === 0,
-                [exchanges, exchangesSavedState], // Dependencies for useMemo
+                [exchanges, exchangesSavedState],
               )}
             >
               {t('SETTINGS.SAVE_BTN')}{' '}
@@ -151,4 +154,5 @@ const AllSettings: FC<Record<string, never>> = () => {
   );
 };
 
-export default AllSettings; // Export the AllSettings component as the default export
+// Export the AllSettings component as the default export
+export default AllSettings;

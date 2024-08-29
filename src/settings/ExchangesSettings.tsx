@@ -31,17 +31,18 @@ import Agent from '@/types/Agent';
 
 // Prop types for ExchangeSettingsPanel component
 type PropTypesSingle = {
-  exchange: ExchangesSettingsType['exchangesList'][number]; // Individual exchange settings
+  exchange: ExchangesSettingsType['exchangesList'][number];
   onChange: (
     index: number,
     field: keyof ExchangesSettingsType['exchangesList'][number],
-    value: string | number | boolean | Omit<Agent, 'type'>, // Value type to update
+    // Value type to update
+    value: string | number | boolean | Omit<Agent, 'type'>,
   ) => void;
-  handleRemoveExchange: (index: number) => void; // Function to handle removal of an exchange
-  handleMoveUp: (index: number) => void; // Function to move an exchange up
-  handleMoveDown: (index: number) => void; // Function to move an exchange down
-  index: number; // Index of the exchange
-  exchangesListLength: number; // Total number of exchanges in the list
+  handleRemoveExchange: (index: number) => void;
+  handleMoveUp: (index: number) => void;
+  handleMoveDown: (index: number) => void;
+  index: number;
+  exchangesListLength: number;
 };
 
 // ExchangeSettingsPanel component to display and edit individual exchange settings
@@ -54,7 +55,9 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
   handleMoveDown,
   exchangesListLength,
 }) => {
-  const { t } = useTranslation(); // Translation hook
+  const { t } = useTranslation();
+
+  // Destructuring exchange settings
   const {
     assistant: exchangeAssistant,
     description: exchangeDescription,
@@ -63,26 +66,28 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
     participantInstructionsOnComplete: exchangeOnComplete,
     nbFollowUpQuestions: exchangeFollowUpQuestions,
     hardLimit: exchangeLimit,
-  } = exchange; // Destructuring exchange settings
+  } = exchange;
 
-  const panelColor: string = `#0${exchange.id.slice(0, 5)}`; // Color based on exchange ID
+  // Color based on exchange ID
+  const panelColor: string = `#0${exchange.id.slice(0, 5)}`;
 
-  const { assistants } = useSettings(); // Getting assistants from settings context
+  // Getting assistants from settings context
+  const { assistants } = useSettings();
 
   return (
     <Stack spacing={1} p={2} border="1px solid #ccc" borderRadius="8px">
       <Stack direction="row" spacing={2} alignItems="center">
         <TextField
-          value={exchangeDescription} // Displaying description
-          label={t('SETTINGS.EXCHANGES.DESCRIPTION')} // Label for description field
+          value={exchangeDescription}
+          label={t('SETTINGS.EXCHANGES.DESCRIPTION')}
           multiline
-          inputProps={{ maxLength: 400 }} // Max length for description
+          inputProps={{ maxLength: 400 }}
           fullWidth
-          onChange={(e) => onChange(index, 'description', e.target.value)} // Handling description change
+          onChange={(e) => onChange(index, 'description', e.target.value)}
         />
         <IconButton
           sx={{ color: panelColor }}
-          onClick={() => handleMoveUp(index)} // Move up button
+          onClick={() => handleMoveUp(index)}
           disabled={index === 0} // Disable if already at the top
         >
           <Tooltip title={t('SETTINGS.UP')}>
@@ -91,7 +96,7 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
         </IconButton>
         <IconButton
           sx={{ color: panelColor }}
-          onClick={() => handleMoveDown(index)} // Move down button
+          onClick={() => handleMoveDown(index)}
           disabled={index === exchangesListLength - 1} // Disable if already at the bottom
         >
           <Tooltip title={t('SETTINGS.DOWN')}>
@@ -100,18 +105,18 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
         </IconButton>
       </Stack>
       <TextField
-        value={exchangeInstructions} // Displaying chatbot instructions
-        label={t('SETTINGS.EXCHANGES.INSTRUCTIONS')} // Label for instructions field
+        value={exchangeInstructions}
+        label={t('SETTINGS.EXCHANGES.INSTRUCTIONS')}
         multiline
-        inputProps={{ maxLength: 400 }} // Max length for instructions
-        onChange={(e) => onChange(index, 'chatbotInstructions', e.target.value)} // Handling instructions change
+        inputProps={{ maxLength: 400 }}
+        onChange={(e) => onChange(index, 'chatbotInstructions', e.target.value)}
       />
       <TextField
-        value={exchangeCue} // Displaying participant cue
-        label={t('SETTINGS.EXCHANGES.CUE')} // Label for cue field
+        value={exchangeCue}
+        label={t('SETTINGS.EXCHANGES.CUE')}
         multiline
-        inputProps={{ maxLength: 400 }} // Max length for cue
-        onChange={(e) => onChange(index, 'participantCue', e.target.value)} // Handling cue change
+        inputProps={{ maxLength: 400 }}
+        onChange={(e) => onChange(index, 'participantCue', e.target.value)}
       />
       <Stack direction="row" spacing={2} alignItems="center">
         <Avatar src={exchangeAssistant.imageUrl}>
@@ -120,7 +125,7 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
         <FormControl fullWidth>
           <InputLabel>{t('SETTINGS.EXCHANGES.ASSISTANT')}</InputLabel>
           <Select
-            value={exchangeAssistant.id} // Displaying selected assistant
+            value={exchangeAssistant.id}
             renderValue={(selectedId) =>
               assistants.assistantsList.find(
                 (assistant) => assistant.id === selectedId,
@@ -161,16 +166,12 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
         </FormControl>
       </Stack>
       <TextField
-        value={exchangeFollowUpQuestions} // Displaying follow-up questions number
+        value={exchangeFollowUpQuestions}
         type="number"
         inputProps={{ min: 0, max: 400 }} // Min and max values for follow-up questions
         label={t('SETTINGS.EXCHANGES.FOLLOW_UP_QUESTIONS')}
         onChange={(e) =>
-          onChange(
-            index,
-            'nbFollowUpQuestions',
-            parseInt(e.target.value, 10) || 0,
-          )
+          onChange(index, 'nbFollowUpQuestions', parseInt(e.target.value, 10))
         }
       />
       <Typography variant="h6">
@@ -181,15 +182,15 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
         </Tooltip>
       </Typography>
       <Switch
-        checked={exchangeLimit} // Switch for enabling/disabling hard limit
-        onChange={(e) => onChange(index, 'hardLimit', e.target.checked)} // Handling switch change
+        checked={exchangeLimit}
+        onChange={(e) => onChange(index, 'hardLimit', e.target.checked)}
       />
       {exchangeLimit && (
         <TextField
-          value={exchangeOnComplete} // Displaying instructions on completion
+          value={exchangeOnComplete}
           label={t('SETTINGS.EXCHANGES.ON_COMPLETE')}
           placeholder={t('SETTINGS.EXCHANGES.ON_COMPLETE_HELPER')}
-          inputProps={{ maxLength: 400 }} // Max length for instructions on complete
+          inputProps={{ maxLength: 400 }}
           onChange={(e) =>
             onChange(index, 'participantInstructionsOnComplete', e.target.value)
           }
@@ -199,7 +200,7 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
         <IconButton
           color="secondary"
           onClick={() => {
-            handleRemoveExchange(index); // Handle removing exchange
+            handleRemoveExchange(index);
           }}
           sx={{ alignSelf: 'center', width: 'auto' }}
         >
@@ -212,13 +213,14 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
 
 // Prop types for ExchangeSettings component
 type PropTypesList = {
-  exchanges: ExchangesSettingsType; // List of exchanges settings
-  onChange: (value: SetStateAction<ExchangesSettingsType>) => void; // Function to handle changes to exchanges settings
+  exchanges: ExchangesSettingsType;
+  onChange: (value: SetStateAction<ExchangesSettingsType>) => void;
 };
 
 // ExchangeSettings component to manage a list of exchanges
 const ExchangeSettings: FC<PropTypesList> = ({ exchanges, onChange }) => {
-  const { t } = useTranslation(); // Translation hook
+  // Translation hook
+  const { t } = useTranslation();
 
   // Add a new exchange to the list
   const handleAddExchange = (): void => {
@@ -226,7 +228,8 @@ const ExchangeSettings: FC<PropTypesList> = ({ exchanges, onChange }) => {
       exchangesList: [
         ...prev.exchangesList,
         {
-          id: uuidv4(), // Generate a new unique ID
+          // Generate a new unique ID
+          id: uuidv4(),
           assistant: {
             id: '',
             name: '',
@@ -252,7 +255,6 @@ const ExchangeSettings: FC<PropTypesList> = ({ exchanges, onChange }) => {
 
   // Move an exchange up in the list
   const handleMoveUp = (index: number): void => {
-    if (index === 0) return; // Do nothing if already at the top
     onChange((prev) => {
       const updatedExchanges = [...prev.exchangesList];
       const [movedExchange] = updatedExchanges.splice(index, 1);
@@ -263,7 +265,6 @@ const ExchangeSettings: FC<PropTypesList> = ({ exchanges, onChange }) => {
 
   // Move an exchange down in the list
   const handleMoveDown = (index: number): void => {
-    if (index === exchanges.exchangesList.length - 1) return; // Do nothing if already at the bottom
     onChange((prev) => {
       const updatedExchanges = [...prev.exchangesList];
       const [movedExchange] = updatedExchanges.splice(index, 1);
@@ -339,7 +340,7 @@ const ExchangeSettings: FC<PropTypesList> = ({ exchanges, onChange }) => {
                   handleRemoveExchange={handleRemoveExchange}
                   handleMoveUp={handleMoveUp}
                   handleMoveDown={handleMoveDown}
-                  exchangesListLength={exchanges.exchangesList.length} // Pass the length
+                  exchangesListLength={exchanges.exchangesList.length}
                 />
               </Box>
             </Stack>
@@ -353,4 +354,5 @@ const ExchangeSettings: FC<PropTypesList> = ({ exchanges, onChange }) => {
   );
 };
 
-export default ExchangeSettings; // Exporting the component as the default export
+// Exporting the component as the default export
+export default ExchangeSettings;

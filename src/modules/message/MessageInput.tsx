@@ -9,24 +9,17 @@ import FormControl from '@mui/material/FormControl';
 import Textarea from '@mui/material/OutlinedInput';
 import Stack from '@mui/material/Stack';
 
-import Exchange from '@/types/Exchange';
-import { Message } from '@/types/Message';
-
 export type MessageInputProps = {
-  exchange: Exchange;
+  dismissExchange: () => void;
   onSubmit: ({ content }: { content: string }) => void;
-  setExchange: (exchange: Exchange) => void;
-  goToNextExchange: () => void;
-  setMessages: (msgs: Message[]) => void;
+  exchangeCompleted: boolean;
 };
 
 // Main component function: MessageInput
 const MessageInput = ({
-  exchange,
+  dismissExchange,
   onSubmit,
-  setExchange,
-  goToNextExchange,
-  setMessages,
+  exchangeCompleted,
 }: MessageInputProps): ReactElement => {
   // State to manage the value of the textarea input
   const [textAreaValue, setTextAreaValue] = useState('');
@@ -36,23 +29,6 @@ const MessageInput = ({
 
   // Hook for internationalization (i18n) translation
   const { t } = useTranslation();
-
-  // Function to dismiss the current exchange
-  function dismissExchange(): void {
-    // Clear all messages
-    setMessages([]);
-
-    // Mark the exchange as dismissed and update the dismissed timestamp
-    const updatedExchange = { ...exchange };
-    updatedExchange.dismissed = true;
-    updatedExchange.dismissedAt = new Date();
-
-    // Update the exchange state with the dismissed exchange
-    setExchange(updatedExchange);
-
-    // Proceed to the next exchange
-    goToNextExchange();
-  }
 
   // Function to focus on the textarea input
   const focusOnTextArea = (): void => {
@@ -78,13 +54,10 @@ const MessageInput = ({
   // Function to handle the send button click
   const handleClick = (): void => {
     if (textAreaValue.trim() !== '') {
-      // Trigger the onSubmit callback with the input content
       onSubmit({ content: textAreaValue });
 
-      // Clear the textarea input
       setTextAreaValue('');
 
-      // Refocus and then blur the textarea input
       focusOnTextArea();
       blurTextArea();
     }
@@ -99,17 +72,17 @@ const MessageInput = ({
     <Box sx={{ px: 2, pb: 3 }}>
       <FormControl sx={{ width: '100%' }}>
         <Textarea
-          placeholder={t('MESSAGE_BOX.INSERT_HERE')} // Placeholder text, internationalized
-          aria-label="Message" // Accessibility label
-          ref={textAreaRef} // Attach the ref to the textarea
+          placeholder={t('MESSAGE_BOX.INSERT_HERE')}
+          aria-label="Message"
+          ref={textAreaRef}
           onChange={(e): void => {
-            setTextAreaValue(e.target.value); // Update the textarea value on change
+            setTextAreaValue(e.target.value);
           }}
           size="small"
-          multiline // Allow multiline input
-          value={textAreaValue} // Controlled input value
-          minRows={3} // Minimum number of rows for the textarea
-          maxRows={10} // Maximum number of rows for the textarea
+          multiline
+          value={textAreaValue}
+          minRows={3}
+          maxRows={10}
           endAdornment={
             <Stack
               direction="row"
@@ -121,13 +94,13 @@ const MessageInput = ({
                 px: 1,
               }}
             >
-              {exchange.completed && ( // Conditionally render the "Done" button if exchange is completed
+              {exchangeCompleted && ( // Conditionally render the "Done" button if exchange is completed
                 <Button
                   size="small"
                   color="success"
-                  endIcon={<CheckIcon />} // Success icon
+                  endIcon={<CheckIcon />}
                   sx={{ alignSelf: 'center', borderRadius: 'sm' }}
-                  onClick={handleDismiss} // Handle dismiss action
+                  onClick={handleDismiss}
                 >
                   {t('MESSAGE_BOX.DONE')}
                 </Button>
@@ -136,8 +109,8 @@ const MessageInput = ({
                 size="small"
                 color="primary"
                 sx={{ ml: 1, alignSelf: 'center', borderRadius: 'sm' }}
-                endIcon={<SendRoundedIcon />} // Send icon
-                onClick={handleClick} // Handle send action
+                endIcon={<SendRoundedIcon />}
+                onClick={handleClick}
               >
                 {t('MESSAGE_BOX.SEND')}
               </Button>
@@ -150,7 +123,7 @@ const MessageInput = ({
           }}
           sx={{
             '& textarea:first-of-type': {
-              minHeight: 72, // Set minimum height for the textarea
+              minHeight: 72,
             },
           }}
         />

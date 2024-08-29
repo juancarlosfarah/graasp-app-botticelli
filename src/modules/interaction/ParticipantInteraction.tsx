@@ -28,14 +28,15 @@ import { defaultSettingsValues, useSettings } from '../context/SettingsContext';
 
 // Main component: ParticipantInteraction
 const ParticipantInteraction = (): ReactElement => {
-  const { memberId: participantId } = useLocalContext(); // Getting the participant ID from local context
+  // Getting the participant ID from local context
+  const { memberId: participantId } = useLocalContext();
 
-  const { data: appDatas } = hooks.useAppData<Interaction>(); // Fetching app data (interactions) using a custom hook
-  const { mutate: postAppData } = mutations.usePostAppData(); // Mutation function for posting new app data
-  const { mutate: patchAppData } = mutations.usePatchAppData(); // Mutation function for patching existing app data
-  const { chat, exchanges } = useSettings(); // Getting chat and exchanges settings using a custom hook
+  const { data: appDatas } = hooks.useAppData<Interaction>();
+  const { mutate: postAppData } = mutations.usePostAppData();
+  const { mutate: patchAppData } = mutations.usePatchAppData();
+  const { chat, exchanges } = useSettings();
 
-  const { t } = useTranslation(); // Translation function from 'react-i18next'
+  const { t } = useTranslation();
 
   // Define a default user as an agent
   const defaultUser: Agent = {
@@ -50,7 +51,8 @@ const ParticipantInteraction = (): ReactElement => {
     ...defaultUser,
     ...hooks
       .useAppContext()
-      .data?.members.find((member) => member.id === participantId), // Find the member in app context data by participant ID
+      // Find the member in app context data by participant ID
+      .data?.members.find((member) => member.id === participantId),
   };
 
   // Define a default assistant as an agent
@@ -88,19 +90,21 @@ const ParticipantInteraction = (): ReactElement => {
 
   // Function to create a template interaction object
   function createTemplate(): Interaction {
-    const interactionBase: Interaction = { ...defaultInteraction, ...chat }; // Merge chat settings with default interaction
+    // Merge chat settings with default interaction
+    const interactionBase: Interaction = { ...defaultInteraction, ...chat };
     interactionBase.exchanges.exchangesList = exchanges.exchangesList.map(
       (exchange) => ({
-        ...defaultExchange, // Merge default exchange with each exchange from settings
+        // Merge default exchange with each exchange from settings
+        ...defaultExchange,
         ...exchange,
         assistant: {
           ...defaultAssistant,
           ...exchange.assistant,
-          type: AgentType.Assistant, // Ensure the assistant type is set
+          type: AgentType.Assistant,
         },
       }),
     );
-    return interactionBase; // Return the complete interaction object
+    return interactionBase;
   }
 
   // Memoize the current app data for the participant
@@ -109,7 +113,8 @@ const ParticipantInteraction = (): ReactElement => {
     [appDatas, participantId],
   );
 
-  const hasPosted = useRef(!!currentAppData); // Ref to track if the app data has already been posted
+  // Ref to track if the app data has already been posted
+  const hasPosted = useRef(!!currentAppData);
 
   // State to manage the current interaction, either from existing data or a new template
   const [interaction, setInteraction] = useState<Interaction>(
@@ -119,8 +124,8 @@ const ParticipantInteraction = (): ReactElement => {
   // Effect to post the interaction data if it hasn't been posted yet
   useEffect(() => {
     if (!hasPosted.current) {
-      postAppData({ data: interaction, type: 'Interaction' }); // Post the interaction data
-      hasPosted.current = true; // Mark as posted
+      postAppData({ data: interaction, type: 'Interaction' });
+      hasPosted.current = true;
     }
   }, [interaction, postAppData]);
 
@@ -159,9 +164,9 @@ const ParticipantInteraction = (): ReactElement => {
       }
       return '';
     };
-    window.addEventListener('beforeunload', handleBeforeUnload); // Add event listener for before unload
+    window.addEventListener('beforeunload', handleBeforeUnload);
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload); // Cleanup the event listener
+      window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, [interaction.completed]);
 
@@ -170,25 +175,26 @@ const ParticipantInteraction = (): ReactElement => {
     setInteraction((prev) => ({
       ...prev,
       started: true,
-      startedAt: new Date(), // Set the start time
+      startedAt: new Date(),
     }));
   };
 
   // Function to move to the next exchange or complete the interaction
   const goToNextExchange = (): void => {
     setInteraction((prev) => {
-      const numExchanges = prev.exchanges.exchangesList.length; // Get the total number of exchanges
+      const numExchanges = prev.exchanges.exchangesList.length;
       if (prev.currentExchange === numExchanges - 1) {
         // If this is the last exchange, mark the interaction as completed
         return {
           ...prev,
           completed: true,
-          completedAt: new Date(), // Set the completion time
+          completedAt: new Date(),
         };
       }
       return {
         ...prev,
-        currentExchange: prev.currentExchange + 1, // Move to the next exchange
+        // Move to the next exchange
+        currentExchange: prev.currentExchange + 1,
       };
     });
   };
@@ -241,7 +247,6 @@ const ParticipantInteraction = (): ReactElement => {
       </Box>
     );
   }
-
   // Render the completed interaction message if the interaction is completed
   return interaction.completed ? (
     <Box
@@ -258,24 +263,25 @@ const ParticipantInteraction = (): ReactElement => {
   ) : (
     // Render the MessagesPane component to handle the conversation
     <MessagesPane
-      goToNextExchange={goToNextExchange} // Function to move to the next exchange
+      goToNextExchange={goToNextExchange}
       autoDismiss={
         interaction.exchanges.exchangesList[interaction.currentExchange]
           .hardLimit
       } // Auto-dismiss exchanges if the hard limit is reached
       currentExchange={
         interaction.exchanges.exchangesList[interaction.currentExchange]
-      } // Current exchange being handled
-      setExchange={updateExchange} // Function to update an exchange
+      }
+      setExchange={updateExchange}
       pastMessages={interaction.exchanges.exchangesList.flatMap((exchange) => {
         if (exchange.dismissed) {
-          return exchange.messages; // Collect messages from dismissed exchanges
+          return exchange.messages;
         }
         return [];
       })}
-      participant={currentMember} // Participant data for the interaction
+      participant={currentMember}
     />
   );
 };
 
-export default ParticipantInteraction; // Export the ParticipantInteraction component as the default export
+// Export the ParticipantInteraction component as the default export
+export default ParticipantInteraction;

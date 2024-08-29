@@ -9,50 +9,52 @@ import { ChatSettingsType } from '@/config/appSettings';
 
 // Prop types for ChatSettings component
 type PropTypes = {
-  chat: ChatSettingsType; // Current chat settings
-  onChange: (newSetting: ChatSettingsType) => void; // Function to handle chat settings changes
+  chat: ChatSettingsType;
+  onChange: (newSetting: ChatSettingsType) => void;
 };
 
 // ChatSettings component to display and update chat settings
 const ChatSettings: FC<PropTypes> = ({ chat, onChange }) => {
-  const { t } = useTranslation(); // Translation hook
+  const { t } = useTranslation();
+
+  // Destructuring chat settings
   const {
     description: chatDescription,
     participantInstructions: chatInstructions,
     participantEndText: chatEndText,
-  } = chat; // Destructuring chat settings
+  } = chat;
 
   return (
     <Stack spacing={2}>
       <Typography variant="h5">{t('SETTINGS.CHAT.TITLE')}</Typography>{' '}
-      {/* Title for chat settings */}
       <TextField
-        value={chatDescription} // Displaying chat description
-        label={t('SETTINGS.CHAT.DESCRIPTION')} // Label for description field
+        value={chatDescription}
+        label={t('SETTINGS.CHAT.DESCRIPTION')}
         multiline
-        inputProps={{ maxLength: 400 }} // Max length for description
-        onChange={(e) => onChange({ ...chat, description: e.target.value })} // Handling description change
+        inputProps={{ maxLength: 400 }}
+        onChange={(e) => onChange({ ...chat, description: e.target.value })}
       />
       <TextField
-        value={chatInstructions} // Displaying participant instructions
-        label={t('SETTINGS.CHAT.INSTRUCTIONS')} // Label for instructions field
+        value={chatInstructions}
+        label={t('SETTINGS.CHAT.INSTRUCTIONS')}
         multiline
-        inputProps={{ maxLength: 400 }} // Max length for instructions
+        inputProps={{ maxLength: 400 }}
         onChange={(e) =>
           onChange({ ...chat, participantInstructions: e.target.value })
-        } // Handling instructions change
+        }
       />
       <TextField
-        value={chatEndText} // Displaying end text
-        label={t('SETTINGS.CHAT.END')} // Label for end text field
+        value={chatEndText}
+        label={t('SETTINGS.CHAT.END')}
         multiline
-        inputProps={{ maxLength: 400 }} // Max length for end text
+        inputProps={{ maxLength: 400 }}
         onChange={(e) =>
           onChange({ ...chat, participantEndText: e.target.value })
-        } // Handling end text change
+        }
       />
     </Stack>
   );
 };
 
-export default ChatSettings; // Exporting the component as the default export
+// Exporting the component as the default export
+export default ChatSettings;

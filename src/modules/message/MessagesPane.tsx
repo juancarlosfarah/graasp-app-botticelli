@@ -82,6 +82,21 @@ const MessagesPane = ({
     currentExchange.messages.length,
   );
 
+  // Function to dismiss the current exchange
+  function dismissExchange(): void {
+    setMessages([]);
+
+    // Mark the exchange as dismissed and update the dismissed timestamp
+    const updatedExchange = { ...currentExchange };
+    updatedExchange.dismissed = true;
+    updatedExchange.dismissedAt = new Date();
+
+    setExchange(updatedExchange);
+    setSentMessageCount(0);
+
+    goToNextExchange();
+  }
+
   // Effect to initialize the message list when the component mounts or currentExchange changes
   useEffect(() => {
     const defaultMessages: Message[] = [
@@ -96,6 +111,8 @@ const MessagesPane = ({
 
     // Update the exchange with the new messages list
     setExchange({ ...currentExchange, messages: msgs });
+    // eslint-disable-next-line no-console
+    console.log('SET');
   }, [currentExchange, msgs, setExchange]);
 
   // Function to handle posting a new message to the chatbot and receiving a response
@@ -153,7 +170,7 @@ const MessagesPane = ({
         setStatus(Status.Idle);
         setSentMessageCount(0);
         setMessages([]);
-        goToNextExchange(); // Move to the next exchange
+        goToNextExchange();
       } else {
         // Otherwise, just update the exchange and handle chatbot response
         setExchange({ ...newExchange, messages: updatedMessages });
@@ -260,11 +277,9 @@ const MessagesPane = ({
       </Box>
       {!currentExchange.dismissed && (
         <MessageInput
-          exchange={currentExchange}
-          goToNextExchange={goToNextExchange}
-          setExchange={setExchange}
+          dismissExchange={() => dismissExchange()}
           onSubmit={saveNewMessage}
-          setMessages={setMessages}
+          exchangeCompleted={currentExchange.completed}
         />
       )}
     </Paper>
