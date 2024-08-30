@@ -214,7 +214,8 @@ const MessagesPane = ({
   // Determine whether to show participant instructions after completing the exchange
   const showParticipantInstructionsOnComplete =
     currentExchange.completed &&
-    currentExchange.participantInstructionsOnComplete;
+    currentExchange.participantInstructionsOnComplete &&
+    !readOnly;
 
   return (
     <Paper
