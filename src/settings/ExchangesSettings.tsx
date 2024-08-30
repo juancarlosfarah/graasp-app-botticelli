@@ -223,7 +223,7 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
             checked={exchangeLimit}
             onChange={(e) => onChange(index, 'hardLimit', e.target.checked)}
           />
-          {exchangeLimit && (
+          {!exchangeLimit && (
             <TextField
               value={exchangeOnComplete}
               label={t('SETTINGS.EXCHANGES.ON_COMPLETE')}

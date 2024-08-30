@@ -237,32 +237,34 @@ const MessagesPane = ({
         }}
       >
         <Stack spacing={2} justifyContent="flex-end">
-          {[...pastMessages, ...msgs].map((message: Message, index: number) => {
-            const isYou = message?.sender?.id === participant.id;
+          {[...pastMessages, ...(currentExchange.dismissed ? [] : msgs)].map(
+            (message: Message, index: number) => {
+              const isYou = message?.sender?.id === participant.id;
 
-            return (
-              <Stack
-                key={index}
-                direction="row"
-                spacing={2}
-                flexDirection={isYou ? 'row-reverse' : 'row'}
-              >
-                {!isYou && (
-                  <AvatarWithStatus
-                    src={currentExchange.assistant.imageUrl}
-                    sx={{ bgcolor: '#5050d2' }}
-                  >
-                    {currentExchange.assistant.name.slice(0, 2) || '🤖'}
-                  </AvatarWithStatus>
-                )}
-                <ChatBubble
-                  variant={isYou ? 'sent' : 'received'}
-                  content={message.content}
-                  sender={message.sender}
-                />
-              </Stack>
-            );
-          })}
+              return (
+                <Stack
+                  key={index}
+                  direction="row"
+                  spacing={2}
+                  flexDirection={isYou ? 'row-reverse' : 'row'}
+                >
+                  {!isYou && (
+                    <AvatarWithStatus
+                      src={currentExchange.assistant.imageUrl}
+                      sx={{ bgcolor: '#5050d2' }}
+                    >
+                      {currentExchange.assistant.name.slice(0, 2) || '🤖'}
+                    </AvatarWithStatus>
+                  )}
+                  <ChatBubble
+                    variant={isYou ? 'sent' : 'received'}
+                    content={message.content}
+                    sender={message.sender}
+                  />
+                </Stack>
+              );
+            },
+          )}
 
           {status === Status.Loading && (
             <Box sx={{ maxWidth: '60%', minWidth: 'auto' }}>

@@ -104,7 +104,7 @@ const Conversations: FC<Props> = ({
                     },
                   ) || []
                 }
-                participant={checkedOutInteraction?.participant}
+                participant={checkedOutInteraction.participant}
                 autoDismiss={false}
                 goToNextExchange={() => {}}
                 readOnly
