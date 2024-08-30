@@ -14,8 +14,12 @@ import Typography from '@mui/material/Typography';
 
 import { useLocalContext } from '@graasp/apps-query-client';
 
-import { v4 as uuidv4 } from 'uuid';
-
+import {
+  defaultAssistant,
+  defaultExchange,
+  defaultInteraction,
+  defaultUser,
+} from '@/config/config';
 import { hooks, mutations } from '@/config/queryClient';
 import { START_INTERACTION_BUTTON_CY } from '@/config/selectors';
 import MessagesPane from '@/modules/message/MessagesPane';
@@ -24,7 +28,7 @@ import AgentType from '@/types/AgentType';
 import Exchange from '@/types/Exchange';
 import Interaction from '@/types/Interaction';
 
-import { defaultSettingsValues, useSettings } from '../context/SettingsContext';
+import { useSettings } from '../context/SettingsContext';
 
 // Main component: ParticipantInteraction
 const ParticipantInteraction = (): ReactElement => {
@@ -38,14 +42,6 @@ const ParticipantInteraction = (): ReactElement => {
 
   const { t } = useTranslation();
 
-  // Define a default user as an agent
-  const defaultUser: Agent = {
-    id: uuidv4(),
-    name: 'Default User',
-    description: 'Default user description',
-    type: AgentType.User,
-  };
-
   // Define the current member as an agent, merging with the default user
   const currentMember: Agent = {
     ...defaultUser,
@@ -55,48 +51,19 @@ const ParticipantInteraction = (): ReactElement => {
       .data?.members.find((member) => member.id === participantId),
   };
 
-  // Define a default assistant as an agent
-  const defaultAssistant: Agent = {
-    id: uuidv4(),
-    name: 'Default Assistant',
-    description: 'Default assistant description',
-    type: AgentType.Assistant,
-  };
-
-  // Define a default interaction object using default settings
-  const defaultInteraction: Interaction = {
-    ...defaultSettingsValues.chat,
-    id: uuidv4(),
-    currentExchange: 0,
-    started: false,
-    completed: false,
-    participant: currentMember,
-    exchanges: { exchangesList: [] },
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
-
-  // Define a default exchange object using default settings
-  const defaultExchange: Exchange = {
-    ...defaultSettingsValues.exchanges.exchangesList[0],
-    messages: [],
-    assistant: defaultAssistant,
-    started: false,
-    completed: false,
-    dismissed: false,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
-
   /**
-   * @function createTemplate
+   * @function createInteractionFromTemplate
    * @description Creates and returns a new `Interaction` object by merging default settings with chat and exchange settings.
    * @returns {Interaction} A fully constructed `Interaction` object with merged settings.
    */
-  function createTemplate(): Interaction {
+  function createInteractionFromTemplate(): Interaction {
     // Merge chat settings with default interaction
-    const interactionBase: Interaction = { ...defaultInteraction, ...chat };
-    interactionBase.exchanges.exchangesList = exchanges.exchangesList.map(
+    const interactionBase: Interaction = {
+      ...defaultInteraction,
+      ...chat,
+      participant: currentMember,
+    };
+    interactionBase.exchanges.exchangeList = exchanges.exchangeList.map(
       (exchange) => ({
         // Merge default exchange with each exchange from settings
         ...defaultExchange,
@@ -126,7 +93,7 @@ const ParticipantInteraction = (): ReactElement => {
 
   // State to manage the current interaction, either from existing data or a new template
   const [interaction, setInteraction] = useState<Interaction>(
-    (currentAppData?.data as Interaction) || createTemplate(),
+    (currentAppData?.data as Interaction) || createInteractionFromTemplate(),
   );
 
   // Effect to post the interaction data if it hasn't been posted yet
@@ -152,7 +119,7 @@ const ParticipantInteraction = (): ReactElement => {
     setInteraction((prevState) => ({
       ...prevState,
       exchanges: {
-        exchangesList: prevState.exchanges.exchangesList.map((exchange) =>
+        exchangeList: prevState.exchanges.exchangeList.map((exchange) =>
           exchange.id === updatedExchange.id ? updatedExchange : exchange,
         ),
       },
@@ -190,7 +157,7 @@ const ParticipantInteraction = (): ReactElement => {
   // Function to move to the next exchange or complete the interaction
   const goToNextExchange = (): void => {
     setInteraction((prev) => {
-      const numExchanges = prev.exchanges.exchangesList.length;
+      const numExchanges = prev.exchanges.exchangeList.length;
       if (prev.currentExchange === numExchanges - 1) {
         // If this is the last exchange, mark the interaction as completed
         return {
@@ -228,20 +195,9 @@ const ParticipantInteraction = (): ReactElement => {
         }}
       >
         {interaction.participantInstructions && (
-          <>
-            <Typography
-              variant="body1"
-              sx={{ p: 2, pt: 4, textAlign: 'justify' }}
-            >
-              {interaction.participantInstructions}
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{ p: 2, pt: 4, textAlign: 'center' }}
-            >
-              {t('START_INTERACTION')}
-            </Typography>
-          </>
+          <Typography variant="body1" sx={{ p: 2, pt: 4, textAlign: 'center' }}>
+            {interaction.participantInstructions}
+          </Typography>
         )}
         <Button
           variant="contained"
@@ -273,15 +229,15 @@ const ParticipantInteraction = (): ReactElement => {
     <MessagesPane
       goToNextExchange={goToNextExchange}
       autoDismiss={
-        interaction.exchanges.exchangesList[interaction.currentExchange]
+        interaction.exchanges.exchangeList[interaction.currentExchange]
           .hardLimit
       } // Auto-dismiss exchanges if the hard limit is reached
       currentExchange={
-        interaction.exchanges.exchangesList[interaction.currentExchange]
+        interaction.exchanges.exchangeList[interaction.currentExchange]
       }
       setExchange={updateExchange}
       interactionDescription={interaction.description}
-      pastMessages={interaction.exchanges.exchangesList.flatMap((exchange) => {
+      pastMessages={interaction.exchanges.exchangeList.flatMap((exchange) => {
         if (exchange.dismissed) {
           return exchange.messages;
         }

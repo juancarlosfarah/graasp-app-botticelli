@@ -6,6 +6,7 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 
 import { ChatSettingsType } from '@/config/appSettings';
+import { MAX_TEXT_INPUT_CHARS } from '@/config/config';
 
 // Prop types for ChatSettings component
 type PropTypes = {
@@ -26,19 +27,19 @@ const ChatSettings: FC<PropTypes> = ({ chat, onChange }) => {
 
   return (
     <Stack spacing={2}>
-      <Typography variant="h5">{t('SETTINGS.CHAT.TITLE')}</Typography>{' '}
+      <Typography variant="h5">{t('SETTINGS.CHAT.TITLE')}</Typography>
       <TextField
         value={chatDescription}
         label={t('SETTINGS.CHAT.DESCRIPTION')}
         multiline
-        inputProps={{ maxLength: 400 }}
+        inputProps={{ maxLength: MAX_TEXT_INPUT_CHARS }}
         onChange={(e) => onChange({ ...chat, description: e.target.value })}
       />
       <TextField
         value={chatInstructions}
         label={t('SETTINGS.CHAT.INSTRUCTIONS')}
         multiline
-        inputProps={{ maxLength: 400 }}
+        inputProps={{ maxLength: MAX_TEXT_INPUT_CHARS }}
         onChange={(e) =>
           onChange({ ...chat, participantInstructions: e.target.value })
         }
@@ -47,7 +48,7 @@ const ChatSettings: FC<PropTypes> = ({ chat, onChange }) => {
         value={chatEndText}
         label={t('SETTINGS.CHAT.END')}
         multiline
-        inputProps={{ maxLength: 400 }}
+        inputProps={{ maxLength: MAX_TEXT_INPUT_CHARS }}
         onChange={(e) =>
           onChange({ ...chat, participantEndText: e.target.value })
         }

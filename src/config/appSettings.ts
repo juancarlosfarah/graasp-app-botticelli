@@ -5,7 +5,7 @@ import Agent from '@/types/Agent';
 type AssistantSettings = Omit<Agent, 'type'>;
 
 export type AssistantsSettingsType = {
-  assistantsList: AssistantSettings[];
+  assistantList: AssistantSettings[];
 };
 
 export type ChatSettingsType = {
@@ -25,4 +25,4 @@ export type ExchangeSettings = {
   hardLimit: boolean;
 };
 
-export type ExchangesSettingsType = { exchangesList: ExchangeSettings[] };
+export type ExchangesSettingsType = { exchangeList: ExchangeSettings[] };

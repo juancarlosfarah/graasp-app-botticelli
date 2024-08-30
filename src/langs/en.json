@@ -21,13 +21,13 @@
       "UP": "Move up",
       "DOWN": "Move down",
       "ASSISTANTS": {
-        "TITLE": "Assitants Settings",
-        "ID": "Assistant Id",
+        "TITLE": "Assistants Settings",
+        "ID": "Assistant ID",
         "NAME": "Assistant Name",
         "DESCRIPTION": "Assistant Description",
         "IMAGE": "Assistant Image",
         "URL": "Please enter a working link to your desired image.",
-        "ADD": "Create new Assistant",
+        "ADD": "Create New Assistant",
         "CREATE": "Please create at least one assistant."
       },
       "CHAT": {
@@ -61,8 +61,7 @@
       "INCOMPLETE": "Not completed",
       "RESET": "Delete and reset conversation"
     },
-    "START_INTERACTION": "The dialogue lasts about 5 minutes and you'll receive a small reward to thank you for taking part!",
-    "START": "Begin!",
+    "START": "Start",
     "MESSAGE_BOX": {
       "INSERT_HERE": "Your response here...",
       "SEND": "Send",

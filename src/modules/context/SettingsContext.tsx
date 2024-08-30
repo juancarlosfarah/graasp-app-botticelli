@@ -21,7 +21,7 @@ type AllSettingsType = {
 // default values for the data property of settings by name
 export const defaultSettingsValues: AllSettingsType = {
   assistants: {
-    assistantsList: [{ id: uuidv4(), name: '', description: '' }],
+    assistantList: [{ id: uuidv4(), name: '', description: '' }],
   },
   chat: {
     description: '',
@@ -29,7 +29,7 @@ export const defaultSettingsValues: AllSettingsType = {
     participantEndText: '',
   },
   exchanges: {
-    exchangesList: [
+    exchangeList: [
       {
         id: uuidv4(),
         assistant: {

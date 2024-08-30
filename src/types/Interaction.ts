@@ -11,7 +11,7 @@ type Interaction = ChatSettingsType & {
   completed: boolean;
   started: boolean;
   participant: Agent;
-  exchanges: { exchangesList: Exchange[] };
+  exchanges: { exchangeList: Exchange[] };
   startedAt?: Date;
   completedAt?: Date;
   createdAt: Date;

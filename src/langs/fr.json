@@ -22,7 +22,7 @@
       "DOWN": "Déplacer vers le bas",
       "ASSISTANTS": {
         "TITLE": "Paramètres de l'Assistant",
-        "ID": "Assistant Id",
+        "ID": "Assistant ID",
         "NAME": "Nom de l'Assistant",
         "DESCRIPTION": "Description de l'Assistant",
         "IMAGE": "Image de l'Assistant",
@@ -61,8 +61,7 @@
       "INCOMPLETE": "Pas terminé",
       "RESET": "Supprimer et réinitialiser la conversation"
     },
-    "START_INTERACTION": "Le dialogue dure environ 5 minutes et vous recevrez une petite récompense pour vous remercier de votre participation!",
-    "START": "Commencer!",
+    "START": "Démarrer",
     "MESSAGE_BOX": {
       "INSERT_HERE": "Votre réponse ici...",
       "SEND": "Envoyer",
