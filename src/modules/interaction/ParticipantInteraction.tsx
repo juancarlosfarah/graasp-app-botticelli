@@ -113,7 +113,11 @@ const ParticipantInteraction = (): ReactElement => {
 
   // Memoize the current app data for the participant
   const currentAppData = useMemo(
-    () => appDatas?.find((appData) => appData.member.id === participantId),
+    () =>
+      appDatas?.find(
+        (appData) =>
+          appData?.data?.exchanges && appData.member.id === participantId,
+      ),
     [appDatas, participantId],
   );
 
@@ -212,18 +216,6 @@ const ParticipantInteraction = (): ReactElement => {
   const handleStartInteraction = (): void => {
     startInteraction();
   };
-  /*
-  return (
-    <MessagesPane
-      goToNextExchange={() => {}}
-      autoDismiss={false} // Auto-dismiss exchanges if the hard limit is reached
-      currentExchange={defaultExchange}
-      setExchange={(a) => {}}
-      pastMessages={[]}
-      participant={defaultUser}
-    />
-  );
-*/
 
   // Render the start interaction button if the interaction has not started
   if (!interaction.started) {

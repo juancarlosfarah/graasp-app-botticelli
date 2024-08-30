@@ -31,6 +31,7 @@ type MessagesPaneProps = {
   participant: Agent;
   autoDismiss: boolean;
   goToNextExchange: () => void;
+  readOnly?: boolean;
 };
 
 // Main component function: MessagesPane
@@ -42,6 +43,7 @@ const MessagesPane = ({
   participant,
   autoDismiss,
   goToNextExchange,
+  readOnly = false,
 }: MessagesPaneProps): ReactElement => {
   // Hook to post chat messages asynchronously using mutation
   const { mutateAsync: postChatBot } = mutations.usePostChatBot();
@@ -282,7 +284,7 @@ const MessagesPane = ({
           )}
         </Stack>
       </Box>
-      {!currentExchange.dismissed && (
+      {!currentExchange.dismissed && !readOnly && (
         <MessageInput
           dismissExchange={() => dismissExchange()}
           onSubmit={saveNewMessage}

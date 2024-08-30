@@ -52,6 +52,15 @@
         "CREATE": "Please create at least one exchange."
       }
     },
+    "CONVERSATIONS": {
+      "TITLE": "View Conversations",
+      "MEMBER": "Please select a member",
+      "PLACEHOLDER": "Please select a member",
+      "NONE": "No conversations so far.",
+      "COMPLETE": "Completed",
+      "INCOMPLETE": "Not completed",
+      "RESET": "Delete and reset conversation"
+    },
     "START_INTERACTION": "The dialogue lasts about 5 minutes and you'll receive a small reward to thank you for taking part!",
     "START": "Begin!",
     "MESSAGE_BOX": {
