@@ -1,4 +1,4 @@
-import { FC, SetStateAction } from 'react';
+import { FC, SetStateAction, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
@@ -266,6 +266,17 @@ const ExchangeSettings: FC<PropTypeList> = ({ exchanges, onChange }) => {
   // Translation hook
   const { t } = useTranslation();
 
+  const lastExchangeRef = useRef<HTMLDivElement | null>(null);
+
+  // Scroll into view when assistants change (e.g., after adding or moving)
+  useEffect(() => {
+    if (lastExchangeRef.current) {
+      lastExchangeRef.current.scrollIntoView({
+        behavior: 'smooth',
+      });
+    }
+  }, [exchanges.exchangeList.length]);
+
   // Add a new exchange to the list
   const handleAddExchange = (): void => {
     onChange((prev) => ({
@@ -352,16 +363,25 @@ const ExchangeSettings: FC<PropTypeList> = ({ exchanges, onChange }) => {
           </Alert>
         ) : (
           exchanges.exchangeList.map((exchange, index) => (
-            <ExchangeSettingsPanel
+            <Box
               key={index}
-              exchange={exchange}
-              onChange={handleChange}
-              handleRemoveExchange={handleRemoveExchange}
-              handleMoveUp={handleMoveUp}
-              handleMoveDown={handleMoveDown}
-              index={index}
-              exchangeListLength={exchanges.exchangeList.length}
-            />
+              ref={
+                index === exchanges.exchangeList.length - 1
+                  ? lastExchangeRef
+                  : null
+              } // Attach ref to the last added panel
+            >
+              <ExchangeSettingsPanel
+                key={index}
+                exchange={exchange}
+                onChange={handleChange}
+                handleRemoveExchange={handleRemoveExchange}
+                handleMoveUp={handleMoveUp}
+                handleMoveDown={handleMoveDown}
+                index={index}
+                exchangeListLength={exchanges.exchangeList.length}
+              />
+            </Box>
           ))
         )}
         <Button variant="contained" onClick={handleAddExchange}>

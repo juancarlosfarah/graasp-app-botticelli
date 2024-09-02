@@ -1,4 +1,4 @@
-import { FC, SetStateAction } from 'react';
+import { FC, SetStateAction, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
@@ -159,6 +159,17 @@ type PropTypeList = {
 const AssistantsSettings: FC<PropTypeList> = ({ assistants, onChange }) => {
   const { t } = useTranslation();
 
+  const lastAssistantRef = useRef<HTMLDivElement | null>(null);
+
+  // Scroll into view when assistants change (e.g., after adding or moving)
+  useEffect(() => {
+    if (lastAssistantRef.current) {
+      lastAssistantRef.current.scrollIntoView({
+        behavior: 'smooth',
+      });
+    }
+  }, [assistants.assistantList.length]);
+
   // Function to add a new assistant to the list
   const handleAddAssistant = (): void => {
     onChange((prev) => ({
@@ -182,6 +193,7 @@ const AssistantsSettings: FC<PropTypeList> = ({ assistants, onChange }) => {
       // Removing the assistant at the specified index
       assistantList: prev.assistantList.filter((_, i) => i !== index),
     }));
+    lastAssistantRef.current?.scrollIntoView();
   };
 
   // Function to move an assistant up in the list
@@ -242,16 +254,24 @@ const AssistantsSettings: FC<PropTypeList> = ({ assistants, onChange }) => {
         ) : (
           // Mapping over the list of assistants and rendering a settings panel for each
           assistants.assistantList.map((assistant, index) => (
-            <AssistantSettingsPanel
+            <Box
               key={index}
-              assistant={assistant}
-              onChange={handleChange}
-              handleRemoveAssistant={handleRemoveAssistant}
-              handleMoveUp={handleMoveUp}
-              handleMoveDown={handleMoveDown}
-              index={index}
-              assistantListLength={assistants.assistantList.length}
-            />
+              ref={
+                index === assistants.assistantList.length - 1
+                  ? lastAssistantRef
+                  : null
+              } // Attach ref to the last added panel
+            >
+              <AssistantSettingsPanel
+                assistant={assistant}
+                onChange={handleChange}
+                handleRemoveAssistant={handleRemoveAssistant}
+                handleMoveUp={handleMoveUp}
+                handleMoveDown={handleMoveDown}
+                index={index}
+                assistantListLength={assistants.assistantList.length}
+              />
+            </Box>
           ))
         )}
         <Button variant="contained" onClick={handleAddAssistant}>
