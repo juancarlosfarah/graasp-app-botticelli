@@ -91,8 +91,8 @@ const Conversations: FC<Props> = ({
           (exchange: Exchange): string[] =>
             exchange.messages.map((message: Message): string =>
               [
-                interactionData.participant.id,
-                message.sender.id,
+                interactionData.participant.name,
+                message.sender.name,
                 format(new Date(message.sentAt || ''), 'dd/MM/yyyy HH:mm'),
                 exchange.name,
                 interactionData.name,
