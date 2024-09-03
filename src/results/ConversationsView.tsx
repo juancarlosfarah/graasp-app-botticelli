@@ -1,5 +1,5 @@
 import { FC, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+import { UseTranslationResponse, useTranslation } from 'react-i18next';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
@@ -10,6 +10,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  SelectChangeEvent,
   Tooltip,
   Typography,
 } from '@mui/material';
@@ -19,7 +20,9 @@ import { Member } from '@graasp/sdk';
 
 import { hooks, mutations } from '@/config/queryClient';
 import MessagesPane from '@/modules/message/MessagesPane';
+import Exchange from '@/types/Exchange';
 import Interaction from '@/types/Interaction';
+import { Message } from '@/types/Message';
 
 type Props = {
   checkedOutMember: Member;
@@ -31,7 +34,8 @@ const Conversations: FC<Props> = ({
   checkedOutMember,
   setCheckedOutMember,
 }) => {
-  const { t } = useTranslation();
+  const { t }: UseTranslationResponse<'translations', undefined> =
+    useTranslation();
 
   // Hook to handle deleting app data
   const { mutate: deleteAppData } = mutations.useDeleteAppData();
@@ -40,13 +44,15 @@ const Conversations: FC<Props> = ({
   const { data: appDatas } = hooks.useAppData<Interaction>();
 
   // Fetching all members from the app context or defaulting to the checked-out member
-  const allMembers = hooks.useAppContext().data?.members || [checkedOutMember];
+  const allMembers: Member[] = hooks.useAppContext().data?.members || [
+    checkedOutMember,
+  ];
 
   // Memoized value to find the interaction corresponding to the selected member
-  const checkedOutInteraction = useMemo(
-    () =>
+  const checkedOutInteraction: Interaction | undefined = useMemo(
+    (): Interaction | undefined =>
       appDatas?.find(
-        (appData) =>
+        (appData): boolean =>
           appData?.data?.exchanges?.exchangeList &&
           appData.member.id === checkedOutMember.id,
       )?.data,
@@ -56,28 +62,31 @@ const Conversations: FC<Props> = ({
   return (
     <Stack spacing={2}>
       <Typography variant="h5">{t('CONVERSATIONS.TITLE')}</Typography>
-
       <FormControl fullWidth>
         <InputLabel>{t('CONVERSATIONS.MEMBER')}</InputLabel>
         <Select
           value={checkedOutMember.id}
-          renderValue={(selectedId) =>
-            allMembers?.find((member) => member.id === selectedId)?.name ||
-            selectedId
+          renderValue={(selectedId: string): string =>
+            allMembers?.find(
+              (member: Member): boolean => member.id === selectedId,
+            )?.name || selectedId
           }
           label={t('CONVERSATIONS.MEMBER')}
-          onChange={(e) =>
+          onChange={(e: SelectChangeEvent<string>): void =>
             setCheckedOutMember(
-              allMembers.find((member) => member.id === e.target.value) ||
-                checkedOutMember,
+              allMembers.find(
+                (member: Member): boolean => member.id === e.target.value,
+              ) || checkedOutMember,
             )
           }
         >
-          {allMembers.map((member, nb) => (
-            <MenuItem key={nb} value={member.id}>
-              {member.name || member.id}
-            </MenuItem>
-          ))}
+          {allMembers.map(
+            (member: Member, nb: number): JSX.Element => (
+              <MenuItem key={nb} value={member.id}>
+                {member.name || member.id}
+              </MenuItem>
+            ),
+          )}
         </Select>
       </FormControl>
       {checkedOutMember.id === '' ? null : (
@@ -90,11 +99,11 @@ const Conversations: FC<Props> = ({
                     checkedOutInteraction.currentExchange
                   ]
                 }
-                setExchange={() => {}}
+                setExchange={(): void => {}}
                 interactionDescription=""
                 pastMessages={
                   checkedOutInteraction.exchanges.exchangeList.flatMap(
-                    (exchange) => {
+                    (exchange: Exchange): Message[] => {
                       // Collect dismissed messages from exchanges
                       if (exchange.dismissed) {
                         return exchange.messages;
@@ -105,7 +114,7 @@ const Conversations: FC<Props> = ({
                 }
                 participant={checkedOutInteraction.participant}
                 autoDismiss={false}
-                goToNextExchange={() => {}}
+                goToNextExchange={(): void => {}}
                 readOnly
               />
               {checkedOutInteraction.completed ? (
@@ -121,11 +130,11 @@ const Conversations: FC<Props> = ({
               <Stack direction="row" justifyContent="center">
                 <IconButton
                   color="secondary"
-                  onClick={() =>
+                  onClick={(): void =>
                     deleteAppData({
                       id:
                         appDatas?.find(
-                          (appData) =>
+                          (appData): boolean =>
                             appData.member.id === checkedOutMember.id,
                         )?.id || '',
                     })
