@@ -17,7 +17,6 @@ import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, Button, Stack, Tab } from '@mui/material';
 
 import { LocalContext, useLocalContext } from '@graasp/apps-query-client';
-import { Member } from '@graasp/sdk';
 
 import { isEqual } from 'lodash';
 
@@ -26,7 +25,6 @@ import {
   ChatSettingsType,
   ExchangesSettingsType,
 } from '@/config/appSettings';
-import { placeholderMember } from '@/config/config';
 import { BUILDER_VIEW_CY } from '@/config/selectors';
 import Conversations from '@/results/ConversationsView';
 
@@ -83,10 +81,10 @@ const BuilderView: () => JSX.Element = (): JSX.Element => {
   const { t }: UseTranslationResponse<'translations', undefined> =
     useTranslation();
 
-  const [checkedOutMember, setCheckedOutMember]: [
-    Member,
-    Dispatch<SetStateAction<Member>>,
-  ] = useState<Member>(placeholderMember);
+  const [expandedConversation, setExpandedConversation]: [
+    number | null,
+    Dispatch<SetStateAction<number | null>>,
+  ] = useState<number | null>(null);
 
   // State to manage the active tab, initially set to the Assistant view
   const [activeTab, setActiveTab]: [Tabs, Dispatch<SetStateAction<Tabs>>] =
@@ -211,8 +209,8 @@ const BuilderView: () => JSX.Element = (): JSX.Element => {
           </TabPanel>
           <TabPanel value={Tabs.CONVERSATIONS_VIEW}>
             <Conversations
-              checkedOutMember={checkedOutMember}
-              setCheckedOutMember={setCheckedOutMember}
+              expandedConversation={expandedConversation}
+              setExpandedConversation={setExpandedConversation}
             />
           </TabPanel>
         </TabContext>
