@@ -77,7 +77,9 @@ const Conversations: FC<Props> = ({
   ): string => {
     const headers: string[] = [
       'Participant',
+      'Participand ID',
       'Sender',
+      'Sender ID',
       'Sent at',
       'Exchange',
       'Interaction',
@@ -92,7 +94,9 @@ const Conversations: FC<Props> = ({
             exchange.messages.map((message: Message): string =>
               [
                 interactionData.participant.name,
+                interactionData.participant.id,
                 message.sender.name,
+                message.sender.id,
                 format(new Date(message.sentAt || ''), 'dd/MM/yyyy HH:mm'),
                 exchange.name,
                 interactionData.name,
@@ -111,10 +115,7 @@ const Conversations: FC<Props> = ({
     // map data rows
     return csvRows.join('\n');
   };
-  /*
-  ...data.map((row) =>
-    headers.map((header) => JSON.stringify(row[header] || '')).join(','),
-*/
+
   // Function to download CSV file
   const downloadCsv: (csv: string, filename: string) => void = (
     csv: string,
