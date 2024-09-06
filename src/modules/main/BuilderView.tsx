@@ -31,6 +31,7 @@ import {
   BUILDER_VIEW_CY,
   CHAT_SAVE_BUTTON_CY,
   CHAT_SETTINGS_TITLE_CY,
+  CONVERSATIONS_VIEW_TITLE_CY,
   EXCHANGE_SETTINGS_TITLE_CY,
 } from '@/config/selectors';
 import Conversations from '@/results/ConversationsView';
@@ -147,6 +148,7 @@ const BuilderView: () => JSX.Element = (): JSX.Element => {
                 label={t('CONVERSATIONS.TITLE')}
                 icon={<ConversationsViewIcon />}
                 iconPosition="start"
+                data-cy={CONVERSATIONS_VIEW_TITLE_CY}
               />
             </TabList>
           </Stack>

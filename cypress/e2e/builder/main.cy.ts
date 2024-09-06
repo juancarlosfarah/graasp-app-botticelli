@@ -18,12 +18,14 @@ import {
   CHAT_NAME_INPUT_CY,
   CHAT_SAVE_BUTTON_CY,
   CHAT_SETTINGS_TITLE_CY,
+  CONVERSATIONS_VIEW_TITLE_CY,
   DELETE_ASSISTANT_BUTTON_CY,
   DELETE_EXCHANGE_BUTTON_CY,
   EXCHANGE_DESCRIPTION_INPUT_CY,
   EXCHANGE_NAME_INPUT_CY,
   EXCHANGE_PANEL_CY,
   EXCHANGE_SETTINGS_TITLE_CY,
+  EXPORT_ALL_BUTTON_CY,
   FOLLOW_UP_QUESTIONS_INPUT_CY,
   HARD_LIMIT_SWITCH_CY,
   INSTRUCTIONS_INPUT_CY,
@@ -400,5 +402,32 @@ describe('ExchangeSettings Component', () => {
     cy.get(buildDataCy(INSTRUCTIONS_INPUT_CY))
       .find('textarea')
       .should('have.value', newInstructions);
+  });
+});
+
+describe('ConversationsView Component', () => {
+  beforeEach(() => {
+    // Set up API and permissions
+    cy.setUpApi(
+      {},
+      {
+        context: Context.Builder,
+        permission: PermissionLevel.Read,
+      },
+    );
+    // Visit the page where the ChatSettings component is rendered
+    cy.visit('/');
+    cy.get(buildDataCy(CONVERSATIONS_VIEW_TITLE_CY)).click();
+  });
+
+  it('should display the title of the conversations view section', () => {
+    cy.get(buildDataCy(CONVERSATIONS_VIEW_TITLE_CY))
+      .should('be.visible')
+      .and('contain.text', 'View Conversations');
+  });
+
+  it('should verify that the "export all" button is initially disabled', () => {
+    // Assert
+    cy.get(buildDataCy(EXPORT_ALL_BUTTON_CY)).should('have.attr', 'disabled');
   });
 });

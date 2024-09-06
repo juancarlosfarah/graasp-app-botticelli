@@ -28,6 +28,10 @@ import { Member } from '@graasp/sdk';
 import { format } from 'date-fns';
 
 import { hooks, mutations } from '@/config/queryClient';
+import {
+  CONVERSATIONS_VIEW_TITLE_CY,
+  EXPORT_ALL_BUTTON_CY,
+} from '@/config/selectors';
 import MessagesPane from '@/modules/message/MessagesPane';
 import Exchange from '@/types/Exchange';
 import Interaction from '@/types/Interaction';
@@ -146,7 +150,9 @@ const Conversations: FC<Props> = ({
   return (
     <Stack spacing={2}>
       <Stack direction="row" justifyContent="space-between">
-        <Typography variant="h5">{t('CONVERSATIONS.TITLE')}</Typography>
+        <Typography variant="h5" data-cy={CONVERSATIONS_VIEW_TITLE_CY}>
+          {t('CONVERSATIONS.TITLE')}
+        </Typography>
         <Button
           disabled={appDatas?.length === 0}
           onClick={(): void =>
@@ -155,6 +161,7 @@ const Conversations: FC<Props> = ({
               `chatbot_all_${format(new Date(), 'yyyyMMdd_HH.mm')}.csv`,
             )
           }
+          data-cy={EXPORT_ALL_BUTTON_CY}
         >
           {t('CONVERSATIONS.EXPORT_ALL')}
         </Button>

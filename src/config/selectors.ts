@@ -13,6 +13,7 @@ export const MOVE_UP_BUTTON_CY = 'move-up-button';
 export const MOVE_DOWN_BUTTON_CY = 'move-down-button';
 export const ASSISTANT_SAVE_BUTTON_CY = 'save-setting-button';
 export const CHAT_SAVE_BUTTON_CY = 'save-setting-button';
+export const EXPORT_ALL_BUTTON_CY = 'export-all-button';
 
 // Assistant Panel and Input Selectors
 export const ASSISTANT_SETTINGS_TITLE_CY = 'assistant-settings-title';
@@ -43,6 +44,9 @@ export const ON_COMPLETE_INSTRUCTIONS_INPUT_CY =
 export const HARD_LIMIT_SWITCH_CY = 'hard-limit-switch';
 export const ASSISTANT_SELECT_CY = 'assistant-select';
 export const ASSISTANT_OPTION_CY = 'assistant-option';
+
+// Conversations View
+export const CONVERSATIONS_VIEW_TITLE_CY = 'conversations-view-title';
 
 // Utility function to create data-cy selectors
 export const buildDataCy = (selector: string): string =>
