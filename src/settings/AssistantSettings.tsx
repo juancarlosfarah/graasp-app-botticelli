@@ -31,6 +31,19 @@ import {
   AssistantsSettingsType,
 } from '@/config/appSettings';
 import { MAX_TEXT_INPUT_CHARS } from '@/config/config';
+import {
+  ADD_ASSISTANT_BUTTON_CY,
+  ASSISTANT_AVATAR_ICON_CY,
+  ASSISTANT_DESCRIPTION_INPUT_CY,
+  ASSISTANT_IMAGE_URL_CY,
+  ASSISTANT_NAME_INPUT_CY,
+  ASSISTANT_PANEL_CY,
+  ASSISTANT_SETTINGS_TITLE_CY,
+  DELETE_ASSISTANT_BUTTON_CY,
+  MOVE_DOWN_BUTTON_CY,
+  MOVE_UP_BUTTON_CY,
+  NO_ASSISTANTS_ALERT_CY,
+} from '@/config/selectors';
 import Agent from '@/types/Agent';
 import AgentType from '@/types/AgentType';
 
@@ -85,6 +98,7 @@ const AssistantSettingsPanel: FC<PropTypesSingle> = ({
           color={panelColor} // Unique color for each assistant's divider
         />
       }
+      data-cy={ASSISTANT_PANEL_CY}
     >
       <Typography
         px={1}
@@ -102,6 +116,7 @@ const AssistantSettingsPanel: FC<PropTypesSingle> = ({
             <Avatar
               src={assistantImageUrl}
               sx={{ border: '1px solid #bdbdbd' }}
+              data-cy={ASSISTANT_AVATAR_ICON_CY}
             >
               {assistantName.slice(0, 2)}
             </Avatar>
@@ -113,11 +128,13 @@ const AssistantSettingsPanel: FC<PropTypesSingle> = ({
               ): void => onChange(index, 'imageUrl', e.target.value)}
               placeholder={t('SETTINGS.ASSISTANTS.URL')}
               fullWidth
+              data-cy={ASSISTANT_IMAGE_URL_CY}
             />
             <IconButton
               sx={{ color: panelColor }}
               onClick={(): void => handleMoveUp(index)}
               disabled={index === 0} // Disabled if the assistant is at the top
+              data-cy={MOVE_UP_BUTTON_CY}
             >
               <Tooltip title={t('SETTINGS.UP')}>
                 <ArrowUpwardIcon />
@@ -127,6 +144,7 @@ const AssistantSettingsPanel: FC<PropTypesSingle> = ({
               sx={{ color: panelColor }}
               onClick={(): void => handleMoveDown(index)}
               disabled={index === assistantListLength - 1} // Disabled if the assistant is at the bottom
+              data-cy={MOVE_DOWN_BUTTON_CY}
             >
               <Tooltip title={t('SETTINGS.DOWN')}>
                 <ArrowDownwardIcon />
@@ -141,6 +159,7 @@ const AssistantSettingsPanel: FC<PropTypesSingle> = ({
             onChange={(
               e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
             ): void => onChange(index, 'name', e.target.value)}
+            data-cy={ASSISTANT_NAME_INPUT_CY}
           />
           <TextField
             value={assistantDescription}
@@ -150,12 +169,14 @@ const AssistantSettingsPanel: FC<PropTypesSingle> = ({
             onChange={(
               e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
             ): void => onChange(index, 'description', e.target.value)}
+            data-cy={ASSISTANT_DESCRIPTION_INPUT_CY}
           />
           <Stack direction="row" justifyContent="center">
             <IconButton
               color="secondary"
               onClick={(): void => handleRemoveAssistant(index)}
               sx={{ width: 'auto' }}
+              data-cy={DELETE_ASSISTANT_BUTTON_CY}
             >
               <DeleteIcon />
             </IconButton>
@@ -264,7 +285,9 @@ const AssistantsSettings: FC<PropTypeList> = ({ assistants, onChange }) => {
 
   return (
     <Stack spacing={2}>
-      <Typography variant="h5">{t('SETTINGS.ASSISTANTS.TITLE')}</Typography>
+      <Typography variant="h5" data-cy={ASSISTANT_SETTINGS_TITLE_CY}>
+        {t('SETTINGS.ASSISTANTS.TITLE')}
+      </Typography>
       <Stack
         spacing={1}
         py={2}
@@ -279,6 +302,7 @@ const AssistantsSettings: FC<PropTypeList> = ({ assistants, onChange }) => {
               display: 'flex',
               justifyContent: 'center',
             }}
+            data-cy={NO_ASSISTANTS_ALERT_CY}
           >
             {t('SETTINGS.ASSISTANTS.CREATE')}
           </Alert>
@@ -307,7 +331,11 @@ const AssistantsSettings: FC<PropTypeList> = ({ assistants, onChange }) => {
             ),
           )
         )}
-        <Button variant="contained" onClick={handleAddAssistant}>
+        <Button
+          variant="contained"
+          onClick={handleAddAssistant}
+          data-cy={ADD_ASSISTANT_BUTTON_CY}
+        >
           {t('SETTINGS.ASSISTANTS.ADD')}
         </Button>
       </Stack>

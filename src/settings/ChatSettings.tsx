@@ -8,6 +8,13 @@ import TextField from '@mui/material/TextField';
 
 import { ChatSettingsType } from '@/config/appSettings';
 import { MAX_TEXT_INPUT_CHARS } from '@/config/config';
+import {
+  CHAT_DESCRIPTION_INPUT_CY,
+  CHAT_INSTRUCTIONS_INPUT_CY,
+  CHAT_NAME_INPUT_CY,
+  CHAT_SETTINGS_TITLE_CY,
+  MESSAGE_MEMORY_SWITCH_CY,
+} from '@/config/selectors';
 
 // Prop types for ChatSettings component
 type PropTypes = {
@@ -31,7 +38,9 @@ const ChatSettings: FC<PropTypes> = ({ chat, onChange }) => {
 
   return (
     <Stack spacing={2}>
-      <Typography variant="h5">{t('SETTINGS.CHAT.TITLE')}</Typography>
+      <Typography variant="h5" data-cy={CHAT_SETTINGS_TITLE_CY}>
+        {t('SETTINGS.CHAT.TITLE')}
+      </Typography>
       <TextField
         value={chatName}
         label={t('SETTINGS.CHAT.NAME')}
@@ -39,6 +48,7 @@ const ChatSettings: FC<PropTypes> = ({ chat, onChange }) => {
         onChange={(
           e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
         ): void => onChange({ ...chat, name: e.target.value })}
+        data-cy={CHAT_NAME_INPUT_CY}
       />
       <TextField
         value={chatDescription}
@@ -48,6 +58,7 @@ const ChatSettings: FC<PropTypes> = ({ chat, onChange }) => {
         onChange={(
           e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
         ): void => onChange({ ...chat, description: e.target.value })}
+        data-cy={CHAT_DESCRIPTION_INPUT_CY}
       />
       <TextField
         value={chatInstructions}
@@ -59,6 +70,7 @@ const ChatSettings: FC<PropTypes> = ({ chat, onChange }) => {
         ): void =>
           onChange({ ...chat, participantInstructions: e.target.value })
         }
+        data-cy={CHAT_INSTRUCTIONS_INPUT_CY}
       />
       <TextField
         value={chatEndText}
@@ -81,6 +93,7 @@ const ChatSettings: FC<PropTypes> = ({ chat, onChange }) => {
         onChange={(e: ChangeEvent<HTMLInputElement>): void =>
           onChange({ ...chat, sendAllToChatbot: e.target.checked })
         }
+        data-cy={MESSAGE_MEMORY_SWITCH_CY}
       />
     </Stack>
   );

@@ -145,7 +145,7 @@ const ParticipantInteraction = (): ReactElement => {
       postAppData({ data: interaction, type: 'Interaction' });
       hasPosted.current = true;
     }
-  }, [interaction, postAppData]);
+  }, [appDataLoading, interaction, postAppData]);
 
   // Effect to patch the interaction data if it has been posted and current app data exists
   useEffect((): void => {

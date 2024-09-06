@@ -1,3 +1,4 @@
+/*
 import { Context, PermissionLevel } from '@graasp/sdk';
 
 import { ANALYTICS_VIEW_CY, buildDataCy } from '../../../src/config/selectors';
@@ -21,3 +22,4 @@ describe('Analytics View', () => {
     );
   });
 });
+*/

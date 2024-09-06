@@ -46,6 +46,23 @@ import {
   MIN_FOLLOW_UP_QUESTIONS,
 } from '@/config/config';
 import {
+  ADD_EXCHANGE_BUTTON_CY,
+  ASSISTANT_OPTION_CY,
+  ASSISTANT_SELECT_CY,
+  DELETE_EXCHANGE_BUTTON_CY,
+  EXCHANGE_DESCRIPTION_INPUT_CY,
+  EXCHANGE_NAME_INPUT_CY,
+  EXCHANGE_PANEL_CY,
+  EXCHANGE_SETTINGS_TITLE_CY,
+  FOLLOW_UP_QUESTIONS_INPUT_CY,
+  HARD_LIMIT_SWITCH_CY,
+  INSTRUCTIONS_INPUT_CY,
+  MOVE_DOWN_BUTTON_CY,
+  MOVE_UP_BUTTON_CY,
+  NO_EXCHANGES_ALERT_CY,
+  ON_COMPLETE_INSTRUCTIONS_INPUT_CY,
+} from '@/config/selectors';
+import {
   SettingsContextType,
   useSettings,
 } from '@/modules/context/SettingsContext';
@@ -111,6 +128,7 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
           color={panelColor} // Color for divider based on exchange ID
         />
       }
+      data-cy={EXCHANGE_PANEL_CY}
     >
       <Typography
         px={1}
@@ -133,12 +151,13 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
               onChange={(
                 e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
               ): void => onChange(index, 'name', e.target.value)}
+              data-cy={EXCHANGE_NAME_INPUT_CY}
             />
-
             <IconButton
               sx={{ color: panelColor }}
               onClick={(): void => handleMoveUp(index)}
               disabled={index === 0} // Disable if already at the top
+              data-cy={MOVE_UP_BUTTON_CY}
             >
               <Tooltip title={t('SETTINGS.UP')}>
                 <ArrowUpwardIcon />
@@ -148,6 +167,7 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
               sx={{ color: panelColor }}
               onClick={(): void => handleMoveDown(index)}
               disabled={index === exchangeListLength - 1} // Disable if already at the bottom
+              data-cy={MOVE_DOWN_BUTTON_CY}
             >
               <Tooltip title={t('SETTINGS.DOWN')}>
                 <ArrowDownwardIcon />
@@ -162,6 +182,7 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
             onChange={(
               e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
             ): void => onChange(index, 'description', e.target.value)}
+            data-cy={EXCHANGE_DESCRIPTION_INPUT_CY}
           />
           <TextField
             value={exchangeInstructions}
@@ -171,6 +192,7 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
             onChange={(
               e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
             ): void => onChange(index, 'chatbotInstructions', e.target.value)}
+            data-cy={INSTRUCTIONS_INPUT_CY}
           />
           <TextField
             value={exchangeCue}
@@ -206,10 +228,15 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
                     ) || exchangeAssistant,
                   )
                 }
+                data-cy={ASSISTANT_SELECT_CY}
               >
                 {assistants.assistantList.map(
                   (assistant: AssistantSettings, nb: number): JSX.Element => (
-                    <MenuItem key={nb} value={assistant.id}>
+                    <MenuItem
+                      key={nb}
+                      value={assistant.id}
+                      data-cy={ASSISTANT_OPTION_CY}
+                    >
                       <Avatar src={assistant.imageUrl} sx={{ mx: '1%' }}>
                         {assistant.name.slice(0, 2)}
                       </Avatar>
@@ -249,6 +276,7 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
                 parseInt(e.target.value, 10),
               )
             }
+            data-cy={FOLLOW_UP_QUESTIONS_INPUT_CY}
           />
           <Typography variant="h6">
             {t('SETTINGS.EXCHANGES.DISABLE_HARD_LIMIT')}
@@ -262,6 +290,7 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
             onChange={(e: ChangeEvent<HTMLInputElement>): void =>
               onChange(index, 'hardLimit', e.target.checked)
             }
+            data-cy={HARD_LIMIT_SWITCH_CY}
           />
           {!exchangeLimit && (
             <TextField
@@ -278,6 +307,7 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
                   e.target.value,
                 )
               }
+              data-cy={ON_COMPLETE_INSTRUCTIONS_INPUT_CY}
             />
           )}
           <Stack direction="row" justifyContent="center">
@@ -287,6 +317,7 @@ const ExchangeSettingsPanel: FC<PropTypesSingle> = ({
                 handleRemoveExchange(index);
               }}
               sx={{ alignSelf: 'center', width: 'auto' }}
+              data-cy={DELETE_EXCHANGE_BUTTON_CY}
             >
               <DeleteIcon />
             </IconButton>
@@ -401,7 +432,9 @@ const ExchangeSettings: FC<PropTypeList> = ({ exchanges, onChange }) => {
 
   return (
     <Stack spacing={2}>
-      <Typography variant="h5">{t('SETTINGS.EXCHANGES.TITLE')}</Typography>
+      <Typography variant="h5" data-cy={EXCHANGE_SETTINGS_TITLE_CY}>
+        {t('SETTINGS.EXCHANGES.TITLE')}
+      </Typography>
       <Stack
         spacing={1}
         py={2}
@@ -416,6 +449,7 @@ const ExchangeSettings: FC<PropTypeList> = ({ exchanges, onChange }) => {
               display: 'flex',
               justifyContent: 'center',
             }}
+            data-cy={NO_EXCHANGES_ALERT_CY}
           >
             {t('SETTINGS.EXCHANGES.CREATE')}
           </Alert>
@@ -443,7 +477,11 @@ const ExchangeSettings: FC<PropTypeList> = ({ exchanges, onChange }) => {
             ),
           )
         )}
-        <Button variant="contained" onClick={handleAddExchange}>
+        <Button
+          variant="contained"
+          onClick={handleAddExchange}
+          data-cy={ADD_EXCHANGE_BUTTON_CY}
+        >
           +
         </Button>
       </Stack>

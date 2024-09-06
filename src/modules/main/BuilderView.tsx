@@ -25,7 +25,14 @@ import {
   ChatSettingsType,
   ExchangesSettingsType,
 } from '@/config/appSettings';
-import { BUILDER_VIEW_CY } from '@/config/selectors';
+import {
+  ASSISTANT_SAVE_BUTTON_CY,
+  ASSISTANT_SETTINGS_TITLE_CY,
+  BUILDER_VIEW_CY,
+  CHAT_SAVE_BUTTON_CY,
+  CHAT_SETTINGS_TITLE_CY,
+  EXCHANGE_SETTINGS_TITLE_CY,
+} from '@/config/selectors';
 import Conversations from '@/results/ConversationsView';
 
 import AssistantsSettingsComponent from '../../settings/AssistantSettings';
@@ -106,21 +113,24 @@ const BuilderView: () => JSX.Element = (): JSX.Element => {
             >
               <Tab
                 value={Tabs.ASSISTANT_VIEW}
-                label={t('SETTINGS.EXCHANGES.ASSISTANT')}
+                label={t('SETTINGS.ASSISTANTS.TITLE')}
                 icon={<AssistantViewIcon />}
                 iconPosition="start"
+                data-cy={ASSISTANT_SETTINGS_TITLE_CY}
               />
               <Tab
                 value={Tabs.CHAT_VIEW}
                 label={t('SETTINGS.CHAT.TITLE')}
                 icon={<ChatViewIcon />}
                 iconPosition="start"
+                data-cy={CHAT_SETTINGS_TITLE_CY}
               />
               <Tab
                 value={Tabs.EXCHANGES_VIEW}
                 label={t('SETTINGS.EXCHANGES.TITLE')}
                 icon={<ExchangesViewIcon />}
                 iconPosition="start"
+                data-cy={EXCHANGE_SETTINGS_TITLE_CY}
               />
             </TabList>
             <TabList
@@ -158,6 +168,7 @@ const BuilderView: () => JSX.Element = (): JSX.Element => {
                       assistants.assistantList.length === 0,
                     [assistants, assistantsSavedState],
                   )}
+                  data-cy={ASSISTANT_SAVE_BUTTON_CY}
                 >
                   {t('SETTINGS.SAVE_BTN')}
                 </Button>
@@ -177,6 +188,7 @@ const BuilderView: () => JSX.Element = (): JSX.Element => {
                     (): boolean => isEqual(chatSavedState, chat),
                     [chat, chatSavedState],
                   )}
+                  data-cy={CHAT_SAVE_BUTTON_CY}
                 >
                   {t('SETTINGS.SAVE_BTN')}
                 </Button>

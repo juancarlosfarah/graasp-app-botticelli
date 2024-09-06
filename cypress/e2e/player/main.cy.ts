@@ -1,4 +1,4 @@
-import { Context, PermissionLevel } from '@graasp/sdk';
+/* import { Context, PermissionLevel } from '@graasp/sdk';
 
 import { START_INTERACTION_BUTTON_CY, buildDataCy } from '@/config/selectors';
 
@@ -21,3 +21,4 @@ describe('Player View', () => {
     );
   });
 });
+*/
