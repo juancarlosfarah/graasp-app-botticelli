@@ -5,6 +5,7 @@ import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
+import { MESSAGE_CY } from '@/config/selectors';
 import Agent from '@/types/Agent';
 import { getFormattedTime } from '@/utils/datetime';
 
@@ -55,6 +56,7 @@ const ChatBubble = ({
                 ? 'var(--joy-palette-common-white)'
                 : 'var(--joy-palette-text-primary)',
             }}
+            data-cy={MESSAGE_CY}
           >
             {content}
           </Typography>

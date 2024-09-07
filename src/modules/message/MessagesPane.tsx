@@ -19,6 +19,7 @@ import _ from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 
 import { mutations } from '@/config/queryClient';
+import { MESSAGE_LOADER_CY, MESSAGE_PANE_CY } from '@/config/selectors';
 import Agent from '@/types/Agent';
 import AgentType from '@/types/AgentType';
 import Exchange from '@/types/Exchange';
@@ -253,6 +254,7 @@ const MessagesPane = ({
         height: readOnly ? 'fit-content' : '100vh',
         maxHeight: '100vh',
       }}
+      data-cy={MESSAGE_PANE_CY}
     >
       <Box
         sx={{
@@ -303,7 +305,7 @@ const MessagesPane = ({
                 spacing={2}
                 sx={{ mb: 0.25 }}
               >
-                <MessageLoader />
+                <MessageLoader data-cy={MESSAGE_LOADER_CY} />
               </Stack>
             </Box>
           )}

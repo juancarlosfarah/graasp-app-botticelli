@@ -262,9 +262,9 @@ const ParticipantInteraction = (): ReactElement => {
         <Button
           variant="contained"
           size="large"
-          data-cy={START_INTERACTION_BUTTON_CY}
           sx={{ mt: 3, mx: 'auto' }}
           onClick={handleStartInteraction}
+          data-cy={START_INTERACTION_BUTTON_CY}
         >
           {t('START')}
         </Button>

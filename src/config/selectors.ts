@@ -4,7 +4,6 @@ export const BUILDER_VIEW_CY = 'builder-view';
 export const ANALYTICS_VIEW_CY = 'analytics-view';
 
 // Button Selectors
-export const START_INTERACTION_BUTTON_CY = 'start-interaction-button';
 export const ADD_EXCHANGE_BUTTON_CY = 'add-exchange-button';
 export const DELETE_EXCHANGE_BUTTON_CY = 'delete-exchange-button';
 export const ADD_ASSISTANT_BUTTON_CY = 'add-exchange-button';
@@ -14,6 +13,9 @@ export const MOVE_DOWN_BUTTON_CY = 'move-down-button';
 export const ASSISTANT_SAVE_BUTTON_CY = 'save-setting-button';
 export const CHAT_SAVE_BUTTON_CY = 'save-setting-button';
 export const EXPORT_ALL_BUTTON_CY = 'export-all-button';
+export const START_INTERACTION_BUTTON_CY = 'start-interaction-button';
+export const SEND_BUTTON_CY = 'send-button';
+export const DISMISS_BUTTON_CY = 'dismiss-button';
 
 // Assistant Panel and Input Selectors
 export const ASSISTANT_SETTINGS_TITLE_CY = 'assistant-settings-title';
@@ -47,6 +49,12 @@ export const ASSISTANT_OPTION_CY = 'assistant-option';
 
 // Conversations View
 export const CONVERSATIONS_VIEW_TITLE_CY = 'conversations-view-title';
+
+// Participant Interaction and Input Selectors
+export const MESSAGE_PANE_CY = 'message-pane';
+export const MESSAGE_CY = 'message';
+export const MESSAGE_INPUT_CY = 'message-input';
+export const MESSAGE_LOADER_CY = 'message-loader';
 
 // Utility function to create data-cy selectors
 export const buildDataCy = (selector: string): string =>

@@ -17,6 +17,12 @@ import FormControl from '@mui/material/FormControl';
 import Textarea from '@mui/material/OutlinedInput';
 import Stack from '@mui/material/Stack';
 
+import {
+  DISMISS_BUTTON_CY,
+  MESSAGE_INPUT_CY,
+  SEND_BUTTON_CY,
+} from '@/config/selectors';
+
 export type MessageInputProps = {
   dismissExchange: () => void;
   onSubmit: ({ content }: { content: string }) => void;
@@ -82,7 +88,7 @@ const MessageInput = ({
 
   return (
     <Box sx={{ px: 2, pb: 3 }}>
-      <FormControl sx={{ width: '100%' }}>
+      <FormControl sx={{ width: '100%' }} data-cy={MESSAGE_INPUT_CY}>
         <Textarea
           placeholder={t('MESSAGE_BOX.INSERT_HERE')}
           aria-label="Message"
@@ -113,6 +119,7 @@ const MessageInput = ({
                   endIcon={<CheckIcon />}
                   sx={{ alignSelf: 'center', borderRadius: 'sm' }}
                   onClick={handleDismiss}
+                  data-cy={DISMISS_BUTTON_CY}
                 >
                   {t('MESSAGE_BOX.DONE')}
                 </Button>
@@ -123,6 +130,7 @@ const MessageInput = ({
                 sx={{ ml: 1, alignSelf: 'center', borderRadius: 'sm' }}
                 endIcon={<SendRoundedIcon />}
                 onClick={handleClick}
+                data-cy={SEND_BUTTON_CY}
               >
                 {t('MESSAGE_BOX.SEND')}
               </Button>
